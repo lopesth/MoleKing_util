@@ -8,30 +8,7 @@
 
 using namespace std;
 
-class PeriodicTable{
 
-    public:
-    map<int, string> symbolMap;
-
-    PeriodicTable(){
-        symbolMap.insert(pair<int, string>(1, "H"));
-        symbolMap.insert(pair<int, string>(2, "He"));
-    };
-
-    string getSymbol(int atomicNumber){
-        return symbolMap[atomicNumber];
-    };
-
-    int getAtomicNumber(string symbol){
-        for (map<int, string>::iterator it=symbolMap.begin(); it!=symbolMap.end(); ++it){
-            if (it->second == symbol){
-                return it->first;
-            };
-        };
-    };
-
-
-};
 
 class Atom{
     
@@ -121,3 +98,30 @@ int main(int argc, char const *argv[])
 
     return 0;
 }
+
+
+
+class PeriodicTable{
+
+    public:
+    map<int, string> symbolMap;
+
+    PeriodicTable(){
+        symbolMap.insert(pair<int, string>(1, "H"));
+        symbolMap.insert(pair<int, string>(2, "He"));
+    };
+
+    string getSymbol(int atomicNumber){
+        return symbolMap[atomicNumber];
+    };
+
+    int getAtomicNumber(string symbol){
+        for (map<int, string>::iterator it=symbolMap.begin(); it!=symbolMap.end(); ++it){
+            if (it->second == symbol){
+                return it->first;
+            };
+        };
+    };
+
+
+};
