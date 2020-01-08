@@ -8,6 +8,41 @@
 
 using namespace std;
 
+class PeriodicTable{
+
+    private:
+    map<string, int> symbolMap;
+    map<string, float> massMap;
+
+    public:
+    PeriodicTable(){
+        symbolMap.insert(pair<string, int>("H", 1));
+        symbolMap.insert(pair<string, int>("H(iso=2)", 1));
+        symbolMap.insert(pair<string, int>("He", 2));
+
+
+        massMap.insert(pair<string, float>("H", 1.0079));
+        massMap.insert(pair<string, float>("H(iso=2)", 2.0079));
+        massMap.insert(pair<string, float>("He", 4.0026));
+    };
+    
+
+    int getAtomicNumber(string symbol){
+        return symbolMap[symbol];
+    };
+
+    float getAtomicMass(string symbol){
+        return massMap[symbol];
+    };
+
+    string getSymbol(int atomicNumber){
+        for (map<string, int>::iterator it=symbolMap.begin(); it!=symbolMap.end(); ++it){
+            if (it->second == atomicNumber){
+                return it->first;
+            };
+        };
+    };
+};
 
 
 class Atom{
@@ -15,6 +50,7 @@ class Atom{
     private:
     int atomicNumber;
     string atomicSymbol;
+    float atomicMass;
     int xPos, yPos, zPos;
     bool freezeCode;
 
@@ -35,6 +71,11 @@ class Atom{
         this->yPos = yPos;
         this->zPos = zPos;
         this->freezeCode = freezeCode_;
+        this->atomicMass = temp.getAtomicMass(this->atomicSymbol);
+    };
+
+    float getAtomicMass(){
+        return this->atomicMass;
     };
 
     string getAtomicSymbol(){
@@ -101,27 +142,3 @@ int main(int argc, char const *argv[])
 
 
 
-class PeriodicTable{
-
-    public:
-    map<int, string> symbolMap;
-
-    PeriodicTable(){
-        symbolMap.insert(pair<int, string>(1, "H"));
-        symbolMap.insert(pair<int, string>(2, "He"));
-    };
-
-    string getSymbol(int atomicNumber){
-        return symbolMap[atomicNumber];
-    };
-
-    int getAtomicNumber(string symbol){
-        for (map<int, string>::iterator it=symbolMap.begin(); it!=symbolMap.end(); ++it){
-            if (it->second == symbol){
-                return it->first;
-            };
-        };
-    };
-
-
-};
