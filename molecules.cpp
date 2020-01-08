@@ -44,14 +44,13 @@ class PeriodicTable{
     };
 };
 
-
 class Atom{
     
     private:
     int atomicNumber;
     string atomicSymbol;
     float atomicMass;
-    int xPos, yPos, zPos;
+    float xPos, yPos, zPos;
     bool freezeCode;
 
     public:
@@ -126,7 +125,6 @@ class Atom{
 
 };
 
-
 class MassCenter{
 
     private:
@@ -154,10 +152,69 @@ class MassCenter{
     float * getMassCenter(){
         return massCenterPoint;
     };
-
-
 };
 
+class ChargePoint{
+
+    private:
+    float xPos, yPos, zPos;
+    float charge;
+
+    public:
+    ChargePoint(float charge, float xPos, float yPos, float zPos){
+        this->charge = charge;
+        this->xPos = xPos;
+        this->yPos = yPos;
+        this->zPos = zPos;
+    };
+
+    float getCharge(){
+        return this->charge;
+    };
+
+    float getXcoord(){
+        return this->xPos;
+    };
+
+    float getYcoord(){
+        return this->yPos;
+    };
+
+    float getZcoord(){
+        return this->zPos;
+    };
+
+    float * getCartesianCoord(){
+        float coord[3];
+        coord[0] = this->xPos;
+        coord[1] = this->yPos;
+        coord[2] = this->zPos;
+        return coord;
+    };
+
+    void setCharge(float newCharge){
+        this->charge = newCharge;
+    };
+
+    void setCartesianPos(float newX, float newY, float newZ){
+        this->xPos = newX;
+        this->yPos = newY;
+        this->zPos = newZ;
+    };
+
+    void setXcoord(float newX){
+        this->xPos = newX;
+    };
+
+    void setZcoord(float newZ){
+        this->zPos = newZ;
+    };
+
+    void setYcoord(float newY){
+        this->yPos = newY;
+    };
+
+};
 
 int main(int argc, char const *argv[])
 {
