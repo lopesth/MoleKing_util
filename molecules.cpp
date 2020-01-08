@@ -127,6 +127,37 @@ class Atom{
 };
 
 
+class MassCenter{
+
+    private:
+    vector <float> massList;
+    float massCenterPoint[3];
+
+    float axisMassCenter(vector <float> coords){
+        float rUp = 0;
+        float rDown = 0;
+        for (int i = 0; i < coords.size(); i++){
+            rUp = rUp + (this->massList.at(i) * coords.at(i));
+            rDown = rDown + this->massList.at(i);
+        };
+        return (rUp/rDown);
+    };
+
+    public:
+    MassCenter(vector <float> massList, vector <float> xCoords, vector <float> yCoords, vector <float> zCoords){
+        this->massList = massList;
+        this->massCenterPoint[0] = this->axisMassCenter(xCoords);
+        this->massCenterPoint[1] = this->axisMassCenter(yCoords);
+        this->massCenterPoint[2] = this->axisMassCenter(zCoords);
+    };
+
+    float * getMassCenter(){
+        return massCenterPoint;
+    };
+
+
+};
+
 
 int main(int argc, char const *argv[])
 {
