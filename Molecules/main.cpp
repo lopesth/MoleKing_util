@@ -10,8 +10,11 @@
 #include "PeriodicTable.hpp"
 #include <string>
 #include "MassCenter.hpp"
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 using namespace std;
+namespace py = pybind11;
 
 class Atom{
     
@@ -205,7 +208,7 @@ class Molecule{
 
     vector <string> getAtom(int number, bool symbol = 0){
         vector<string> atomString(4);
-        Atom atom = this->molecule.at(number);
+        Atom atom = this->molecule.at(number-1);
         if(symbol == 0){
             atomString.at(0) = to_string(atom.getAtomicNumber());
         }else{
@@ -235,7 +238,7 @@ class Molecule{
 
     vector< vector<string> > getMolecule(bool symbol = 0){
         vector< vector<string> > moleculeString;
-        for (int i = 0; i < this->molecule.size(); i++){
+        for (int i = 1; i < this->molecule.size()+1; i++){
             vector <string> atom = this->getAtom(i, symbol);
             moleculeString.push_back(atom);
         };
@@ -345,7 +348,31 @@ class Molecule{
     };
 
 };
+/*
+class SupraMolecule{
 
+    private:
+    vector <Molecule> supraMolecule;
+
+    public:
+    SupraMolecule(){
+    };
+
+    void addMolecule(Molecule molecule){
+        supraMolecule.push_back(molecule);
+    };
+
+    vector <string> getMolecule(int moleculeNumber, bool symbol = 0){
+        for(int i = 0; i < this->supraMolecule.size(), i++){
+
+        };
+    };
+
+    vector < vector<string> > getMolecule(bool symbol = 0){
+        
+    };
+
+};
 
 int main(int argc, const char * argv[]) {
     Atom meuatomo(1.0, 1.0, 0.1, 1);
@@ -356,3 +383,28 @@ int main(int argc, const char * argv[]) {
     cout << meuatomo.getAtomicSymbol();
     
 }
+*/
+
+
+
+PYBIND11_MODULE(molecules, m) {
+    py::class_<Molecule>(m, "Molecule")
+        .def(py::init())
+        .def("addChargePoints", &Molecule::addChargePoints)
+        .def("setCharge", &Molecule::setCharge)
+        .def("getAtom", &Molecule::getAtom, py::arg("number")=0, py::arg("symbol")=0)
+        .def("addAtom", (void (Molecule::*)(int, float, float, float)) &Molecule::addAtom)
+        .def("addAtom", (void (Molecule::*)(string, float, float, float)) &Molecule::addAtom)
+        .def("getCharge", &Molecule::getCharge)
+        .def("setCharge", &Molecule::setCharge)
+        .def("setMultiplicity", &Molecule::setMultiplicity)
+        .def("getMultiplicity", &Molecule::getMultiplicity)
+        .def("getMolecule", &Molecule::getMolecule, py::arg("symbol")=0)
+        .def("getChargePoints", &Molecule::getChargePoints)
+        .def("getSize", &Molecule::getSize)
+        .def("normalizeCPs", &Molecule::normalizeCPs)
+        .def("getMassCenter", &Molecule::getMassCenter)
+        .def("moveMassCenter", &Molecule::moveMassCenter, py::arg("newX")=0.0, py::arg("newY")=0.0, py::arg("newZ")=0.0)
+        .def("standartOrientation", &Molecule::standartOrientation);
+        
+};
