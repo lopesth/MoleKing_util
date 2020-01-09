@@ -269,7 +269,7 @@ class Molecule{
         };
     };
 
-    float * getMassCenter(){
+    vector<float> getMassCenter(){
         vector <float> massVector;
         vector <float> xCoords;
         vector <float> yCoords;
@@ -281,15 +281,16 @@ class Molecule{
             yCoords.push_back(atom.getY());
             zCoords.push_back(atom.getZ());
         };
-        return MassCenter(massVector, xCoords, yCoords, zCoords).getMassCenter();
+        vector<float> temp = MassCenter(massVector, xCoords, yCoords, zCoords).getMassCenter();
+        return temp;
     };
 
     void moveMassCenter(float newX = 0.0, float newY = 0.0, float newZ= 0.0){
-        float * oldMC = this->getMassCenter();
+        vector<float> oldMC = this->getMassCenter();
         float dx, dy, dz;
-        dx = newX - oldMC[0];
-        dy = newY - oldMC[1];
-        dz = newZ - oldMC[2];
+        dx = newX - oldMC.at(0);
+        dy = newY - oldMC.at(1);
+        dz = newZ - oldMC.at(2);
         for(int i = 0; i < this->molecule.size(); i++){
             Atom atom = this->molecule.at(i);
             atom.setX(atom.getX() + dx);
