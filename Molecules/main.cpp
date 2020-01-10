@@ -69,10 +69,10 @@ class Atom{
     };
 
     float getZ(){
-        return this->cCoord.toVector().at(3);
+        return this->cCoord.toVector().at(2);
     };
 
-    void setX(int newX){
+    void setX(float newX){
         this->cCoord.changeCoord('x', newX);
         this->sCoord = cCoord.transformToSpherical();
     };
@@ -89,12 +89,12 @@ class Atom{
         return this->sCoord.toVector().at(2);
     };
 
-    void setY(int newY){
+    void setY(float newY){
         this->cCoord.changeCoord('y', newY);
         this->sCoord = cCoord.transformToSpherical();
     };
 
-    void setZ(int newZ){
+    void setZ(float newZ){
         this->cCoord.changeCoord('z', newZ);
         this->sCoord = cCoord.transformToSpherical();
     };
@@ -123,14 +123,14 @@ class Atom{
     };
 
     void setPhi(int newPhi){
-        this->sCoord.changeCoord('f', newPhi);
+        this->sCoord.changeCoord('p', newPhi);
         this->cCoord = sCoord.transformToCar();
     };
 
     void setSphericalPos(float newRadius, float newTetha, float newPhi){
-        this->sCoord.changeCoord('x', newRadius);
-        this->sCoord.changeCoord('y', newTetha);
-        this->sCoord.changeCoord('z', newPhi);
+        this->sCoord.changeCoord('r', newRadius);
+        this->sCoord.changeCoord('t', newTetha);
+        this->sCoord.changeCoord('p', newPhi);
         this->cCoord = sCoord.transformToCar();
     };
 
@@ -381,23 +381,24 @@ class Molecule{
         dx = newX - oldMC.at(0);
         dy = newY - oldMC.at(1);
         dz = newZ - oldMC.at(2);
+
         for(int i = 0; i < this->molecule.size(); i++){
-            Atom atom = this->molecule.at(i);
-            atom.setX(atom.getX() + dx);
-            atom.setY(atom.getY() + dy);
-            atom.setZ(atom.getZ() + dz);
+            this->molecule.at(i).setX(this->molecule.at(i).getX() + dx);
+            this->molecule.at(i).setY(this->molecule.at(i).getY() + dy);
+            this->molecule.at(i).setZ(this->molecule.at(i).getZ() + dz);
+            
+
         };
         if (this->chargePoint.size() != 0){
             for(int i = 0; i < this->chargePoint.size(); i++){
-                ChargePoint cp = this->chargePoint.at(i);
-                cp.setXcoord(cp.getXcoord() + dx);
-                cp.setYcoord(cp.getYcoord() + dy);
-                cp.setZcoord(cp.getZcoord() + dz);
+                this->chargePoint.at(i).setXcoord(this->chargePoint.at(i).getXcoord() + dx);
+                this->chargePoint.at(i).setYcoord(this->chargePoint.at(i).getYcoord() + dy);
+                this->chargePoint.at(i).setZcoord(this->chargePoint.at(i).getZcoord() + dz);
             };
         };
     };
 
-    void standartOrientation(){
+    void standardOrientation(){
         this->moveMassCenter();
         int j = 0;
         vector<int> biggerDistance(2);
@@ -421,31 +422,35 @@ class Molecule{
         for (int i = 0; i < this->molecule.size(); i++){
             this->molecule.at(i).setTetha(molecule.at(i).getTetha() + incTetha);
             this->molecule.at(i).setPhi(molecule.at(i).getPhi() + incPhi);
-        }
+        };
 
         vector <float> xCoord(this->molecule.size()), yCoord(this->molecule.size()), zCoord(this->molecule.size());
         for(int i = 0; i < this->molecule.size(); i++){
-            Atom atom = this->molecule.at(i);
-            xCoord.push_back(atom.getX());
-            yCoord.push_back(atom.getY());
-            zCoord.push_back(atom.getZ());
+            xCoord.push_back(this->molecule.at(i).getX());
+            yCoord.push_back(this->molecule.at(i).getY());
+            zCoord.push_back(this->molecule.at(i).getZ());
         };
         vector <float> mmX(2), mmY(2), mmZ(2);
+
         mmX = minNmaxValue(xCoord);
+
         mmY = minNmaxValue(yCoord);
         mmZ = minNmaxValue(zCoord);
         vector<float> ref(3);
         ref.at(0) = mmX.at(1) - mmX.at(0);
         ref.at(1) = mmY.at(1) - mmY.at(0);
         ref.at(2) = mmZ.at(1) - mmZ.at(0);
+
         vector<float>minMaxRef(2);
         minMaxRef = minNmaxValue(ref);
         int iMax, iMin, iMid;
         for (int i = 0; i < ref.size(); i++){
             if (minMaxRef.at(0) == ref.at(i)){
                 iMin = i;
+
             }else if (minMaxRef.at(1) == ref.at(i)){
                 iMax = i;
+
             }else{
                 iMid = i;
             };
@@ -455,13 +460,11 @@ class Molecule{
             pos.at(0) = this->molecule.at(i).getX();
             pos.at(1) = this->molecule.at(i).getY();
             pos.at(2) = this->molecule.at(i).getZ();
-            this->molecule.at(i);
             this->molecule.at(i).setX(pos.at(iMax));
             this->molecule.at(i).setY(pos.at(iMid));
             this->molecule.at(i).setZ(pos.at(iMin));
         };
     };
-
 };
 /*
 class SupraMolecule{
@@ -488,16 +491,6 @@ class SupraMolecule{
     };
 
 };
-
-int main(int argc, const char * argv[]) {
-    Atom meuatomo(1.0, 1.0, 0.1, 1);
-    cout << meuatomo.getAtomicNumber() << endl;
-    cout << meuatomo.getCartesianPos()[0] << ", " << meuatomo.getCartesianPos()[1] << ", " << meuatomo.getCartesianPos()[2] << endl;
-    meuatomo.setCartesianPos(2, 2, 2 );
-    cout << meuatomo.getCartesianPos()[0] << ", " << meuatomo.getCartesianPos()[1] << ", " << meuatomo.getCartesianPos()[2] << endl;
-    cout << meuatomo.getAtomicSymbol();
-    
-}
 */
 
 
@@ -520,7 +513,7 @@ PYBIND11_MODULE(molecules, m) {
         .def("normChargePoints", &Molecule::normalizeCPs)
         .def("getMassCenter", &Molecule::getMassCenter)
         .def("moveMassCenter", &Molecule::moveMassCenter, py::arg("newX")=0.0, py::arg("newY")=0.0, py::arg("newZ")=0.0)
-        .def("standartOrientation", &Molecule::standartOrientation);
+        .def("stdOrientation", &Molecule::standardOrientation);
     
     py::class_<Atom>(m, "Atom", "This class creates a atom variable type allowing for the usage in python like a primitive type.")
         .def(py::init<int, float, float, float, bool>(), py::arg("atomicNumber"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_") = 0)

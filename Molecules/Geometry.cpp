@@ -29,7 +29,7 @@ void CartesianSpace::changeCoord(char axis, float newValue){
 };
 
 SphericalSpace CartesianSpace::transformToSpherical(){
-    vector <float> temp = SphericalCoords(this->x, this->y, this->z, 'c').toCartesian();
+    vector <float> temp = SphericalCoords(this->x, this->y, this->z, 'c').toSpherical();
     return SphericalSpace(temp.at(0), temp.at(1), temp.at(2));
 };
 
@@ -58,7 +58,7 @@ SphericalSpace::SphericalSpace(float radius, float tetha, float phi){
 };
 
 CartesianSpace SphericalSpace::transformToCar(){
-    vector <float> temp = SphericalCoords(this->radius, this->phi, this->tetha, 'c').toSpherical();
+    vector <float> temp = SphericalCoords(this->radius, this->phi, this->tetha, 's').toCartesian();
     return CartesianSpace(temp.at(0), temp.at(1), temp.at(2));
 };
 
@@ -100,16 +100,16 @@ SphericalCoords::SphericalCoords(float coord1/*x or radius*/, float coord2/*y or
 };
 
 vector <float> SphericalCoords::toCartesian(){
-    this->x = this->radius * sin(this->phi) * cos(this->tetha);
-    this->y = this->radius * sin(this->phi) * sin(this->tetha);
-    this->z = this->radius * cos(this->phi);
+    this->x = this->radius * sin(3.14159286 * this->phi / 180) * cos(3.14159286 * this->tetha / 180);
+    this->y = this->radius * sin(3.14159286 * this->phi / 180) * sin(3.14159286 * this->tetha / 180);
+    this->z = this->radius * cos(3.14159286 * this->phi / 180);
     return vector <float> {this->x, this->y, this->z};
 };
 vector <float> SphericalCoords::toSpherical(){
     float r;
     r = sqrt(pow(this->x, 2) + pow(this->y, 2));
     this->radius = sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2));
-    this->phi = atan(r/this->z);
-    this->tetha = atan(this->y / this->x);
+    this->phi = atan(r/this->z) * 180 / 3.14159286;
+    this->tetha = atan(this->y / this->x) * 180 / 3.14159286;
     return vector <float> {this->radius, this->tetha, this->phi};
 };
