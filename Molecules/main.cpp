@@ -12,6 +12,7 @@
 #include "MassCenter.hpp"
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "Geometry.hpp"
 
 using namespace std;
 namespace py = pybind11;
@@ -22,28 +23,27 @@ class Atom{
     int atomicNumber;
     string atomicSymbol;
     float atomicMass;
-    float xPos, yPos, zPos;
+    CartesianSpace cCoord;
+    SphericalSpace sCoord;
     bool freezeCode;
 
     public:
-    Atom(int atomicNumber, float xPos, float yPos, float zPos, bool freezeCode_ = 0){
+    Atom(int atomicNumber, float coord1, float coord2, float coord3, bool freezeCode_ = 0){
         PeriodicTable temp;
         this->atomicNumber = atomicNumber;
         this->atomicSymbol = temp.getSymbol(this->atomicNumber);
-        this->xPos = xPos;
-        this->yPos = yPos;
-        this->zPos = zPos;
+        this->cCoord = CartesianSpace(coord1, coord2, coord3);
+        this->sCoord = SphericalSpace(coord1, coord2, coord3);
         this->freezeCode = freezeCode_;
         this->atomicMass = temp.getAtomicMass(this->atomicSymbol);
     };
 
-    Atom(string atomicSymbol, float xPos, float yPos, float zPos, bool freezeCode_ = 0){
+    Atom(string atomicSymbol, float coord1, float coord2, float coord3, bool freezeCode_ = 0){
         PeriodicTable temp;
         this->atomicSymbol = atomicSymbol;
         this->atomicNumber = temp.getAtomicNumber(atomicSymbol);
-        this->xPos = xPos;
-        this->yPos = yPos;
-        this->zPos = zPos;
+        this->cCoord = CartesianSpace(coord1, coord2, coord3);
+        this->sCoord = SphericalSpace(coord1, coord2, coord3);
         this->freezeCode = freezeCode_;
         this->atomicMass = temp.getAtomicMass(this->atomicSymbol);
     };
@@ -61,57 +61,99 @@ class Atom{
     };
 
     float getX(){
-        return this->xPos;
-    }
+        return this->cCoord.toVector().at(0);
+    };
 
     float getY(){
-        return this->yPos;
-    }
+        return this->cCoord.toVector().at(1);
+    };
 
     float getZ(){
-        return this->zPos;
-    }
+        return this->cCoord.toVector().at(3);
+    };
 
     void setX(int newX){
-        this->xPos = newX;
+        this->cCoord.changeCoord('x', newX);
+        this->sCoord = cCoord.transformToSpherical();
+    };
+
+    float getRadius(){
+        return this->sCoord.toVector().at(0);
+    };
+
+    float getTetha(){
+        return this->sCoord.toVector().at(1);
+    };
+
+    float getPhi(){
+        return this->sCoord.toVector().at(2);
     };
 
     void setY(int newY){
-        this->yPos = newY;
+        this->cCoord.changeCoord('y', newY);
+        this->sCoord = cCoord.transformToSpherical();
     };
 
     void setZ(int newZ){
-        this->zPos = newZ;
+        this->cCoord.changeCoord('z', newZ);
+        this->sCoord = cCoord.transformToSpherical();
     };
 
     void setCartesianPos(int newX, int newY, int newZ){
-        this->xPos = newX;
-        this->yPos = newY;
-        this->zPos = newZ;
+        this->cCoord.changeCoord('x', newX);
+        this->cCoord.changeCoord('y', newY);
+        this->cCoord.changeCoord('z', newZ);
+        this->sCoord = cCoord.transformToSpherical();
     };
 
-    float * getCartesianPos(){
-        float* pos = new float[3];
-        pos[0] = this->xPos;
-        pos[1] = this->yPos;
-        pos[2] = this->zPos;
+    vector<float>  getCartesianPos(){
+        vector<float> pos(3);
+        pos = {this->cCoord.toVector().at(0), this->cCoord.toVector().at(1), this->cCoord.toVector().at(2)};
         return pos;
-    }
+    };
+
+    void setRadius(int newRadius){
+        this->sCoord.changeCoord('r', newRadius);
+        this->cCoord = sCoord.transformToCar();
+    };
+
+    void setTetha(int newTetha){
+        this->sCoord.changeCoord('t', newTetha);
+        this->cCoord = sCoord.transformToCar();
+    };
+
+    void setPhi(int newPhi){
+        this->sCoord.changeCoord('f', newPhi);
+        this->cCoord = sCoord.transformToCar();
+    };
+
+    void setSphericalPos(float newRadius, float newTetha, float newPhi){
+        this->sCoord.changeCoord('x', newRadius);
+        this->sCoord.changeCoord('y', newTetha);
+        this->sCoord.changeCoord('z', newPhi);
+        this->cCoord = sCoord.transformToCar();
+    };
+
+    vector<float> getSphericalPos(){
+        vector<float> pos(3);
+        pos = {this->sCoord.toVector().at(0), this->sCoord.toVector().at(1), this->sCoord.toVector().at(2)};
+        return pos;
+    };
 
 };
 
 class ChargePoint{
 
     private:
-    float xPos, yPos, zPos;
+    CartesianSpace cCoord;
+    SphericalSpace sCoord;
     float charge;
 
     public:
-    ChargePoint(float xPos, float yPos, float zPos, float charge){
+    ChargePoint(float coord1, float coord2, float coord3, float charge){
         this->charge = charge;
-        this->xPos = xPos;
-        this->yPos = yPos;
-        this->zPos = zPos;
+        this->cCoord = CartesianSpace(coord1, coord2, coord3);
+        this->sCoord = SphericalSpace(coord1, coord2, coord3);
     };
 
     float getCharge(){
@@ -119,35 +161,48 @@ class ChargePoint{
     };
 
     float getXcoord(){
-        return this->xPos;
+        return this->cCoord.toVector().at(0);
     };
 
     float getYcoord(){
-        return this->yPos;
+        return this->cCoord.toVector().at(1);
     };
 
     float getZcoord(){
-        return this->zPos;
+        return this->cCoord.toVector().at(2);
+    };
+
+    float getRadius(){
+        return this->sCoord.toVector().at(0);
+    };
+
+    float getTetha(){
+        return this->sCoord.toVector().at(1);
+    };
+
+    float getPhi(){
+        return this->sCoord.toVector().at(2);
     };
 
     void setXcoord(float newX){
-        this->xPos = newX;
+        this->cCoord.changeCoord('x', newX);
+        this->sCoord = cCoord.transformToSpherical();
     };
 
     void setYcoord(float newY){
-        this->yPos = newY;
+        this->cCoord.changeCoord('y', newY);
+        this->sCoord = cCoord.transformToSpherical();
     };
 
     void setZcoord(float newZ){
-        this->zPos = newZ;
+        this->cCoord.changeCoord('z', newZ);
+        this->sCoord = cCoord.transformToSpherical();
     };
 
-    float * getCartesianCoord(){
-        static float coord[3];
-        coord[0] = this->xPos;
-        coord[1] = this->yPos;
-        coord[2] = this->zPos;
-        return coord;
+    vector<float> getCartesianCoord(){
+        vector<float> pos(3);
+        pos = {this->cCoord.toVector().at(0), this->cCoord.toVector().at(1), this->cCoord.toVector().at(2)};
+        return pos;
     };
 
     void setCharge(float newCharge){
@@ -155,9 +210,38 @@ class ChargePoint{
     };
 
     void setCartesianPos(float newX, float newY, float newZ){
-        this->xPos = newX;
-        this->yPos = newY;
-        this->zPos = newZ;
+        this->cCoord.changeCoord('x', newX);
+        this->cCoord.changeCoord('y', newY);
+        this->cCoord.changeCoord('z', newZ);
+        this->sCoord = cCoord.transformToSpherical();
+    };
+
+    void setRadius(int newRadius){
+        this->sCoord.changeCoord('r', newRadius);
+        this->cCoord = sCoord.transformToCar();
+    };
+
+    void setTetha(int newTetha){
+        this->sCoord.changeCoord('t', newTetha);
+        this->cCoord = sCoord.transformToCar();
+    };
+
+    void setPhi(int newPhi){
+        this->sCoord.changeCoord('f', newPhi);
+        this->cCoord = sCoord.transformToCar();
+    };
+
+    void setSphericalPos(float newRadius, float newTetha, float newPhi){
+        this->sCoord.changeCoord('x', newRadius);
+        this->sCoord.changeCoord('y', newTetha);
+        this->sCoord.changeCoord('z', newPhi);
+        this->cCoord = sCoord.transformToCar();
+    };
+
+    vector<float> getSphericalPos(){
+        vector<float> pos(3);
+        pos = {this->sCoord.toVector().at(0), this->sCoord.toVector().at(1), this->sCoord.toVector().at(2)};
+        return pos;
     };
 
 };
@@ -206,7 +290,7 @@ class Molecule{
         this->molecule.push_back(atom);
     };
 
-    vector <string> getAtom(int number, bool symbol = 0){
+    vector <string> getAtom(int number, bool symbol = 0, bool cartesian = 0){
         vector<string> atomString(4);
         Atom atom = this->molecule.at(number-1);
         if(symbol == 0){
@@ -214,9 +298,15 @@ class Molecule{
         }else{
             atomString.at(0) = atom.getAtomicSymbol();
         };
-        atomString.at(1) = to_string(atom.getX());
-        atomString.at(2) = to_string(atom.getY());
-        atomString.at(3) = to_string(atom.getZ());
+        if(cartesian == 0){
+            atomString.at(1) = to_string(atom.getX());
+            atomString.at(2) = to_string(atom.getY());
+            atomString.at(3) = to_string(atom.getZ());
+        } else{
+            atomString.at(1) = to_string(atom.getSphericalPos().at(0));
+            atomString.at(2) = to_string(atom.getSphericalPos().at(1));
+            atomString.at(3) = to_string(atom.getSphericalPos().at(2));
+        };
         return atomString;
     };
 
@@ -236,10 +326,10 @@ class Molecule{
         return this->multiplicity;
     };
 
-    vector< vector<string> > getMolecule(bool symbol = 0){
+    vector< vector<string> > getMolecule(bool symbol = 0, bool cartesian = 0){
         vector< vector<string> > moleculeString;
         for (int i = 1; i < this->molecule.size()+1; i++){
-            vector <string> atom = this->getAtom(i, symbol);
+            vector <string> atom = this->getAtom(i, symbol, cartesian);
             moleculeString.push_back(atom);
         };
         return moleculeString;
@@ -309,6 +399,30 @@ class Molecule{
 
     void standartOrientation(){
         this->moveMassCenter();
+        int j = 0;
+        vector<int> biggerDistance(2);
+        float distance = 0;
+        while(j < this->molecule.size()){
+            for(int i = j+1; i < this->molecule.size(); i++){
+                vector<float> atomCoord1 = this->molecule.at(j).getCartesianPos();
+                vector<float> atomCoord2 = this->molecule.at(i).getCartesianPos();
+                float dist = NormVector(atomCoord1, atomCoord2).norma();
+                if(dist > distance){
+                    distance = dist;
+                    biggerDistance.at(0) = j;
+                    biggerDistance.at(1) = i;
+                };
+            };
+            j++;
+        };
+        float incTetha, incPhi;
+        incTetha = 0 - this->molecule.at(biggerDistance.at(1)).getSphericalPos().at(1);
+        incPhi = 90 - this->molecule.at(biggerDistance.at(1)).getSphericalPos().at(2);
+        for (int i = 0; i < this->molecule.size(); i++){
+            this->molecule.at(i).setTetha(molecule.at(i).getTetha() + incTetha);
+            this->molecule.at(i).setPhi(molecule.at(i).getPhi() + incPhi);
+        }
+
         vector <float> xCoord(this->molecule.size()), yCoord(this->molecule.size()), zCoord(this->molecule.size());
         for(int i = 0; i < this->molecule.size(); i++){
             Atom atom = this->molecule.at(i);
@@ -389,23 +503,53 @@ int main(int argc, const char * argv[]) {
 
 
 PYBIND11_MODULE(molecules, m) {
-    py::class_<Molecule>(m, "Molecule")
+    py::class_<Molecule>(m, "Molecule", "This class creates a molecule variable type allowing for the usage in python like a primitive type.")
         .def(py::init())
-        .def("addChargePoints", &Molecule::addChargePoints)
+        .def("addChargePoints", &Molecule::addChargePoints, "This method add a charge point in a existent molecule.")
         .def("setCharge", &Molecule::setCharge)
-        .def("getAtom", &Molecule::getAtom, py::arg("number")=0, py::arg("symbol")=0)
+        .def("getAtom", &Molecule::getAtom, py::arg("number")=0, py::arg("symbol")=0, py::arg("cartesian") = 0)
         .def("addAtom", (void (Molecule::*)(int, float, float, float)) &Molecule::addAtom)
         .def("addAtom", (void (Molecule::*)(string, float, float, float)) &Molecule::addAtom)
         .def("getCharge", &Molecule::getCharge)
         .def("setCharge", &Molecule::setCharge)
         .def("setMultiplicity", &Molecule::setMultiplicity)
         .def("getMultiplicity", &Molecule::getMultiplicity)
-        .def("getMolecule", &Molecule::getMolecule, py::arg("symbol")=0)
+        .def("getMolecule", &Molecule::getMolecule, py::arg("symbol") = 0, py::arg("cartesian") = 0)
         .def("getChargePoints", &Molecule::getChargePoints)
         .def("getSize", &Molecule::getSize)
-        .def("normalizeCPs", &Molecule::normalizeCPs)
+        .def("normChargePoints", &Molecule::normalizeCPs)
         .def("getMassCenter", &Molecule::getMassCenter)
         .def("moveMassCenter", &Molecule::moveMassCenter, py::arg("newX")=0.0, py::arg("newY")=0.0, py::arg("newZ")=0.0)
         .def("standartOrientation", &Molecule::standartOrientation);
-        
+    
+    py::class_<Atom>(m, "Atom", "This class creates a atom variable type allowing for the usage in python like a primitive type.")
+        .def(py::init<int, float, float, float, bool>(), py::arg("atomicNumber"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_") = 0)
+        .def(py::init<string, float, float, float, bool>(), py::arg("atomicSymbol"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_") = 0)
+        .def("getAtomicMass", &Atom::getAtomicMass)
+        .def("getAtomicSymbol", &Atom::getAtomicSymbol)
+        .def("getAtomicNumber", &Atom::getAtomicNumber)
+        .def("getAtomicMass", &Atom::getAtomicMass)
+        .def("getX", &Atom::getX)
+        .def("getY", &Atom::getY)
+        .def("getZ", &Atom::getZ)
+        .def("setX", &Atom::setX)
+        .def("setY", &Atom::setY)
+        .def("setZ", &Atom::setZ)
+        .def("setCartesianCoord", &Atom::setCartesianPos)
+        .def("getCartesianCoord", &Atom::getCartesianPos);
+
+     py::class_<ChargePoint>(m, "ChargePoint", "This class creates a charge point variable type allowing for the usage in python like a primitive type.")
+        .def(py::init<float, float, float, float>())
+        .def("getX", &ChargePoint::getXcoord)
+        .def("getY", &ChargePoint::getYcoord)
+        .def("getZ", &ChargePoint::getZcoord)
+        .def("setX", &ChargePoint::setXcoord)
+        .def("setY", &ChargePoint::setYcoord)
+        .def("setZ", &ChargePoint::setZcoord)
+        .def("getCharge", &ChargePoint::getCharge)
+        .def("setCharge", &ChargePoint::setCharge)
+        .def("setCartesianCoord", &ChargePoint::setCartesianPos)
+        .def("getCartesianCoord", &ChargePoint::getCartesianCoord);
+
+
 };

@@ -18,7 +18,10 @@
 			"string_view": "cpp",
 			"unordered_map": "cpp",
 			"vector": "cpp",
-			"iosfwd": "cpp"
+			"iosfwd": "cpp",
+			"__tree": "cpp",
+			"set": "cpp",
+			"bitset": "cpp"
 		}
 	}
 }

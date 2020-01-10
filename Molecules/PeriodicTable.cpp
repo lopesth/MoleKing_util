@@ -262,16 +262,16 @@ PeriodicTable::PeriodicTable(){
     
 
 int PeriodicTable::getAtomicNumber(string symbol){
-    return symbolMap[symbol];
+    return this->symbolMap[symbol];
 };
 
 float PeriodicTable::getAtomicMass(string symbol){
-    return massMap[symbol];
+    return this->massMap[symbol];
 };
 
 string PeriodicTable::getSymbol(int atomicNumber){
     string target = "";
-    for (map<string, int>::iterator it=symbolMap.begin(); it!=symbolMap.end(); ++it){
+    for (map<string, int>::iterator it=this->symbolMap.begin(); it!=this->symbolMap.end(); ++it){
         if (it->second == atomicNumber){
             target = it->first;
         };
