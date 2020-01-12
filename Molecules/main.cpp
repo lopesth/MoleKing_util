@@ -81,7 +81,7 @@ class Atom{
     };
 
     float getZ(){
-        return this->cCoord.toVector().at(3);
+        return this->cCoord.toVector().at(2);
     };
 
     float getRadius(){
@@ -122,7 +122,7 @@ class Atom{
     };
 
     void setPhi(int newPhi){
-        this->sCoord.changeCoord('f', newPhi);
+        this->sCoord.changeCoord('p', newPhi);
         this->cCoord = sCoord.transformToCar();
     };
 
@@ -395,8 +395,6 @@ class Molecule{
             this->molecule.at(i).setX(this->molecule.at(i).getX() + dx);
             this->molecule.at(i).setY(this->molecule.at(i).getY() + dy);
             this->molecule.at(i).setZ(this->molecule.at(i).getZ() + dz);
-            
-
         };
         if (this->chargePoint.size() != 0){
             for(int i = 0; i < this->chargePoint.size(); i++){
@@ -501,16 +499,6 @@ class SupraMolecule{
     };
 
 };
-
-int main(int argc, const char * argv[]) {
-    Atom meuatomo(1.0, 1.0, 0.1, 1);
-    cout << meuatomo.getAtomicNumber() << endl;
-    cout << meuatomo.getCartesianPos()[0] << ", " << meuatomo.getCartesianPos()[1] << ", " << meuatomo.getCartesianPos()[2] << endl;
-    meuatomo.setCartesianPos(2, 2, 2 );
-    cout << meuatomo.getCartesianPos()[0] << ", " << meuatomo.getCartesianPos()[1] << ", " << meuatomo.getCartesianPos()[2] << endl;
-    cout << meuatomo.getAtomicSymbol();
-    
-}
 */
 
 
