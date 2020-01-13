@@ -21,7 +21,9 @@
 			"iosfwd": "cpp",
 			"__tree": "cpp",
 			"set": "cpp",
-			"bitset": "cpp"
+			"bitset": "cpp",
+			"ostream": "cpp",
+			"iostream": "cpp"
 		}
 	}
 }

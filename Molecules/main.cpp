@@ -10,12 +10,12 @@
 #include "PeriodicTable.hpp"
 #include <string>
 #include "MassCenter.hpp"
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+//#include <pybind11/pybind11.h>
+//#include <pybind11/stl.h>
 #include "Geometry.hpp"
 
 using namespace std;
-namespace py = pybind11;
+//namespace py = pybind11;
 
 class Atom{
     
@@ -344,13 +344,19 @@ class Molecule{
         return moleculeString;
     };
 
-    vector< vector<string> > getChargePoints(){
+    vector< vector<string> > getChargePoints(bool cartesian = 0){
         vector< vector<string> > cps;
         for (int i=0; i < this->chargePoint.size(); i++){
             vector<string> cp(4);
-            cp.at(0) = to_string(this->chargePoint.at(i).getX());
-            cp.at(1) = to_string(this->chargePoint.at(i).getY());
-            cp.at(2) = to_string(this->chargePoint.at(i).getZ());
+            if (cartesian == 0){
+                cp.at(0) = to_string(this->chargePoint.at(i).getX());
+                cp.at(1) = to_string(this->chargePoint.at(i).getY());
+                cp.at(2) = to_string(this->chargePoint.at(i).getZ());
+            } else{
+                cp.at(0) = to_string(this->chargePoint.at(i).getRadius());
+                cp.at(1) = to_string(this->chargePoint.at(i).getTetha());
+                cp.at(2) = to_string(this->chargePoint.at(i).getPhi());
+            };
             cp.at(3) = to_string(this->chargePoint.at(i).getCharge());
             cps.push_back(cp);
         };
@@ -368,39 +374,57 @@ class Molecule{
         };
     };
 
-    vector<float> getMassCenter(){
+    vector<float> getMassCenter(char typeCoord = 'c'){
         vector <float> massVector;
-        vector <float> xCoords;
-        vector <float> yCoords;
-        vector <float> zCoords;
+        vector <float> coordX;
+        vector <float> coordY;
+        vector <float> coordZ;
         for (int i = 0; i < this->molecule.size(); i++){
-            Atom atom = this->molecule.at(i);
-            massVector.push_back(atom.getAtomicMass());
-            xCoords.push_back(atom.getX());
-            yCoords.push_back(atom.getY());
-            zCoords.push_back(atom.getZ());
+            massVector.push_back(this->molecule.at(i).getAtomicMass());
+            coordX.push_back(this->molecule.at(i).getX());
+            coordY.push_back(this->molecule.at(i).getY());
+            coordZ.push_back(this->molecule.at(i).getZ());
         };
-        vector<float> temp = MassCenter(massVector, xCoords, yCoords, zCoords).getMassCenter();
-        return temp;
+        vector<float> temp = MassCenter(massVector, coordX, coordY, coordZ).getMassCenter();
+        if(typeCoord == 's'){
+            SphericalSpace tempSpherical = CartesianSpace(temp.at(0), temp.at(1), temp.at(2)).transformToSpherical();
+            return tempSpherical.toVector();
+        } else {
+            return temp;
+        };
     };
 
-    void moveMassCenter(float newX = 0.0, float newY = 0.0, float newZ= 0.0){
-        vector<float> oldMC = this->getMassCenter();
-        float dx, dy, dz;
-        dx = newX - oldMC.at(0);
-        dy = newY - oldMC.at(1);
-        dz = newZ - oldMC.at(2);
-
-        for(int i = 0; i < this->molecule.size(); i++){
-            this->molecule.at(i).setX(this->molecule.at(i).getX() + dx);
-            this->molecule.at(i).setY(this->molecule.at(i).getY() + dy);
-            this->molecule.at(i).setZ(this->molecule.at(i).getZ() + dz);
-        };
-        if (this->chargePoint.size() != 0){
-            for(int i = 0; i < this->chargePoint.size(); i++){
-                this->chargePoint.at(i).setX(this->chargePoint.at(i).getX() + dx);
-                this->chargePoint.at(i).setY(this->chargePoint.at(i).getY() + dy);
-                this->chargePoint.at(i).setZ(this->chargePoint.at(i).getZ() + dz);
+    void moveMassCenter(char typeCoord = 'c', float newCoord1 = 0.0, float newCoord2 = 0.0, float newCoord3= 0.0){
+        vector<float> oldMC = this->getMassCenter(typeCoord);
+        float dCoord1, dCoord2, dCoord3;
+        dCoord1 = newCoord1 - oldMC.at(0);
+        dCoord2 = newCoord2 - oldMC.at(1);
+        dCoord3 = newCoord3 - oldMC.at(2);
+        if (typeCoord == 'c'){
+            for(int i = 0; i < this->molecule.size(); i++){
+                this->molecule.at(i).setX(this->molecule.at(i).getX() + dCoord1);
+                this->molecule.at(i).setY(this->molecule.at(i).getY() + dCoord2);
+                this->molecule.at(i).setZ(this->molecule.at(i).getZ() + dCoord3);
+            };
+            if (this->chargePoint.size() != 0){
+                for(int i = 0; i < this->chargePoint.size(); i++){
+                    this->chargePoint.at(i).setX(this->chargePoint.at(i).getX() + dCoord1);
+                    this->chargePoint.at(i).setY(this->chargePoint.at(i).getY() + dCoord2);
+                    this->chargePoint.at(i).setZ(this->chargePoint.at(i).getZ() + dCoord3);
+                };
+            };
+        } else {
+            for(int i = 0; i < this->molecule.size(); i++){
+                this->molecule.at(i).setRadius(this->molecule.at(i).getRadius() + dCoord1);
+                this->molecule.at(i).setTetha(this->molecule.at(i).getTetha() + dCoord2);
+                this->molecule.at(i).setPhi(this->molecule.at(i).getPhi() + dCoord3);
+            };
+            if (this->chargePoint.size() != 0){
+                for(int i = 0; i < this->chargePoint.size(); i++){
+                    this->chargePoint.at(i).setRadius(this->chargePoint.at(i).getRadius() + dCoord1);
+                    this->chargePoint.at(i).setTetha(this->chargePoint.at(i).getTetha() + dCoord2);
+                    this->chargePoint.at(i).setPhi(this->chargePoint.at(i).getPhi() + dCoord3);
+                };
             };
         };
     };
@@ -499,27 +523,24 @@ class SupraMolecule{
     };
 
 };
-*/
-
 
 PYBIND11_MODULE(molecules, m) {
     py::class_<Molecule>(m, "Molecule", "This class creates a molecule variable type allowing for the usage in python like a primitive type.")
         .def(py::init())
         .def("addChargePoints", &Molecule::addChargePoints, "This method add a charge point in a existent molecule.")
-        .def("setCharge", &Molecule::setCharge)
-        .def("getAtom", &Molecule::getAtom, py::arg("number")=0, py::arg("symbol")=0, py::arg("cartesian") = 0)
         .def("addAtom", (void (Molecule::*)(int, float, float, float)) &Molecule::addAtom)
         .def("addAtom", (void (Molecule::*)(string, float, float, float)) &Molecule::addAtom)
-        .def("getCharge", &Molecule::getCharge)
+        .def("getAtom", &Molecule::getAtom, py::arg("number")=0, py::arg("symbol")=0, py::arg("cartesian") = 0)
         .def("setCharge", &Molecule::setCharge)
+        .def("getCharge", &Molecule::getCharge)
         .def("setMultiplicity", &Molecule::setMultiplicity)
         .def("getMultiplicity", &Molecule::getMultiplicity)
         .def("getMolecule", &Molecule::getMolecule, py::arg("symbol") = 0, py::arg("cartesian") = 0)
-        .def("getChargePoints", &Molecule::getChargePoints)
+        .def("getChargePoints", &Molecule::getChargePoints, py::arg("cartesian") = 0)
         .def("getSize", &Molecule::getSize)
         .def("normChargePoints", &Molecule::normalizeCPs)
-        .def("getMassCenter", &Molecule::getMassCenter)
-        .def("moveMassCenter", &Molecule::moveMassCenter, py::arg("newX")=0.0, py::arg("newY")=0.0, py::arg("newZ")=0.0)
+        .def("getMassCenter", &Molecule::getMassCenter, py::arg("typeCoord") = 'c')
+        .def("moveMassCenter", &Molecule::moveMassCenter, py::arg("typeCoord") = 'c', py::arg("newCoord1") = 0.0, py::arg("newCoord2") = 0.0, py::arg("newCoord3") = 0.0)
         .def("stdOrientation", &Molecule::standardOrientation);
     
     py::class_<Atom>(m, "Atom", "This class creates a atom variable type allowing for the usage in python like a primitive type.")
@@ -536,7 +557,15 @@ PYBIND11_MODULE(molecules, m) {
         .def("setY", &Atom::setY)
         .def("setZ", &Atom::setZ)
         .def("setCartesianCoord", &Atom::setCartesianPos)
-        .def("getCartesianCoord", &Atom::getCartesianPos);
+        .def("getCartesianCoord", &Atom::getCartesianPos)
+        .def("getRadius", &Atom::getRadius)
+        .def("getTetha", &Atom::getTetha)
+        .def("getPhi", &Atom::getPhi)
+        .def("setRadius", &Atom::setRadius)
+        .def("setTetha", &Atom::setTetha)
+        .def("setPhi", &Atom::setPhi)
+        .def("setSphericalPos", &Atom::setSphericalPos)
+        .def("getSphericalPos", &Atom::getSphericalPos);
 
      py::class_<ChargePoint>(m, "ChargePoint", "This class creates a charge point variable type allowing for the usage in python like a primitive type.")
         .def(py::init<float, float, float, float, char>(), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("charge"), py::arg("typeCoord") = 'c')
@@ -549,7 +578,60 @@ PYBIND11_MODULE(molecules, m) {
         .def("getCharge", &ChargePoint::getCharge)
         .def("setCharge", &ChargePoint::setCharge)
         .def("setCartesianCoord", &ChargePoint::setCartesianPos)
-        .def("getCartesianCoord", &ChargePoint::getCartesianPos);
-
-
+        .def("getCartesianCoord", &ChargePoint::getCartesianPos)
+        .def("getRadius", &ChargePoint::getRadius)
+        .def("getTetha", &ChargePoint::getTetha)
+        .def("getPhi", &ChargePoint::getPhi)
+        .def("setRadius", &ChargePoint::setRadius)
+        .def("setTetha", &ChargePoint::setTetha)
+        .def("setPhi", &ChargePoint::setPhi)
+        .def("setSphericalPos", &ChargePoint::setSphericalPos)
+        .def("getSphericalPos", &ChargePoint::getSphericalPos);
 };
+*/
+
+int main(){
+
+    Molecule minhaMol = Molecule();
+    minhaMol.addAtom("C",  6.394,  2.538, -0.301);
+    minhaMol.addAtom("C",  7.645,  2.034, -0.141);
+    minhaMol.addAtom("C",  7.762,  0.623, -0.006);
+    minhaMol.addAtom("C",  6.585, -0.199, -0.021);
+    minhaMol.addAtom("C",  5.274,  0.372, -0.174);
+    minhaMol.addAtom("C",  5.215,  1.731, -0.327);
+    minhaMol.addAtom("N",  8.876, -0.085,  0.135);
+    minhaMol.addAtom("S",  8.449, -1.650,  0.232);
+    minhaMol.addAtom("N",  6.833, -1.493,  0.103);
+    minhaMol.addAtom("N",  4.232, -0.531, -0.195);
+    minhaMol.addAtom("C",  2.866, -0.329, -0.064);
+    minhaMol.addAtom("C",  1.997, -1.330, -0.507);
+    minhaMol.addAtom("C",  0.636, -1.159, -0.352);
+    minhaMol.addAtom("N",  0.074, -0.084,  0.198);
+    minhaMol.addAtom("C",  0.908,  0.857,  0.628);
+    minhaMol.addAtom("C",  2.289,  0.794,  0.530);
+    minhaMol.addAtom("H",  6.265,  3.608, -0.423);
+    minhaMol.addAtom("H",  8.530,  2.656, -0.123);
+    minhaMol.addAtom("H",  4.269,  2.220, -0.504);
+    minhaMol.addAtom("H",  4.529, -1.492, -0.290);
+    minhaMol.addAtom("H",  2.385, -2.227, -0.978);
+    minhaMol.addAtom("H", -0.047, -1.931, -0.697);
+    minhaMol.addAtom("H",  0.447,  1.725,  1.093);
+    minhaMol.addAtom("H",  2.891,  1.587,  0.949);
+    vector <float> mc = minhaMol.getMassCenter();
+    cout << mc[0] << " " << mc[1] << " " << mc[2] << " " << endl;
+    vector< vector<string> > mol = minhaMol.getMolecule(1);
+    for(int i = 0; i <  mol.size(); i++){
+        cout << mol.at(i).at(0) << " " << mol.at(i).at(1) << " " << mol.at(i).at(2) << " " << mol.at(i).at(3) << endl;
+    }
+    cout << endl;
+    minhaMol.moveMassCenter();
+    mc = minhaMol.getMassCenter();
+    cout << mc[0] << " " << mc[1] << " " << mc[2] << " " << endl;
+    mol = minhaMol.getMolecule(1);
+    for(int i = 0; i <  mol.size(); i++){
+        cout << mol.at(i).at(0) << " " << mol.at(i).at(1) << " " << mol.at(i).at(2) << " " << mol.at(i).at(3) << endl;
+    }
+
+
+    return 0;
+}

@@ -273,7 +273,7 @@ string PeriodicTable::getSymbol(int atomicNumber){
     string target = "";
     for (map<string, int>::iterator it=this->symbolMap.begin(); it!=this->symbolMap.end(); ++it){
         if (it->second == atomicNumber){
-            target = it->first;
+            return it->first;
         };
     };
     return target;
