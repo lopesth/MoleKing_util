@@ -58,6 +58,7 @@ class Point{
     vector <double> getCoords(char typeCoord);
     void setCoords(vector <double> newValues, char typeCoord);
     void translation(Vector3D traslationVector);
+    void rotationVector(double angle, Vector3D unitVector);
 };
 
 class SphericalCoords{

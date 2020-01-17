@@ -90,6 +90,10 @@ class Atom{
         this->point.translation(traslationVector);
     }
 
+    void rotationAxis(double tetha, Vector3D unitAxis){
+        this->point.rotationVector(tetha, unitAxis);
+    }
+
     vector<double>  getPos(){
         return this->point.getCoords('c');
     };
@@ -150,6 +154,10 @@ class ChargePoint{
 
     void translation(Vector3D traslationVector){
         this->point.translation(traslationVector);
+    };
+
+    void rotationAxis(double tetha, Vector3D unitAxis){
+        this->point.rotationVector(tetha, unitAxis);
     }
 
 };
@@ -323,7 +331,73 @@ class Molecule{
             };
             j++;
         };
+        this->moveTail(biggerDistance[0]);
 
+        vector <double> cart = this->molecule[biggerDistance[1]].getPos();
+        Point victor = Point(cart[0], cart[1], cart[2], 'c');
+        Point victorDoidera = Point(cart[0], cart[1], cart[2], 'c');
+        Vector3D yAxis = Vector3D({0.0, 1.0, 0.0}, {0.0, 0.0, 0.0});
+        victorDoidera.rotationVector(180, yAxis);
+        Vector3D victores = Vector3D(victor.getCoords('c'), victorDoidera.getCoords('c'));
+        double linhaDaLoucura = victores.magnitude();
+        double raioVictoral = linhaDaLoucura/2;
+        double yDaLoucura = -1 *(sqrt(pow(raioVictoral, 2) - pow(victorDoidera.getCoords('c')[2],2)) - victorDoidera.getCoords('c')[1]);
+        Point centroDaLoucura = Point(victor.getCoords('c')[0], yDaLoucura, 0.0, 'c');
+        Vector3D sonOfVictor = Vector3D(victor.getCoords('c'), centroDaLoucura.getCoords('c'));
+        double yTombado = raioVictoral + yDaLoucura;
+        Vector3D sonOfZ = Vector3D( {victor.getCoords('c')[0] , yTombado, 0.0} , centroDaLoucura.getCoords('c'));
+        double anguloDaLoucura = sonOfVictor.angle(sonOfZ);
+        cout << anguloDaLoucura << endl;
+
+
+        for (int i =0; i < this->molecule.size(); i++){
+            Vector3D yAxis = Vector3D({0.0, 1.0, 0.0}, {0.0, 0.0, 0.0});
+            this->molecule[i].rotationAxis(anguloDaLoucura, yAxis);
+        }
+
+        vector <double> theLastVictor = this->molecule[biggerDistance[1]].getPos();
+        vector <double> victorGirando = SphericalCoords(theLastVictor[0], theLastVictor[1], theLastVictor[2], 'c').toSpherical();
+        for (int i =0; i < this->molecule.size(); i++){
+            Vector3D zAxis = Vector3D({0.0, 0.0, 1.0}, {0.0, 0.0, 0.0});
+            this->molecule[i].rotationAxis(victorGirando[2], zAxis);
+        }
+
+
+        cart = this->molecule[biggerDistance[1]].getPos();
+        victor = Point(cart[0], cart[1], cart[2], 'c');
+        victorDoidera = Point(cart[0], cart[1], cart[2], 'c');
+        Vector3D xAxis = Vector3D({1.0, 0.0, 0.0}, {0.0, 0.0, 0.0});
+        victorDoidera.rotationVector(180, xAxis);
+        victores = Vector3D(victor.getCoords('c'), victorDoidera.getCoords('c'));
+        linhaDaLoucura = victores.magnitude();
+        raioVictoral = linhaDaLoucura/2;
+        double xDaLoucura = -1 *(sqrt(pow(raioVictoral, 2) - pow(victorDoidera.getCoords('c')[2],2)) - victorDoidera.getCoords('c')[0]);
+        centroDaLoucura = Point(xDaLoucura, victor.getCoords('c')[2], 0.0, 'c');
+        sonOfVictor = Vector3D(victor.getCoords('c'), centroDaLoucura.getCoords('c'));
+        double xTombado = raioVictoral + xDaLoucura;
+        sonOfZ = Vector3D( {xTombado , victor.getCoords('c')[1], 0.0} , centroDaLoucura.getCoords('c'));
+        double anguloDaLoucuraX = sonOfVictor.angle(sonOfZ);
+        cout << anguloDaLoucuraX << endl;
+  
+
+        for (int i =0; i < this->molecule.size(); i++){
+            Vector3D xAxis = Vector3D({1.0, 0.0, 0.0}, {0.0, 0.0, 0.0});
+            this->molecule[i].rotationAxis(-anguloDaLoucuraX, xAxis);
+        }
+
+        for (int i =0; i < this->molecule.size(); i++){
+            Vector3D zAxis = Vector3D({0.0, 0.0, 1.0}, {0.0, 0.0, 0.0});
+            this->molecule[i].rotationAxis(90, zAxis);
+        }
+
+        for (int i =0; i < this->molecule.size(); i++){
+            Vector3D zAxis = Vector3D({0.0, 1.0, 0.0}, {0.0, 0.0, 0.0});
+            this->molecule[i].rotationAxis(90, yAxis);
+        }
+
+        this->moveMassCenter();
+  
+};
 
 
         
@@ -418,7 +492,7 @@ class Molecule{
             this->molecule.at(i).setY(pos.at(iMid));
             this->molecule.at(i).setZ(pos.at(iMin));
        };*/
-    };
+
 };
 
 /*
@@ -533,11 +607,11 @@ int main(){
         cout << "Atomo Original " << atomo[0] << " (" << atomo[1] << ", " << atomo[2] << ", " << atomo[3] << ")" << endl;
     };
 
-    minhaMol.moveMassCenter();
+    minhaMol.standardOrientation();
     for (int i = 0; i < 11; i++){
         vector <string> atomo;
         atomo = minhaMol.getAtom(i+1);
-        cout << "Atomo mudado " << atomo[0] << " (" << atomo[1] << ", " << atomo[2] << ", " << atomo[3] << ")" << endl;
+        cout << "Atomo mudado " << atomo[0] << "    " << atomo[1] << "    " << atomo[2] << "    " << atomo[3] << "" << endl;
     };
 
 
