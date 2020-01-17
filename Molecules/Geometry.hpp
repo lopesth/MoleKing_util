@@ -10,55 +10,65 @@
 #define Geometry_hpp
 #include<vector>
 #include <math.h>
+#include <iostream>
+#include "Matrix.hpp"
 
 using namespace std;
 
-class SphericalSpace;
-
-class CartesianSpace{
+class Vector3D{
     private:
-    float x, y, z;
+    double x_a, x_b, y_a, y_b, z_a, z_b, s_i, s_j, s_k;
 
     public:
-    CartesianSpace();
-    CartesianSpace(float x, float y, float z);
-    SphericalSpace transformToSpherical();
-    vector<float> toVector();
-    void changeCoord(char axis, float newValue);
+    Vector3D(vector<double> pointA, vector<double> pointB);
+    double magnitude();
+    vector <double> getVector();
+    void show();
+    Vector3D normalize();
+    Vector3D conjugate();
+    Vector3D operator/ (double mag);
+    Vector3D operator* (double mag);
+    Vector3D operator+ (Vector3D vectorB);
+    Vector3D operator- (Vector3D vectorB);
+    Vector3D crossProduct(Vector3D vectorB);
+    double dotProduct(Vector3D vectorB);
+    double angle(Vector3D vectorB);
+    double axisValue(char unitVector);
 };
 
-class SphericalSpace{
+class Quaternion{
     private:
-    float radius, tetha, phi;
+    double u, s_i, s_j, s_k;
 
     public:
-    SphericalSpace();
-    SphericalSpace(float radius, float tetha, float phi);
-    CartesianSpace transformToCar();
-    vector<float> toVector();
-    void changeCoord(char axis, float newValue);
+    Quaternion(double u, vector <double> vectorA, vector <double> vectorB);
+    double magnitude();
+    vector <double> getQuaternion();
+    void show();
 };
 
-class NormVector{
-
+class Point{
     private:
-    vector<float> pointA, pointB;
+    double radius, tetha, phi, x, y, z;
 
     public:
-    NormVector(vector<float> pointA, vector<float> pointB);
-    float norma();
-
+    Point(double coord1, double coord2, double coord3, char typeCoord);
+    Point();
+    void setCoord(char coordName, double newValue);
+    vector <double> getCoords(char typeCoord);
+    void setCoords(vector <double> newValues, char typeCoord);
+    void translation(Vector3D traslationVector);
 };
 
 class SphericalCoords{
 
     private:
-    float x, y, z, radius, tetha, phi;
+    double x, y, z, radius, tetha, phi;
 
     public:
-    SphericalCoords(float coord1/*x or radius*/, float coord2/*y or teta*/, float coord3/*z or phi*/, char spaceType);
-    vector <float> toCartesian();
-    vector <float> toSpherical();
+    SphericalCoords( double coord1/*x or radius*/, double coord2/*y or teta*/, double coord3/*z or phi*/, char spaceType);
+    vector <double> toCartesian();
+    vector <double> toSpherical();
 
 };
 

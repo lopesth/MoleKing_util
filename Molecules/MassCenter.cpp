@@ -8,9 +8,9 @@
 
 #include "MassCenter.hpp"
 
-float MassCenter::axisMassCenter(vector <float> coords){
-    float rUp = 0;
-    float rDown = 0;
+double MassCenter::axisMassCenter(vector <double> coords){
+    double rUp = 0;
+    double rDown = 0;
     for (int i = 0; i < coords.size(); i++){
         rUp = rUp + (this->massList.at(i) * coords.at(i));
         rDown = rDown + this->massList.at(i);
@@ -18,14 +18,14 @@ float MassCenter::axisMassCenter(vector <float> coords){
     return (rUp/rDown);
 };
 
-MassCenter::MassCenter(vector <float> massList, vector <float> xCoords, vector <float> yCoords, vector <float> zCoords){
+MassCenter::MassCenter(vector <double> massList, vector <double> xCoords, vector <double> yCoords, vector <double> zCoords){
     this->massList = massList;
     this->massCenterPoint.at(0)=this->axisMassCenter(xCoords);
     this->massCenterPoint.at(1)=this->axisMassCenter(yCoords);
     this->massCenterPoint.at(2)=this->axisMassCenter(zCoords);
 };
 
-vector<float> MassCenter::getMassCenter(){
+vector<double> MassCenter::getMassCenter(){
         return this->massCenterPoint;
 };
 

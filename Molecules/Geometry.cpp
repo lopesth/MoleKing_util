@@ -8,108 +8,255 @@
 
 #include "Geometry.hpp"
 
-CartesianSpace::CartesianSpace(){};
+// Point class //
 
-CartesianSpace::CartesianSpace(float x, float y, float z){
-    this->x = x;
-    this->y = y;
-    this->z = z;
-};
+Point::Point(){};
 
-void CartesianSpace::changeCoord(char axis, float newValue){
-    if(axis == 'x'){
-        this->x = newValue;
-    } else if (axis == 'y'){
-        this->y = newValue;
-    } else if(axis == 'z'){
-        this->z = newValue;
+Point::Point(double coord1, double coord2, double coord3, char typeCoord = 'c'){
+    if (typeCoord == 'c'){
+        this->x = coord1;
+        this->y = coord2;
+        this->z = coord3;
+        vector<double> temp = SphericalCoords(this->x, this->y, this->z, 'c').toSpherical();
+        this->radius = temp[0];
+        this->tetha = temp[1];
+        this->phi = temp[2];
     } else {
-        exit (EXIT_FAILURE);
+        this->radius = coord1;
+        this->tetha = coord2;
+        this->phi = coord3;
+        vector<double> temp = SphericalCoords(this->radius, this->tetha, this->phi, 's').toCartesian();
+        this->x = temp[0];
+        this->y = temp[1];
+        this->z = temp[2];
     };
 };
 
-SphericalSpace CartesianSpace::transformToSpherical(){
-    vector <float> temp = SphericalCoords(this->x, this->y, this->z, 'c').toSpherical();
-    return SphericalSpace(temp.at(0), temp.at(1), temp.at(2));
+void Point::setCoords(vector <double> newValues, char typeCoord = 'c' /* 'c' for cartesian coordinates, 's' for spherical*/){
+    if(typeCoord == 'c'){
+        this->x = newValues[0];
+        this->y = newValues[1];
+        this->z = newValues[2];
+        vector<double> temp = SphericalCoords(this->x, this->y, this->z, 'c').toSpherical();
+        this->radius = temp[0];
+        this->tetha = temp[1];
+        this->phi = temp[2];
+    } else {
+        this->radius = newValues[0];
+        this->tetha = newValues[1];
+        this->phi = newValues[2];
+        vector<double> temp = SphericalCoords(this->radius, this->tetha, this->phi, 's').toCartesian();
+        this->x = temp[0];
+        this->y = temp[1];
+        this->z = temp[2];
+    };
 };
 
-vector<float> CartesianSpace::toVector(){
-    return vector <float> {this->x, this->y, this->z};
-};
-
-SphericalSpace::SphericalSpace(){};
-
-void SphericalSpace::changeCoord(char axis, float newValue){
-    if(axis == 'r'){
+void Point::setCoord(char coordName, double newValue){
+    if(coordName == 'x'){
+        this->x = newValue;
+    } else if (coordName == 'y'){
+        this->y = newValue;
+    } else if(coordName == 'z'){
+        this->z = newValue;
+    } else if(coordName == 'r'){
         this->radius = newValue;
-    } else if (axis == 't'){
+    } else if(coordName == 't'){
         this->tetha = newValue;
-    } else if(axis == 'p'){
+    } else if(coordName == 'p'){
         this->phi = newValue;
     } else {
         exit (EXIT_FAILURE);
     };
+    if (coordName == 'x' || coordName == 'y' || coordName == 'z'){
+        this->setCoords(vector <double> {this->x, this->y, this->z}, 'c');
+    } else {
+        this->setCoords(vector <double> {this->radius, this->tetha, this->phi}, 's');
+    };
 };
 
-SphericalSpace::SphericalSpace(float radius, float tetha, float phi){
-    this->radius = radius;
-    this->phi = phi;
-    this->tetha = tetha;
+vector<double> Point::getCoords(char typeCoord = 'c'){
+    if (typeCoord == 'c'){
+        return vector <double> {this->x, this->y, this->z};
+    } else {
+        return vector <double> {this->radius, this->tetha, this->phi};
+    };
 };
 
-CartesianSpace SphericalSpace::transformToCar(){
-    vector <float> temp = SphericalCoords(this->radius, this->phi, this->tetha, 's').toCartesian();
-    return CartesianSpace(temp.at(0), temp.at(1), temp.at(2));
+void Point::translation(Vector3D translationVector){
+    vector < vector < double> > posMatrix= { {this->x}, {this->y}, {this->z}, {1.0} };
+    Matrix transMAtrix = Matrix( { {1.0, 0.0, 0.0, translationVector.axisValue('i')},
+                                   {0.0, 1.0, 0.0, translationVector.axisValue('j')},
+                                   {0.0, 0.0, 1.0, translationVector.axisValue('k')},
+                                   {0.0, 0.0, 0.0, 1.0} } );
+    Matrix newPos = transMAtrix.multiplication(posMatrix);
+    this->x = newPos.element(1, 1);
+    this->y = newPos.element(2, 1);
+    this->z = newPos.element(3, 1);
+    vector <double> newPosSpherical = SphericalCoords(this->x, this->y, this->z, 'c').toSpherical();
+    this->radius = newPosSpherical[0];
+    this->tetha = newPosSpherical[1];
+    this->phi = newPosSpherical[2];
 };
 
-vector<float> SphericalSpace::toVector(){
-    return vector <float> {this->radius, this->phi, this->tetha};
-};
+// End of Point class //
 
-NormVector::NormVector(vector<float> pointA, vector<float> pointB){
-    this->pointA.resize(3);
-    this->pointB.resize(3);
-    this->pointA = pointA;
-    this->pointB = pointB;
-};
+// SphericalCoords class //
 
-float NormVector::norma(){
-
-    float distance, dx, dy, dz;
-
-    dx = pointA.at(0) - pointB.at(0);
-    dy = pointA.at(1) - pointB.at(1);
-    dz = pointA.at(2) - pointB.at(2);
-
-    distance = pow(dx, 2) + pow(dy, 2) + pow(dz, 2);
-    return sqrt(distance);
-
-};
-
-
-SphericalCoords::SphericalCoords(float coord1/*x or radius*/, float coord2/*y or tetha*/, float coord3/*z or phi*/, char spaceType/* 'c' for cartesian ou 's' for spherical*/){
+SphericalCoords::SphericalCoords(double coord1/*x or radius*/, double coord2/*y or tetha*/, double coord3/*z or phi*/, char spaceType = 'c'/* 'c' for cartesian ou 's' for spherical*/){
     if (spaceType == 'c'){
         this->x = coord1;
         this->y = coord2;
         this->z = coord3;
-    }else{
+    } else {
         this->radius = coord1;
         this->tetha =  coord2;
         this->phi = coord3;
     };
 };
 
-vector <float> SphericalCoords::toCartesian(){
-    this->x = this->radius * sin(3.14159286 * this->phi / 180) * cos(3.14159286 * this->tetha / 180);
-    this->y = this->radius * sin(3.14159286 * this->phi / 180) * sin(3.14159286 * this->tetha / 180);
-    this->z = this->radius * cos(3.14159286 * this->phi / 180);
-    return vector <float> {this->x, this->y, this->z};
+vector <double> SphericalCoords::toCartesian(){
+    SphericalCoords s = *this;
+    s.x = s.radius * sin(M_PI * s.tetha / 180) * cos(M_PI * s.phi / 180);
+    s.y = s.radius * sin(M_PI * s.tetha / 180) * sin(M_PI * s.phi / 180);
+    s.z = s.radius * cos(M_PI * s.tetha / 180);
+    return vector <double> {s.x, s.y, s.z};
 };
-vector <float> SphericalCoords::toSpherical(){
-    float r;
-    r = sqrt(pow(this->x, 2) + pow(this->y, 2));
-    this->radius = sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2));
-    this->phi = atan(r/this->z) * 180 / 3.14159286;
-    this->tetha = atan(this->y / this->x) * 180 / 3.14159286;
-    return vector <float> {this->radius, this->tetha, this->phi};
+
+vector <double> SphericalCoords::toSpherical(){
+    SphericalCoords c = *this;
+    c.radius = sqrt(pow(c.x, 2) + pow(c.y, 2) + pow(c.z, 2));
+    if (c.radius == 0){
+        return vector <double> {0, 0, 0};
+    }
+    c.tetha = acos(c.z/c.radius) * 180 / M_PI;
+    double xy = sqrt(pow(c.x, 2) + pow(c.y,2));
+    if (xy == 0){
+        c.phi =0;
+    } else {
+        c.phi = acos(c.x/xy) * 180 / M_PI;
+    };
+    return vector <double> {c.radius, c.tetha, c.phi};
 };
+
+// Endo fo SphericalCoords class //
+
+// Vector3D class ///
+
+Vector3D::Vector3D(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0}){
+    x_a = pointA[0];
+    x_b = pointB[0];
+    s_i = x_a - x_b;
+    y_a = pointA[1];
+    y_b = pointB[1];
+    s_j = y_a - y_b;
+    z_a = pointA[2];
+    z_b = pointB[2];
+    s_k = z_a - z_b;
+};
+
+double Vector3D::magnitude(){
+    double norm = pow(this->s_i, 2) + pow(this->s_j, 2) + pow(this->s_k, 2);
+    return sqrt(norm);
+};
+
+vector <double> Vector3D::getVector(){
+    return vector <double> {this->s_i, this->s_j, this->s_k};
+};
+
+Vector3D Vector3D::normalize(){
+    Vector3D v = *this;
+    double mag = 1/this->magnitude();
+    return Vector3D(vector <double> {this->s_i * mag, this->s_j * mag, this->s_k * mag});
+};
+
+Vector3D Vector3D::conjugate(){
+    Vector3D v = *this;
+    double mag = -1.0;
+    return Vector3D(vector <double> {this->s_i * mag, this->s_j * mag, this->s_k * mag});
+};
+
+Vector3D Vector3D::operator/ (double mag){
+    Vector3D v = *this;
+    return Vector3D(vector <double> {this->s_i / mag, this->s_j / mag, this->s_k / mag});
+};
+
+Vector3D Vector3D::operator* (double mag){
+    Vector3D v = *this;
+    return Vector3D(vector <double> {this->s_i * mag, this->s_j * mag, this->s_k * mag});
+};
+
+Vector3D Vector3D::crossProduct(Vector3D vectorB){
+    Vector3D v = *this;
+    vector < double > b = vectorB.getVector();
+    return Vector3D(vector <double> {(this->s_j * b[2]) - (this->s_k * b[1]), (this->s_k * b[0]) - (this->s_i * b[2]), (this->s_i *b[1]) - (b[0] * this->s_j)});
+};
+
+double Vector3D::dotProduct(Vector3D vectorB){
+    Vector3D v = *this;
+    vector < double > b = vectorB.getVector();
+    return double (this->s_i * b[0] + this->s_j * b[1] + this->s_k * b[2]);
+};
+
+Vector3D Vector3D::operator+ (Vector3D vectorB){
+    Vector3D v = *this;
+    vector < double > b = vectorB.getVector();
+    return Vector3D(vector <double> {this->s_i + b[0], this->s_j + b[1], this->s_k + b[2]});
+};
+
+Vector3D Vector3D::operator-(Vector3D vectorB){
+    Vector3D v = *this;
+    return this->operator+(vectorB.conjugate());
+};
+
+double Vector3D::angle(Vector3D vectorB){
+        Vector3D v = *this;
+        double tetha;
+
+        tetha = acos( this->dotProduct(vectorB) / ( vectorB.magnitude() * this->magnitude() ) );
+          
+        return (tetha * 180) / M_PI;
+};
+
+void Vector3D::show(){
+    cout << "v = " << this->s_i << "i +" << this->s_j << "j +" << this->s_k << "k" << endl;
+};
+
+double Vector3D::axisValue(char unitVector){
+    if (unitVector == 'i'){
+        return this->s_i;
+    } else if (unitVector == 'j'){
+        return this->s_j;
+    } else if (unitVector == 'k'){
+        return this->s_k;
+    } else {
+        return 0.0;
+    };
+};
+
+// End of Vector3D class //
+
+// Quaternion class //
+
+Quaternion::Quaternion(double u, vector <double> vectorA, vector <double> vectorB = {0.0, 0.0, 0.0}){
+    Quaternion q = *this;
+    this->u = u;
+    this->s_i = vectorA[0] - vectorB[0];
+    this->s_j = vectorA[0] - vectorB[0];
+    this->s_k = vectorA[0] - vectorB[0];
+};
+
+double Quaternion::magnitude(){
+    double norm = pow(this->u, 2) + pow(this->s_i, 2) + pow(this->s_j, 2) + pow(this->s_k, 2);
+    return sqrt(norm);
+};
+
+void Quaternion::show(){
+    cout << "q = " << this->u << " + " << this->s_i << "i +" << this->s_j << "j +" << this->s_k << "k" << endl;
+}
+
+vector <double> Quaternion::getQuaternion(){
+    return vector <double> {this->u, this->s_i, this->s_j, this->s_k};
+};
+
+// End of Quaternion class //

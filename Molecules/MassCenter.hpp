@@ -15,13 +15,13 @@ using namespace std;
 
 class MassCenter{
     private:
-    vector <float> massList;
-    vector <float> massCenterPoint = {0, 0, 0};
-    float axisMassCenter(vector <float> coords);
+    vector <double> massList;
+    vector <double> massCenterPoint = {0, 0, 0};
+    double axisMassCenter(vector <double> coords);
 
     public:
-    MassCenter(vector <float> massList, vector <float> xCoords, vector <float> yCoords, vector <float> zCoords);
-    vector <float> getMassCenter();
+    MassCenter(vector <double> massList, vector <double> xCoords, vector <double> yCoords, vector <double> zCoords);
+    vector <double> getMassCenter();
 };
 
 
