@@ -21,6 +21,7 @@ class MassCenter{
 
     public:
     MassCenter(vector <double> massList, vector <double> xCoords, vector <double> yCoords, vector <double> zCoords);
+    ~MassCenter();
     vector <double> getMassCenter();
 };
 

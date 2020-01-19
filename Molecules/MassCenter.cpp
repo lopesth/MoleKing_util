@@ -18,6 +18,13 @@ double MassCenter::axisMassCenter(vector <double> coords){
     return (rUp/rDown);
 };
 
+MassCenter::~MassCenter(){
+    this->massList.clear();
+    this->massCenterPoint.clear();
+    this->massList.resize(0);
+    this->massCenterPoint.resize(0);
+};
+
 MassCenter::MassCenter(vector <double> massList, vector <double> xCoords, vector <double> yCoords, vector <double> zCoords){
     this->massList = massList;
     this->massCenterPoint.at(0)=this->axisMassCenter(xCoords);

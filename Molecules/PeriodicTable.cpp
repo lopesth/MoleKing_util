@@ -259,7 +259,11 @@ PeriodicTable::PeriodicTable(){
     this->massMap.insert(pair<string, float>("dice_ghost_label", 0.0000));
 
 };
-    
+
+PeriodicTable::~PeriodicTable(){
+    this->symbolMap.clear();
+    this->massMap.clear();
+};   
 
 int PeriodicTable::getAtomicNumber(string symbol){
     return this->symbolMap[symbol];

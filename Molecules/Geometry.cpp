@@ -32,6 +32,15 @@ Point::Point(double coord1, double coord2, double coord3, char typeCoord = 'c'){
     };
 };
 
+Point::~Point(){
+    this->x = 0.0;
+    this->y = 0.0;
+    this->z = 0.0;
+    this->radius = 0.0;
+    this->tetha = 0.0;
+    this->phi =  0.0;
+};
+
 void Point::setCoords(vector <double> newValues, char typeCoord = 'c' /* 'c' for cartesian coordinates, 's' for spherical*/){
     if(typeCoord == 'c'){
         this->x = newValues[0];
@@ -138,6 +147,15 @@ SphericalCoords::SphericalCoords(double coord1/*x or radius*/, double coord2/*y 
     };
 };
 
+SphericalCoords::~SphericalCoords(){
+    this->x = 0.0;
+    this->y = 0.0;
+    this->z = 0.0;
+    this->radius = 0.0;
+    this->tetha = 0.0;
+    this->phi = 0.0;
+};
+
 vector <double> SphericalCoords::toCartesian(){
     SphericalCoords s = *this;
     s.x = s.radius * sin(M_PI * s.tetha / 180) * cos(M_PI * s.phi / 180);
@@ -167,15 +185,41 @@ vector <double> SphericalCoords::toSpherical(){
 // Vector3D class ///
 
 Vector3D::Vector3D(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0}){
-    x_a = pointA[0];
-    x_b = pointB[0];
-    s_i = x_a - x_b;
-    y_a = pointA[1];
-    y_b = pointB[1];
-    s_j = y_a - y_b;
-    z_a = pointA[2];
-    z_b = pointB[2];
-    s_k = z_a - z_b;
+    this->x_a = pointA[0];
+    this->x_b = pointB[0];
+    this->s_i = this->x_a - this->x_b;
+    this->y_a = pointA[1];
+    this->y_b = pointB[1];
+    this->s_j = this->y_a - this->y_b;
+    this->z_a = pointA[2];
+    this->z_b = pointB[2];
+    this->s_k = this->z_a - this->z_b;
+};
+
+Vector3D::Vector3D(){};
+
+void Vector3D::setVector(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0}){
+    this->x_a = pointA[0];
+    this->x_b = pointB[0];
+    this->s_i = this->x_a - this->x_b;
+    this->y_a = pointA[1];
+    this->y_b = pointB[1];
+    this->s_j = this->y_a - this->y_b;
+    this->z_a = pointA[2];
+    this->z_b = pointB[2];
+    this->s_k = this->z_a - this->z_b;
+};
+
+Vector3D::~Vector3D(){
+    x_a = 0.0;
+    x_b = 0.0;
+    y_a = 0.0;
+    y_b = 0.0;
+    z_a = 0.0;
+    z_b = 0.0;
+    s_i = 0.0;
+    s_j = 0.0;
+    s_k = 0.0;
 };
 
 double Vector3D::magnitude(){
@@ -267,6 +311,13 @@ Quaternion::Quaternion(double u, vector <double> vectorA, vector <double> vector
     this->s_i = vectorA[0] - vectorB[0];
     this->s_j = vectorA[0] - vectorB[0];
     this->s_k = vectorA[0] - vectorB[0];
+};
+
+Quaternion::~Quaternion(){
+    u = 0.0;
+    s_i = 0.0;
+    s_j = 0.0;
+    s_k = 0.0;
 };
 
 double Quaternion::magnitude(){

@@ -24,6 +24,9 @@ class Matrix{
 
     public:
     Matrix(vector < vector <double> > matrix);
+    Matrix();
+    ~Matrix();
+    void setMatrix(vector < vector <double> > matrix);
     vector < vector <double> > sum(vector < vector <double> > matrixB);
     vector < vector <double> > multiplication(double scalar);
     vector < vector <double> > multiplication(vector < vector <double> > matrixB);

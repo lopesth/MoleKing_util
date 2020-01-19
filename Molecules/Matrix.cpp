@@ -12,6 +12,17 @@ Matrix::Matrix(vector < vector <double> > matrix){
     this->matrix = matrix;
 };
 
+Matrix::Matrix(){};
+
+void Matrix::setMatrix(vector < vector <double> > matrix){
+    this->matrix = matrix;
+}
+
+Matrix::~Matrix(){
+    this->matrix.clear();
+    this->matrix.resize(0);
+};
+
 vector <vector <double> > Matrix::sum(vector <vector <double> > matrixB){
     vector <double> in(this->matrix[0].size());
     vector < vector < double > > result(this->matrix.size(), in);

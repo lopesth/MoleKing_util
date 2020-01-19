@@ -1,15 +1,15 @@
 //
 //  main.cpp
-//  Molecules
+//  Molecules   
 //
 //  Created by Thiago Lopes and Mateus Barbosa on 09/01/20.
 //  Copyright © 2020 Thiago Lopes and Mateus Barbosa. All rights reserved.
 //
 
 #include <iostream>
-#include "PeriodicTable.hpp"
 #include <string>
 #include "MassCenter.hpp"
+#include "AtomicScale.hpp"
 //#include <pybind11/pybind11.h>
 //#include <pybind11/stl.h>
 #include "Geometry.hpp"
@@ -17,150 +17,6 @@
 
 using namespace std;
 //namespace py = pybind11;
-
-class Atom{
-    
-    private:
-    int atomicNumber;
-    string atomicSymbol;
-    double atomicMass;
-    Point point;
-    bool freezeCode;
-
-    public:
-    Atom(int atomicNumber, double x, double y, double z, bool freezeCode_ = 0){
-        PeriodicTable temp;
-        this->atomicNumber = atomicNumber;
-        this->atomicSymbol = temp.getSymbol(this->atomicNumber);
-        this->point = Point(x, y, z, 'c');
-        this->freezeCode = freezeCode_;
-        this->atomicMass = temp.getAtomicMass(this->atomicSymbol);
-    };
-
-    Atom(string atomicSymbol, double x, double y, double z, bool freezeCode_ = 0){
-        PeriodicTable temp;
-        this->atomicSymbol = atomicSymbol;
-        this->atomicNumber = temp.getAtomicNumber(atomicSymbol);
-        this->point = Point(x, y, z, 'c');
-        this->freezeCode = freezeCode_;
-        this->atomicMass = temp.getAtomicMass(this->atomicSymbol);
-    };
-
-    double getAtomicMass(){
-        return this->atomicMass;
-    };
-
-    string getAtomicSymbol(){
-        return this->atomicSymbol;
-    };
-
-    int getAtomicNumber(){
-        return this->atomicNumber;
-    };
-
-    double getX(){
-        return this->point.getCoords('c')[0];
-    };
-
-    double getY(){
-        return this->point.getCoords('c')[1];
-    };
-
-    double getZ(){
-        return this->point.getCoords('c')[2];
-    };
-
-    void setX(double newX){
-        this->point.setCoord('x', newX);
-    };
-
-    void setY(double newY){
-        this->point.setCoord('y', newY);
-    };
-
-    void setZ(double newZ){
-        this->point.setCoord('z', newZ);
-    };
-
-    void setNewPos(double newX, double newY, double newZ){
-        this->point.setCoords(vector <double> {newX, newY, newZ}, 'c');
-    };
-
-    void translation(Vector3D traslationVector){
-        this->point.translation(traslationVector);
-    }
-
-    void rotationAxis(double tetha, Vector3D unitAxis){
-        this->point.rotationVector(tetha, unitAxis);
-    }
-
-    vector<double>  getPos(){
-        return this->point.getCoords('c');
-    };
-
-};
-
-class ChargePoint{
-
-    private:
-    Point point;
-    double charge;
-
-    public:
-    ChargePoint(double coord1, double coord2, double coord3, double charge){
-        this->charge = charge;
-        this->point = Point(coord1, coord2, coord3, 'c');
-    };
-
-    void setCharge(double newCharge){
-        this->charge = newCharge;
-    };
-
-    double getCharge(){
-        return this->charge;
-    };
-
-    double getX(){
-        return this->point.getCoords('c')[0];
-    };
-
-    double getY(){
-        return this->point.getCoords('c')[1];
-    };
-
-    double getZ(){
-        return this->point.getCoords('c')[2];
-    };
-
-    void setX(double newX){
-        this->point.setCoord('x', newX);
-    };
-
-    void setY(double newY){
-        this->point.setCoord('y', newY);
-    };
-
-    void setZ(double newZ){
-        this->point.setCoord('z', newZ);
-    };
-
-    void setNewPos(double newX, double newY, double newZ){
-        this->point.setCoords(vector <double> {newX, newY, newZ}, 'c');
-    };
-
-    vector<double>  getPos(){
-        return this->point.getCoords('c');
-    };
-
-    void translation(Vector3D traslationVector){
-        this->point.translation(traslationVector);
-    };
-
-    void rotationAxis(double tetha, Vector3D unitAxis){
-        this->point.rotationVector(tetha, unitAxis);
-    }
-
-};
 
 class Molecule{
 
@@ -231,13 +87,13 @@ class Molecule{
         this->chargePoint.push_back(cp);
     };
 
-    void addAtom(string atomSymbol, double xPos, double yPos, double zPos){
-        Atom atom(atomSymbol, xPos, yPos, zPos);
+    void addAtom(string atomSymbol, double xPos, double yPos, double zPos, bool freezeCode_ = 0){
+        Atom atom(atomSymbol, xPos, yPos, zPos, freezeCode_);
         this->molecule.push_back(atom);
     };
 
-    void addAtom(int atomNumber, double xPos, double yPos, double zPos){
-        Atom atom(atomNumber, xPos, yPos, zPos);
+    void addAtom(int atomNumber, double xPos, double yPos, double zPos, bool freezeCode_ = 0){
+        Atom atom(atomNumber, xPos, yPos, zPos, freezeCode_);
         this->molecule.push_back(atom);
     };
 
@@ -398,32 +254,27 @@ class Molecule{
     };
 };
 
-/*
 class SupraMolecule{
 
     private:
     vector <Molecule> supraMolecule;
 
     public:
-    SupraMolecule(){
+    SupraMolecule(int nOfMolecules){
+        this->supraMolecule.resize(nOfMolecules);
     };
 
     void addMolecule(Molecule molecule){
-        supraMolecule.push_back(molecule);
+        this->supraMolecule.push_back(molecule);
     };
 
-    vector <string> getMolecule(int moleculeNumber, bool symbol = 0){
-        for(int i = 0; i < this->supraMolecule.size(), i++){
+    Molecule getMolecule(int numberMolecule){
+        return this->supraMolecule[numberMolecule];
+    }
 
-        };
-    };
-
-    vector < vector<string> > getMolecule(bool symbol = 0){
-        
-    };
 
 };
-
+/*
 PYBIND11_MODULE(molecules, m) {
     py::class_<Molecule>(m, "Molecule", "This class creates a molecule variable type allowing for the usage in python like a primitive type.")
         .def(py::init())

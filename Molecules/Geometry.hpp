@@ -21,6 +21,9 @@ class Vector3D{
 
     public:
     Vector3D(vector<double> pointA, vector<double> pointB);
+    Vector3D();
+    void setVector(vector<double> pointA, vector<double> pointB);
+    ~Vector3D();
     double magnitude();
     vector <double> getVector();
     void show();
@@ -42,6 +45,7 @@ class Quaternion{
 
     public:
     Quaternion(double u, vector <double> vectorA, vector <double> vectorB);
+    ~Quaternion();
     double magnitude();
     vector <double> getQuaternion();
     void show();
@@ -54,6 +58,7 @@ class Point{
     public:
     Point(double coord1, double coord2, double coord3, char typeCoord);
     Point();
+    ~Point();
     void setCoord(char coordName, double newValue);
     vector <double> getCoords(char typeCoord);
     void setCoords(vector <double> newValues, char typeCoord);
@@ -68,10 +73,10 @@ class SphericalCoords{
 
     public:
     SphericalCoords( double coord1/*x or radius*/, double coord2/*y or teta*/, double coord3/*z or phi*/, char spaceType);
+    ~SphericalCoords();
     vector <double> toCartesian();
     vector <double> toSpherical();
 
 };
-
 
 #endif /* Geometry_hpp */

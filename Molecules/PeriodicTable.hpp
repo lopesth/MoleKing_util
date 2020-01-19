@@ -23,6 +23,7 @@ class PeriodicTable{
     
     public:
     PeriodicTable();
+    ~PeriodicTable();
     int getAtomicNumber(string symbol);
     float getAtomicMass(string symbol);
     string getSymbol(int atomicNumber);
