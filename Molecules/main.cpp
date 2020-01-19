@@ -167,6 +167,41 @@ class Molecule{
     private:
     vector<Atom> molecule;
     vector<ChargePoint> chargePoint;
+    double angleToSpinInAref(int ref, char axisName){
+        vector <double> cart = this->molecule[ref].getPos();
+        if (axisName == 'x'){
+            Point victor = Point(cart[0], cart[1], cart[2], 'c');
+            Point victorDoidera = Point(cart[0], cart[1], cart[2], 'c');
+            Vector3D xAxis = Vector3D({1.0, 0.0, 0.0}, {0.0, 0.0, 0.0});
+            victorDoidera.rotationVector(180, xAxis);
+            Vector3D victores = Vector3D(victor.getCoords('c'), victorDoidera.getCoords('c'));
+            double linhaDaLoucura = victores.magnitude();
+            double raioVictoral = linhaDaLoucura/2;
+            double xDaLoucura = -1 *(sqrt(pow(raioVictoral, 2) - pow(victorDoidera.getCoords('c')[2],2)) - victorDoidera.getCoords('c')[0]);
+            Point centroDaLoucura = Point(xDaLoucura, victor.getCoords('c')[2], 0.0, 'c');
+            Vector3D  sonOfVictor = Vector3D(victor.getCoords('c'), centroDaLoucura.getCoords('c'));
+            double xTombado = raioVictoral + xDaLoucura;
+            Vector3D sonOfZ = Vector3D( {xTombado , victor.getCoords('c')[1], 0.0} , centroDaLoucura.getCoords('c'));
+            double anguloDaLoucura = sonOfVictor.angle(sonOfZ);
+            return anguloDaLoucura;
+        } else {
+            Point victor = Point(cart[0], cart[1], cart[2], 'c');
+            Point victorDoidera = Point(cart[0], cart[1], cart[2], 'c');
+            Vector3D yAxis = Vector3D({0.0, 1.0, 0.0}, {0.0, 0.0, 0.0});
+            victorDoidera.rotationVector(180, yAxis);
+            Vector3D victores = Vector3D(victor.getCoords('c'), victorDoidera.getCoords('c'));
+            double linhaDaLoucura = victores.magnitude();
+            double raioVictoral = linhaDaLoucura/2;
+            double yDaLoucura = -1 *(sqrt(pow(raioVictoral, 2) - pow(victorDoidera.getCoords('c')[2],2)) - victorDoidera.getCoords('c')[1]);
+            Point centroDaLoucura = Point(victor.getCoords('c')[0], yDaLoucura, 0.0, 'c');
+            Vector3D sonOfVictor = Vector3D(victor.getCoords('c'), centroDaLoucura.getCoords('c'));
+            double yTombado = raioVictoral + yDaLoucura;
+            Vector3D sonOfZ = Vector3D( {victor.getCoords('c')[0] , yTombado, 0.0} , centroDaLoucura.getCoords('c'));
+            double anguloDaLoucura = sonOfVictor.angle(sonOfZ);
+            return anguloDaLoucura;
+        };  
+    };
+
     int multiplicity, charge;
 
     vector<double> minNmaxValue(vector <double> v){
@@ -292,6 +327,25 @@ class Molecule{
         return temp;
     };
 
+    void spinMolecule(double angle, Vector3D spinVector){
+        for (int i = 0; i < this->molecule.size(); i++){
+            this->molecule[i].rotationAxis(angle, spinVector);
+        }
+    };
+
+    void spinMolecule(double angle, char axis){
+        if (axis == 'x') {
+            Vector3D spinVector = Vector3D({1.0, 0.0, 0.0}, {0.0, 0.0, 0.0});
+            this->spinMolecule(angle , spinVector);
+        } else if (axis == 'y'){
+            Vector3D spinVector = Vector3D({0.0, 1.0, 0.0}, {0.0, 0.0, 0.0});
+            this->spinMolecule(angle , spinVector);
+        } else {
+            Vector3D spinVector = Vector3D({0.0, 0.0, 1.0}, {0.0, 0.0, 0.0});
+            this->spinMolecule(angle , spinVector);
+        };
+    };
+
     void translation(Vector3D traslationVector){
         for(int i = 0; i < this->molecule.size(); i++){
             this->molecule.at(i).translation(traslationVector);
@@ -307,7 +361,6 @@ class Molecule{
         Vector3D traslationVector = Vector3D({0.0, 0.0, 0.0}, this->getMassCenter());
         this->translation(traslationVector);
     };
-
 
     void moveTail(int atomNumber, double x = 0.0, double y = 0.0, double z= 0.0){
         Vector3D traslationVector = Vector3D({x, y, z}, this->molecule.at(atomNumber).getPos());
@@ -332,167 +385,17 @@ class Molecule{
             j++;
         };
         this->moveTail(biggerDistance[0]);
-
-        vector <double> cart = this->molecule[biggerDistance[1]].getPos();
-        Point victor = Point(cart[0], cart[1], cart[2], 'c');
-        Point victorDoidera = Point(cart[0], cart[1], cart[2], 'c');
-        Vector3D yAxis = Vector3D({0.0, 1.0, 0.0}, {0.0, 0.0, 0.0});
-        victorDoidera.rotationVector(180, yAxis);
-        Vector3D victores = Vector3D(victor.getCoords('c'), victorDoidera.getCoords('c'));
-        double linhaDaLoucura = victores.magnitude();
-        double raioVictoral = linhaDaLoucura/2;
-        double yDaLoucura = -1 *(sqrt(pow(raioVictoral, 2) - pow(victorDoidera.getCoords('c')[2],2)) - victorDoidera.getCoords('c')[1]);
-        Point centroDaLoucura = Point(victor.getCoords('c')[0], yDaLoucura, 0.0, 'c');
-        Vector3D sonOfVictor = Vector3D(victor.getCoords('c'), centroDaLoucura.getCoords('c'));
-        double yTombado = raioVictoral + yDaLoucura;
-        Vector3D sonOfZ = Vector3D( {victor.getCoords('c')[0] , yTombado, 0.0} , centroDaLoucura.getCoords('c'));
-        double anguloDaLoucura = sonOfVictor.angle(sonOfZ);
-        cout << anguloDaLoucura << endl;
-
-
-        for (int i =0; i < this->molecule.size(); i++){
-            Vector3D yAxis = Vector3D({0.0, 1.0, 0.0}, {0.0, 0.0, 0.0});
-            this->molecule[i].rotationAxis(anguloDaLoucura, yAxis);
-        }
-
-        vector <double> theLastVictor = this->molecule[biggerDistance[1]].getPos();
-        vector <double> victorGirando = SphericalCoords(theLastVictor[0], theLastVictor[1], theLastVictor[2], 'c').toSpherical();
-        for (int i =0; i < this->molecule.size(); i++){
-            Vector3D zAxis = Vector3D({0.0, 0.0, 1.0}, {0.0, 0.0, 0.0});
-            this->molecule[i].rotationAxis(victorGirando[2], zAxis);
-        }
-
-
-        cart = this->molecule[biggerDistance[1]].getPos();
-        victor = Point(cart[0], cart[1], cart[2], 'c');
-        victorDoidera = Point(cart[0], cart[1], cart[2], 'c');
-        Vector3D xAxis = Vector3D({1.0, 0.0, 0.0}, {0.0, 0.0, 0.0});
-        victorDoidera.rotationVector(180, xAxis);
-        victores = Vector3D(victor.getCoords('c'), victorDoidera.getCoords('c'));
-        linhaDaLoucura = victores.magnitude();
-        raioVictoral = linhaDaLoucura/2;
-        double xDaLoucura = -1 *(sqrt(pow(raioVictoral, 2) - pow(victorDoidera.getCoords('c')[2],2)) - victorDoidera.getCoords('c')[0]);
-        centroDaLoucura = Point(xDaLoucura, victor.getCoords('c')[2], 0.0, 'c');
-        sonOfVictor = Vector3D(victor.getCoords('c'), centroDaLoucura.getCoords('c'));
-        double xTombado = raioVictoral + xDaLoucura;
-        sonOfZ = Vector3D( {xTombado , victor.getCoords('c')[1], 0.0} , centroDaLoucura.getCoords('c'));
-        double anguloDaLoucuraX = sonOfVictor.angle(sonOfZ);
-        cout << anguloDaLoucuraX << endl;
-  
-
-        for (int i =0; i < this->molecule.size(); i++){
-            Vector3D xAxis = Vector3D({1.0, 0.0, 0.0}, {0.0, 0.0, 0.0});
-            this->molecule[i].rotationAxis(-anguloDaLoucuraX, xAxis);
-        }
-
-        for (int i =0; i < this->molecule.size(); i++){
-            Vector3D zAxis = Vector3D({0.0, 0.0, 1.0}, {0.0, 0.0, 0.0});
-            this->molecule[i].rotationAxis(90, zAxis);
-        }
-
-        for (int i =0; i < this->molecule.size(); i++){
-            Vector3D zAxis = Vector3D({0.0, 1.0, 0.0}, {0.0, 0.0, 0.0});
-            this->molecule[i].rotationAxis(90, yAxis);
-        }
-
+        double angle1 = this->angleToSpinInAref(biggerDistance[1], 'y');
+        this->spinMolecule(angle1, 'y');
+        vector <double> zspin = this->molecule[biggerDistance[1]].getPos();
+        vector <double> zspinSpherical = SphericalCoords(zspin[0], zspin[1], zspin[2], 'c').toSpherical();
+        this->spinMolecule(zspinSpherical[2], 'z');
+        double angle2 = this->angleToSpinInAref(biggerDistance[1], 'x');
+        this->spinMolecule(angle2, 'x');
+        this->spinMolecule(90, 'z');
+        this->spinMolecule(90, 'y');
         this->moveMassCenter();
-  
-};
-
-
-        
-/*       
-
-        // Teste de estragamento
-        for (int i = 0; i < this->molecule.size(); i++){
-            cout << "Atomo original " << this->molecule[i].getAtomicSymbol() << " (" << this->molecule[i].getPos()[0] << ", " << this->molecule[i].getPos()[1] << ", " << this->molecule[i].getPos()[2] << ")" << endl;
-        }
-        // fim do teste de estragamento
-
-
-        double incTetha, incPhi, newTetha, newPhi, radius;
-        incTetha = 0; //- molecule[atomFarFarWay].getTetha();
-        incPhi = 0; ///- molecule[atomFarFarWay].getPhi();
-        for (int i = 0; i < this->molecule.size(); i++){
-            radius = this->molecule[i].getRadius();
-            newTetha = this->molecule[i].getTetha() + incTetha;
-            newPhi = this->molecule[i].getPhi() + incPhi;
-            this->molecule[i].setSphericalPos(radius, newTetha, newPhi);
-            cout << "Atomo " << this->molecule[i].getAtomicSymbol()  << "Raio " << radius << "Angulos : teta " << newTetha << " Phi " << newPhi << endl; 
-        };
-
-        // Teste de estragamento
-        for (int i = 0; i < this->molecule.size(); i++){
-            cout << "Atomo mudado " << this->molecule[i].getAtomicSymbol() << " (" << this->molecule[i].getPos()[0] << ", " << this->molecule[i].getPos()[1] << ", " << this->molecule[i].getPos()[2] << ")" << endl;;
-        };
-        // fim do teste de estragamento
-
-        double incTetha, incPhi;
-        incTetha = 0 - this->molecule.at(atomFarFarWay).getTetha();
-        incPhi = 90 - this->molecule.at(atomFarFarWay).getPhi();
-        double x, y, z;
-        for (int i = 0; i < this->molecule.size(); i++){
-            x = this->molecule.at(i).getX();
-            y = this->molecule.at(i).getY();
-            z = this->molecule.at(i).getZ();
-            CartesianSpace car = CartesianSpace(x,y,z);
-            vector <double> sph = car.transformToSpherical().toVector();
-
-
-            double radius = sph[0];
-            double newTetha = sph[1] + incTetha;
-            double newPhi = sph[2] + incPhi;
-            cout << "Atomo " << this->molecule.at(i).getAtomicSymbol() <<endl;
-            cout << sph[0] << ", " << sph[1] << ", " << sph[2] << endl;
-            cout << radius << ", " << newTetha << ", " << " " << newPhi << endl;
-            SphericalSpace pointS = SphericalSpace(radius, newTetha, newPhi);
-            CartesianSpace pointC = pointS.transformToCar();
-            vector <double> pontos = pointC.toVector();
-            cout << this->molecule.at(i).getAtomicSymbol() << "    " << pontos[0] << "    " << pontos[1] << "    " << pontos[2] << endl;
-            this->molecule.at(i).setSphericalPos(radius, newTetha, newPhi);
-        };
-
-        vector <double> xCoord(this->molecule.size()), yCoord(this->molecule.size()), zCoord(this->molecule.size());
-        for(int i = 0; i < this->molecule.size(); i++){
-            xCoord.push_back(this->molecule.at(i).getX());
-            yCoord.push_back(this->molecule.at(i).getY());
-            zCoord.push_back(this->molecule.at(i).getZ());
-        };
-        vector <double> mmX(2), mmY(2), mmZ(2);
-
-        mmX = minNmaxValue(xCoord);
-
-        mmY = minNmaxValue(yCoord);
-        mmZ = minNmaxValue(zCoord);
-        vector<double> ref(3);
-        ref.at(0) = mmX.at(1) - mmX.at(0);
-        ref.at(1) = mmY.at(1) - mmY.at(0);
-        ref.at(2) = mmZ.at(1) - mmZ.at(0);
-
-        vector<double>minMaxRef(2);
-        minMaxRef = minNmaxValue(ref);
-        int iMax, iMin, iMid;
-        for (int i = 0; i < ref.size(); i++){
-            if (minMaxRef.at(0) == ref.at(i)){
-                iMin = i;
-
-            }else if (minMaxRef.at(1) == ref.at(i)){
-                iMax = i;
-
-            }else{
-                iMid = i;
-            };
-        };
-        for (int i = 0; i < this->molecule.size(); i++){
-            vector<double> pos(3);
-            pos.at(0) = this->molecule.at(i).getX();
-            pos.at(1) = this->molecule.at(i).getY();
-            pos.at(2) = this->molecule.at(i).getZ();
-            this->molecule.at(i).setX(pos.at(iMax));
-            this->molecule.at(i).setY(pos.at(iMid));
-            this->molecule.at(i).setZ(pos.at(iMin));
-       };*/
-
+    };
 };
 
 /*
@@ -613,145 +516,5 @@ int main(){
         atomo = minhaMol.getAtom(i+1);
         cout << "Atomo mudado " << atomo[0] << "    " << atomo[1] << "    " << atomo[2] << "    " << atomo[3] << "" << endl;
     };
-
-
-    /*
-    Point p1 = Point(1.0, 1.0, 1.0, 'c');
-    Point p2 = Point(0.0, 0.0, 0.0, 'c');
-    Point p3 = Point(1.0, 1.0, 1.0, 'c');
-    Vector3D trans = Vector3D(vector <double> {1.0, 1.0, 3.0}, vector <double> {0.0, 0.0, 0.0});
-    p1.translation(trans);
-    p2.translation(trans);
-    p3.translation(trans);
-    vector <double> coordsP1, coordsP2, coordsP3;
-    coordsP1 = p1.getCoords('c');
-    coordsP2 = p2.getCoords('c');
-    coordsP3 = p3.getCoords('c');
-    cout << "Ponto 1 (" << coordsP1[0] << ", " << coordsP1[1] << ", " << coordsP3[2] << ")" << endl;
-    cout << "Ponto 2 (" << coordsP2[0] << ", " << coordsP2[1] << ", " << coordsP2[2] << ")" << endl;
-    cout << "Ponto 3 (" << coordsP3[0] << ", " << coordsP3[1] << ", " << coordsP3[2] << ")" << endl;
-
-
-
-    vector <double> a1 = {1, 0, 0, -3};
-    vector <double> a2 = {0, 1, 0, 0};
-    vector <double> a3 = {0, 0, 3, 5};
-    vector <double> a4 = {0, 0, 0, 4};
-    Matrix matrixC = Matrix({a1, a2, a3, a4});
-    double minhaMatriz = matrixC.determinant();
-    cout << minhaMatriz;
-
-    vector <double> a4 = {1, 10, 1};
-    vector <vector <double> > matrixA = {a1, a2, a3, a4};
-    vector <double> b1 = {1, 3, 4, 5};
-    vector <double> b2 = {1, 3, 4, 5};
-
-    vector <vector <double> > matrixB = {b1, b2};
-
-    Matrix m = Matrix(matrixB);
-    vector < vector <double> > result = m.multiplication(matrixA);
-    for (int i = 0 ; i< result.size(); i++){
-        for (int j = 0 ; j < result[0].size(); j++){
-            cout << result[i][j] << " ";
-        };
-        cout << endl;
-    };
-
-    //Molecule minhaMol = Molecule();
-
-    minhaMol.addAtom("C",  6.394,  2.538, -0.301);
-    minhaMol.addAtom("C",  7.645,  2.034, -0.141);
-    minhaMol.addAtom("C",  7.762,  0.623, -0.006);
-    minhaMol.addAtom("C",  6.585, -0.199, -0.021);
-    minhaMol.addAtom("C",  5.274,  0.372, -0.174);
-    minhaMol.addAtom("C",  5.215,  1.731, -0.327);
-    minhaMol.addAtom("N",  8.876, -0.085,  0.135);
-    minhaMol.addAtom("S",  8.449, -1.650,  0.232);
-    minhaMol.addAtom("N",  6.833, -1.493,  0.103);
-    minhaMol.addAtom("N",  4.232, -0.531, -0.195);
-    minhaMol.addAtom("C",  2.866, -0.329, -0.064);
-    minhaMol.addAtom("C",  1.997, -1.330, -0.507);
-    minhaMol.addAtom("C",  0.636, -1.159, -0.352);
-    minhaMol.addAtom("N",  0.074, -0.084,  0.198);
-    minhaMol.addAtom("C",  0.908,  0.857,  0.628);
-    minhaMol.addAtom("C",  2.289,  0.794,  0.530);
-    minhaMol.addAtom("H",  6.265,  3.608, -0.423);
-    minhaMol.addAtom("H",  8.530,  2.656, -0.123);
-    minhaMol.addAtom("H",  4.269,  2.220, -0.504);
-    minhaMol.addAtom("H",  4.529, -1.492, -0.290);
-    minhaMol.addAtom("H",  2.385, -2.227, -0.978);
-    minhaMol.addAtom("H", -0.047, -1.931, -0.697);
-    minhaMol.addAtom("H",  0.447,  1.725,  1.093);
-    minhaMol.addAtom("H",  2.891,  1.587,  0.949);
-
-    minhaMol.addAtom("C", -3.61788608,  2.27642273,  0.00000000);
-    minhaMol.addAtom("H", -3.26121324,  2.78082092,  0.87365150);
-    minhaMol.addAtom("H", -3.26121324,  2.78082092, -0.87365150);
-    minhaMol.addAtom("H", -4.68788608,  2.27643591,  0.00000000);
-    minhaMol.addAtom("C", -3.10457037,  0.82449058,  0.00000000);
-    minhaMol.addAtom("H", -2.03457037,  0.82447793, -0.00000262);
-    minhaMol.addAtom("H", -3.46124509,  0.32009118, -0.87365004);
-    minhaMol.addAtom("C", -3.61790997,  0.09853523,  1.25740657);
-    minhaMol.addAtom("H", -3.26285566, -0.91083858,  1.25642781);
-    minhaMol.addAtom("H", -3.25963701,  0.60180287,  2.13105534);
-    minhaMol.addAtom("H", -4.68790815,  0.10024407,  1.25838880);
-    minhaMol.standardOrientation();
-
-    //minhaMol.standardOrientation();
-
-    minhaMol.moveMassCenter();
-    for (int i = 0; i < 3; i++){
-        vector <string> atomo;
-        atomo = minhaMol.getAtom(i+1);
-        cout << "Atomo mudado " << atomo[0] << " (" << atomo[1] << ", " << atomo[2] << ", " << atomo[3] << ")" << endl;;
-        }
-
-    vector< vector<string> > mol = minhaMol.getMolecule(1);
-    vector <double> mc = minhaMol.getMassCenter();
-
-    cout << mc[0] << " " << mc[1] << " " << mc[2] << " " << endl;
-    for(int i = 0; i <  mol.size(); i++){
-        cout << mol.at(i).at(0) << " " << mol.at(i).at(1) << " " << mol.at(i).at(2) << " " << mol.at(i).at(3) << endl;
-    }
-    cout << endl;
-    minhaMol.moveMassCenter();
-    mc = minhaMol.getMassCenter();
-    cout << mc[0] << " " << mc[1] << " " << mc[2] << " " << endl;
-    mol = minhaMol.getMolecule(1);
-    for(int i = 0; i <  mol.size(); i++){
-        cout << mol.at(i).at(0) << " " << mol.at(i).at(1) << " " << mol.at(i).at(2) << " " << mol.at(i).at(3) << endl;
-    }
-    cout << endl;
-    minhaMol.standardOrientation();
-    mc = minhaMol.getMassCenter();
-    cout << mc[0] << " " << mc[1] << " " << mc[2] << " " << endl;
-    mol = minhaMol.getMolecule(1);
-    for(int i = 0; i <  mol.size(); i++){
-        cout << mol.at(i).at(0) << " " << mol.at(i).at(1) << " " << mol.at(i).at(2) << " " << mol.at(i).at(3) << endl;
-    }
-
-    cout << acos(-1) << "  " << acos(0) << "  " << acos(1) << endl;
-
-
-    Atom atomo1 = Atom(16, 0.64922479, -1.12403099, 0.00000000);
-
-    SphericalSpace bola = SphericalSpace(1.29805, 59.99, 90.00000000);
-    CartesianSpace bolaQuadrada = bola.transformToCar();
-    vector <double> bolaLida = bola.toVector();
-    vector <double> quadradoLida = bolaQuadrada.toVector();
-
-    cout << "Bola: " << bolaLida[0] << " " << bolaLida[1] << " " << bolaLida[2] << endl;
-    cout << "Quadrado: " << quadradoLida[0] << " " << quadradoLida[1] << " " << quadradoLida[2] << endl;
-
-    bolaQuadrada = CartesianSpace(0.649221, 1.12403, 0);
-    bola = bolaQuadrada.transformToSpherical();
-
-    bolaLida = bola.toVector();
-    quadradoLida = bolaQuadrada.toVector();
-
-    cout << "Bola: " << bolaLida[0] << " " << bolaLida[1] << " " << bolaLida[2] << endl;
-    cout << "Quadrado: " << quadradoLida[0] << " " << quadradoLida[1] << " " << quadradoLida[2] << endl;
-    */
-    return 0;
 
 };

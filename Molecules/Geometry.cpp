@@ -99,33 +99,18 @@ void Point::translation(Vector3D translationVector){
     this->phi = newPosSpherical[2];
 };
 
-Matrix getrotMatrix(double angle, Vector3D unitVector){
-        double x_u = unitVector.axisValue('i');
-    double y_u = unitVector.axisValue('j');
-    double z_u = unitVector.axisValue('k');
-    if (unitVector.getVector() == vector <double> {1.0, 0.0, 0.0}){
-       Matrix rotMatrix = Matrix( { { 1.0, 0.0, 0.0, 0.0 },
-                                   { 0.0, cos(angle), sin(angle), 0.0},
-                                   { 0.0, -sin(angle), cos(angle), 0.0},
-                                   { 0.0, 0.0, 0.0, 1.0} } );
-                                   return rotMatrix;
-    } else {
-            Matrix rotMatrix = Matrix( { { cos(angle) + (1 - cos(angle))*pow(x_u, 2), y_u * x_u * (1 - cos(angle)) - z_u * (sin(angle)), z_u * x_u * (1 - cos(angle)) + y_u * (sin(angle)), 0.0},
-
-                                 { x_u * y_u * (1 - cos(angle)) + z_u * (sin(angle)), cos(angle) + (1 - cos(angle)) * pow(y_u, 2), z_u * y_u * (1 - cos(angle)) - x_u * (sin(angle)), 0.0},
-
-                                 { x_u * z_u * (1 - cos(angle)) - y_u * sin(angle), y_u * z_u * (1 - cos(angle)) - x_u * sin(angle), cos(angle) + (1 - cos(angle)) * pow(z_u, 2), 0.0},
-
-                                 {0.0, 0.0, 0.0, 1.0} } );
-                                 return rotMatrix;
-    };
-};
 
 void Point::rotationVector(double angle, Vector3D unitVector){
     angle = M_PI * angle / 180;
-
+    double x_u = unitVector.axisValue('i');
+    double y_u = unitVector.axisValue('j');
+    double z_u = unitVector.axisValue('k');
     vector < vector < double> > posMatrix= { {this->x}, {this->y}, {this->z}, {1.0} };
-    Matrix rotMatrix = getrotMatrix(angle, unitVector);
+
+    Matrix rotMatrix = Matrix( { { cos(angle) + pow(x_u, 2)*(1 - cos(angle)), y_u * x_u * (1 - cos(angle)) - z_u * (sin(angle)), z_u * x_u * (1 - cos(angle)) + y_u * (sin(angle)), 0.0},
+                                 { x_u * y_u * (1 - cos(angle)) + z_u * (sin(angle)), cos(angle) + (1 - cos(angle)) * pow(y_u, 2), z_u * y_u * (1 - cos(angle)) - x_u * (sin(angle)), 0.0},
+                                 { x_u * z_u * (1 - cos(angle)) - y_u * sin(angle), y_u * z_u * (1 - cos(angle)) + x_u * sin(angle), cos(angle) + (1 - cos(angle)) * pow(z_u, 2), 0.0},
+                                 {0.0, 0.0, 0.0, 1.0} } );
 
     Matrix newPos = rotMatrix.multiplication(posMatrix);
     this->x = newPos.element(1, 1);
