@@ -115,6 +115,10 @@ class Molecule{
         return atomString;
     };
 
+    Atom getAtomObj(int number){
+        return this->molecule[number];
+    }
+
     void setCharge(int charge){
         this->charge = charge;
     };
@@ -186,7 +190,7 @@ class Molecule{
     void spinMolecule(double angle, Vector3D spinVector){
         for (int i = 0; i < this->molecule.size(); i++){
             this->molecule[i].rotationAxis(angle, spinVector);
-        }
+        };
     };
 
     void spinMolecule(double angle, char axis){
@@ -214,7 +218,7 @@ class Molecule{
     };
 
     void moveMassCenter(double x = 0.0, double y = 0.0, double z= 0.0){
-        Vector3D traslationVector = Vector3D({0.0, 0.0, 0.0}, this->getMassCenter());
+        Vector3D traslationVector = Vector3D({x, y, z}, this->getMassCenter());
         this->translation(traslationVector);
     };
 
@@ -258,6 +262,26 @@ class SupraMolecule{
 
     private:
     vector <Molecule> supraMolecule;
+    int multiplicity, charge;
+    void setCharge(){
+        this->charge = 0;
+        for (int i = 0; i < this->supraMolecule.size(); i++){
+            this->charge = this->charge + supraMolecule[i].getCharge();
+        };
+    };
+    double getS(int n){
+        double m = this->supraMolecule[n].getMultiplicity();
+        return (m - 1) / 2;
+    };
+
+    void setMultiplicity(){
+        this->multiplicity = 0;
+        double s = 0;
+        for (int i = 0; i < this->supraMolecule.size(); i++){
+            s += getS(i);
+        };
+        this->multiplicity = (2 * s + 1);
+    };
 
     public:
     SupraMolecule(int nOfMolecules){
@@ -266,12 +290,123 @@ class SupraMolecule{
 
     void addMolecule(Molecule molecule){
         this->supraMolecule.push_back(molecule);
+        this->setCharge();
+        this->setMultiplicity();
     };
 
     Molecule getMolecule(int numberMolecule){
         return this->supraMolecule[numberMolecule];
-    }
+    };
 
+    void setMultiplicity(int multiplicity){
+        this->multiplicity = multiplicity;
+    };
+
+    int getMultiplicity(){
+        return this->multiplicity;
+    };
+
+    double getCharge(){
+        return this->charge;
+    };
+
+    int getSize(){
+        return this->supraMolecule.size();
+    };
+
+    vector <double> getMassCenter(){
+        vector <double> massVector;
+        vector <double> coordX;
+        vector <double> coordY;
+        vector <double> coordZ;
+        for (int i = 0; i < this->supraMolecule.size(); i++){
+            for (int j = 0; j < this->supraMolecule[i].getSize(); j++){
+                Atom atom = this->supraMolecule[i].getAtomObj(j);
+                massVector.push_back(atom.getAtomicMass());
+                coordX.push_back(atom.getX());
+                coordY.push_back(atom.getY());
+                coordZ.push_back(atom.getZ());
+            };
+        };
+        vector<double> temp = MassCenter(massVector, coordX, coordY, coordZ).getMassCenter();
+        return temp;
+    };
+
+    void translation(Vector3D traslationVector){
+        for(int i = 0; i < this->supraMolecule.size(); i++){
+            this->supraMolecule[i].translation(traslationVector);
+        };
+    };
+
+    void moveMassCenter(double x = 0.0, double y = 0.0, double z= 0.0){
+        Vector3D traslationVector = Vector3D({x, y, z}, this->getMassCenter());
+        this->translation(traslationVector);
+    };
+
+    void moveTail(int molNumber, int atomNumber, double x = 0.0, double y = 0.0, double z = 0.0){
+        vector <double> pos = this->supraMolecule.at(molNumber).getAtomObj(atomNumber).getPos();
+        Vector3D traslationVector = Vector3D({x, y, z}, pos);
+        this->translation(traslationVector);
+    };
+
+    void spinSupraMolecule(double angle, char axis){
+        if (axis == 'x') {
+            Vector3D spinVector = Vector3D({1.0, 0.0, 0.0}, {0.0, 0.0, 0.0});
+            this->spinSupraMolecule(angle , spinVector);
+        } else if (axis == 'y'){
+            Vector3D spinVector = Vector3D({0.0, 1.0, 0.0}, {0.0, 0.0, 0.0});
+            this->spinSupraMolecule(angle , spinVector);
+        } else {
+            Vector3D spinVector = Vector3D({0.0, 0.0, 1.0}, {0.0, 0.0, 0.0});
+            this->spinSupraMolecule(angle , spinVector);
+        };
+    };
+
+    void spinSupraMolecule(double angle, Vector3D spinVector){
+        for (int i = 0; i < this->supraMolecule.size(); i++){
+            for (int j = 0; j < this->supraMolecule[i].getSize(); j++){
+                this->supraMolecule[i].getAtomObj(j).rotationAxis(angle, spinVector);
+            };
+        };
+    };
+
+    void standardOrientation(){
+        vector <Atom> supramol;
+        for (int u = 0 ; u < this->supraMolecule.size(); u++){
+            for (int n = 0; n < this->supraMolecule[u].getSize(); n++){
+                supramol.push_back(this->supraMolecule[u].getAtomObj(n));
+            };
+        };
+        int j = 0;
+        vector <int> biggerDistanceSupra(2);
+        double distance = 0;
+        while(j < this->supraMolecule.size()){
+            for(int i = j+1; i < supramol.size(); i++){
+                vector <double> atomCoord1 = supramol.at(j).getPos();
+                vector <double> atomCoord2 = supramol.at(i).getPos();
+                double dist = Vector3D(atomCoord1, atomCoord2).magnitude();
+                if(dist > distance){
+                    distance = dist;
+                    biggerDistanceSupra.at(0) = j;
+                    biggerDistanceSupra.at(1) = i;
+                };
+            };
+            j++;
+        };
+        vector <vector <int> > biggerDistance(2, {0,0});
+        int n = 0;
+        for (int i = 0; i < this->supraMolecule.size(); i++){
+            for (int j = 0; j < this->supraMolecule[i].getSize(); i++){
+                if (this->supraMolecule[i].getAtomObj(j) == supramol[biggerDistanceSupra[0]]){
+                    biggerDistance.at(n) = {i, j};
+                    n+=1;
+                } else if (this->supraMolecule[i].getAtomObj(j) == supramol[biggerDistanceSupra[1]]){
+                    biggerDistance.at(n) = {i, j};
+                    n+=1;
+                } else {};
+            };
+        };
+    };
 
 };
 /*

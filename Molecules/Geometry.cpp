@@ -41,6 +41,24 @@ Point::~Point(){
     this->phi =  0.0;
 };
 
+bool Point::operator==(Point point2){
+    bool value;
+    if (this->x == point2.getCoords('c')[0]){
+        if (this->y == point2.getCoords('c')[1]){
+            if (this->z == point2.getCoords('c')[2]){
+                value = 1;
+            } else {
+                value = 0;
+            };
+        } else {
+            value = 0;
+        };
+    } else {
+        value = 0;
+    };
+    return value;
+};
+
 void Point::setCoords(vector <double> newValues, char typeCoord = 'c' /* 'c' for cartesian coordinates, 's' for spherical*/){
     if(typeCoord == 'c'){
         this->x = newValues[0];

@@ -59,6 +59,7 @@ class Point{
     Point(double coord1, double coord2, double coord3, char typeCoord);
     Point();
     ~Point();
+    bool operator==(Point point2);
     void setCoord(char coordName, double newValue);
     vector <double> getCoords(char typeCoord);
     void setCoords(vector <double> newValues, char typeCoord);

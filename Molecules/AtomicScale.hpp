@@ -27,6 +27,7 @@ class Atom{
     double getAtomicMass();
     string getAtomicSymbol();
     int getAtomicNumber();
+    bool operator==(Atom atom2);
     void setX(double newX);
     void setY(double newY);
     void setZ(double newZ);
@@ -48,6 +49,7 @@ class ChargePoint{
     ChargePoint(double x, double y, double z, double charge);
     void setCharge(double newCharge);
     double getCharge();
+    bool operator==(ChargePoint charge2);
     void setX(double newX);
     void setY(double newY);
     void setZ(double newZ);

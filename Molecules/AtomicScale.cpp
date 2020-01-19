@@ -17,6 +17,21 @@ void ChargePoint::setCharge(double newCharge){
     this->charge = newCharge;
 };
 
+bool ChargePoint::operator==(ChargePoint charge2){
+    bool value;
+    Point point2 = Point(charge2.getX(), charge2.getY(), charge2.getZ(), 'c');
+    if (this->charge == charge2.getCharge()){
+        if (this->point == point2){
+            value = 1;
+        } else {
+            value = 0;
+        };
+    } else {
+        value = 0;
+    };
+    return value;
+};
+
 double ChargePoint::getCharge(){
     return this->charge;
 };
@@ -77,6 +92,25 @@ Atom::Atom(string atomicSymbol, double x, double y, double z, bool freezeCode_ =
     this->point = Point(x, y, z, 'c');
     this->freezeCode = freezeCode_;
     this->atomicMass = temp.getAtomicMass(this->atomicSymbol);
+};
+
+bool Atom::operator==(Atom atom2){
+    bool value;
+    if (this->atomicNumber == atom2.getAtomicNumber()){
+        if (this->atomicMass == atom2.getAtomicMass()){
+            Point point2 = Point(atom2.getX(), atom2.getY(), atom2.getZ(), 'c');
+            if (this->point == point2){
+                value = 1;
+            } else {
+                value = 0;
+            };
+        } else {
+            value = 0;
+        };
+    } else {
+        value = 0;
+    };
+    return value;
 };
 
 double Atom::getAtomicMass(){
