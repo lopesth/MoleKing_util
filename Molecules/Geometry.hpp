@@ -35,7 +35,7 @@ class Vector3D{
     Vector3D operator- (Vector3D vectorB);
     Vector3D crossProduct(Vector3D vectorB);
     double dotProduct(Vector3D vectorB);
-    double angle(Vector3D vectorB);
+    double angle(Vector3D vectorB, char unit = 'd');
     double axisValue(char unitVector);
 };
 

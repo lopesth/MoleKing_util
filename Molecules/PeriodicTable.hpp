@@ -19,16 +19,16 @@ using namespace std;
 class PeriodicTable{
     private:
     map<string, int> symbolMap;
-    map<string, float> massMap;
-    map<string, float> radiiMap;
+    map<string, double> massMap;
+    map<string, double> radiiMap;
     
     public:
     PeriodicTable();
     ~PeriodicTable();
     int getAtomicNumber(string symbol);
-    float getAtomicMass(string symbol);
+    double getAtomicMass(string symbol);
     string getSymbol(int atomicNumber);
-    float getCovalentRadii(string symbol);
+    double getCovalentRadii(string symbol);
 };
 
 #endif /* PeriodicTable_hpp */

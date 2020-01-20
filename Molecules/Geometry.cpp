@@ -280,7 +280,8 @@ Vector3D Vector3D::crossProduct(Vector3D vectorB){
 double Vector3D::dotProduct(Vector3D vectorB){
     Vector3D v = *this;
     vector < double > b = vectorB.getVector();
-    return double (this->s_i * b[0] + this->s_j * b[1] + this->s_k * b[2]);
+    double r = double (this->s_i * b[0] + this->s_j * b[1] + this->s_k * b[2]);
+    return r;
 };
 
 Vector3D Vector3D::operator+ (Vector3D vectorB){
@@ -294,13 +295,16 @@ Vector3D Vector3D::operator-(Vector3D vectorB){
     return this->operator+(vectorB.conjugate());
 };
 
-double Vector3D::angle(Vector3D vectorB){
-        Vector3D v = *this;
-        double tetha;
+double Vector3D::angle(Vector3D vectorB, char unit){
+    double tetha;
 
-        tetha = acos( this->dotProduct(vectorB) / ( vectorB.magnitude() * this->magnitude() ) );
-          
+    tetha = acos( this->dotProduct(vectorB) / ( vectorB.magnitude() * this->magnitude() ) );
+    if (unit == 'd'){
         return (tetha * 180) / M_PI;
+    } else {
+        return tetha;
+    };
+        
 };
 
 void Vector3D::show(){

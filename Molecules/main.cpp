@@ -14,6 +14,7 @@
 //#include <pybind11/stl.h>
 #include "Geometry.hpp"
 #include "Matrix.hpp"
+#include <math.h>
 
 using namespace std;
 //namespace py = pybind11;
@@ -23,6 +24,10 @@ class Molecule{
     private:
     vector<Atom> molecule;
     vector<ChargePoint> chargePoint;
+    vector < vector <int> > bonds;
+    vector <vector <int> > angles;
+    vector < vector <int> > dihedrals;
+
     double angleToSpinInAref(int ref, char axisName){
         vector <double> cart = this->molecule[ref].getPos();
         if (axisName == 'x'){
@@ -56,6 +61,79 @@ class Molecule{
             double anguloDaLoucura = sonOfVictor.angle(sonOfZ);
             return anguloDaLoucura;
         };  
+    };
+
+    void getBonds(){
+        this->bonds.clear();
+        for (int i = 0 ; i < this->molecule.size(); i++){
+            for (int j = i; j < this->molecule.size(); j++){
+                double length = this->bondLength(i, j);
+                string symbol1, symbol2;
+                symbol1 = this->molecule[i].getAtomicSymbol();
+                symbol2 = this->molecule[j].getAtomicSymbol();
+                PeriodicTable table = PeriodicTable();
+                double radii = 1.3 * (table.getCovalentRadii(symbol1) + table.getCovalentRadii(symbol2));
+                if (length <= radii){
+                    if (i != j){
+                        this->bonds.push_back(vector <int> {i, j});
+                    };
+                };
+            };
+        };
+    };
+
+    void getAngles(){
+        this->angles.clear();
+        for (int i = 0; i < bonds.size(); i++){
+            int atom1 = this->bonds[i][0];
+            int atom2 = this->bonds[i][1];
+            for (int j = i; j < this->bonds.size(); j++){
+                int atom3 = this->bonds[j][0];
+                int atom4 = this->bonds[j][1];
+                if (atom1 == atom3){
+                    if (atom2 != atom4){
+                        this->angles.push_back(vector <int> {atom1, atom2, atom4});
+                    };
+                } else if (atom1 == atom4){
+                    if (atom2 != atom3){
+                        this->angles.push_back(vector <int> {atom1, atom2, atom3});
+                    };
+                } else if (atom2 == atom3){
+                    if (atom1 != atom4){
+                        this->angles.push_back(vector <int> {atom2, atom1, atom4});
+                    };
+                } else if (atom2 == atom4){
+                    if (atom1 != atom3){
+                        this->angles.push_back(vector <int> {atom2, atom1, atom3});  
+                    };
+                };
+            };
+        };
+    };
+
+    void getDihedrals(){
+        dihedrals.clear();
+        for (int i = 0; i < this->angles.size(); i++){
+            int atom1 = this->angles[i][0];
+            int atom2 = this->angles[i][1];
+            int atom3 = this->angles[i][2];
+            for (int j = i; j < this->angles.size(); j++){
+                int atom4= this->angles[j][0];
+                int atom5 = this->angles[j][1];
+                int atom6 = this->angles[j][2];
+                if (atom1 != atom4){
+                    if (atom1 == atom5 && atom4 == atom3){
+                        dihedrals.push_back(vector <int> {atom2, atom1, atom3, atom6});
+                    } else if (atom1 == atom5 && atom4 == atom2){
+                        dihedrals.push_back(vector <int> {atom2, atom1, atom2, atom6});
+                    } else if (atom1 == atom6 && atom4 == atom3){
+                        dihedrals.push_back(vector <int> {atom2, atom1, atom3, atom5});
+                    } else if (atom1 == atom6 && atom4 == atom2){
+                        dihedrals.push_back(vector <int> {atom3, atom1, atom2, atom5});
+                    };
+                };
+            };    
+        };
     };
 
     int multiplicity, charge;
@@ -256,6 +334,55 @@ class Molecule{
         this->spinMolecule(90, 'y');
         this->moveMassCenter();
     };
+
+    double bondLength(int atomN1, int atomN2){
+        Vector3D bond = Vector3D(this->molecule[atomN1].getPos(), this->molecule[atomN2].getPos());
+        return bond.magnitude();
+    };
+
+    double valenceAngle(int atomN1, int atomN2, int atomN3){
+        Vector3D bond1 = Vector3D(this->molecule[atomN1].getPos(), this->molecule[atomN2].getPos());
+        Vector3D bond2 = Vector3D(this->molecule[atomN1].getPos(), this->molecule[atomN3].getPos());
+        return bond1.angle(bond2);
+    };
+
+    double torsion(int atomN1, int atomN2, int atomN3, int atomN4){
+        Vector3D bond1 = Vector3D(this->molecule[atomN2].getPos(), this->molecule[atomN1].getPos());
+        Vector3D bond2 = Vector3D(this->molecule[atomN2].getPos(), this->molecule[atomN3].getPos());
+        Vector3D bond3 = Vector3D(this->molecule[atomN3].getPos(), this->molecule[atomN4].getPos());
+        Vector3D semi_normal1 = bond1.crossProduct(bond2) / sin(bond1.angle(bond2, 'r'));
+        Vector3D semi_normal2 = bond3.crossProduct(bond2) / sin(bond3.angle(bond2, 'r'));
+        cout << endl;
+        double angleD = semi_normal2.angle(semi_normal1);
+        double signal = semi_normal1.dotProduct(bond1);
+        if (signal < 0){
+            signal = -1;
+        } else {
+            signal = 1;
+        };
+        return signal * angleD;
+    };
+
+    void doIRC(){
+        this->getBonds();
+        this->getAngles();
+        this->getDihedrals();
+        /*
+        cout << "Name     Definition        Value" << endl;
+        for (int i = 0; i < this->bonds.size(); i++){
+            cout << "R" << i+1 << "     " << "R(" << this->bonds[i][0]+1 << ", " << this->bonds[i][1]+1 << ")        " << this->bondLength(this->bonds[i][0], this->bonds[i][1]) << endl;
+        };
+        for (int i = 0; i < this->angles.size(); i++){
+            cout << "A" << i+1 << "     " << "A(" << this->angles[i][0]+1 << ", " << this->angles[i][1]+1 << ", " << this->angles[i][2]+1 << ")        " << this->valenceAngle(this->angles[i][0], this->angles[i][1], this->angles[i][2]) << endl;
+        };
+        */
+        for (int i = 0; i < this->dihedrals.size(); i++){
+            cout << "D(" << this->dihedrals[i][0] << ", " << this->dihedrals[i][1] << ", " << this->dihedrals[i][2] << ", " << this->dihedrals[i][3] << ")        " << this->torsion(this->dihedrals[i][0], this->dihedrals[i][1], this->dihedrals[i][2], this->dihedrals[i][3]) << endl << endl;
+        };
+        
+    };
+
+
 };
 
 class SupraMolecule{
@@ -490,17 +617,8 @@ int main(){
     minhaMol.addAtom("H", -3.25963701,  0.60180287,  2.13105534);
     minhaMol.addAtom("H", -4.68790815,  0.10024407,  1.25838880);
 
-    for (int i = 0; i < 11; i++){
-        vector <string> atomo;
-        atomo = minhaMol.getAtom(i+1);
-        cout << "Atomo Original " << atomo[0] << " (" << atomo[1] << ", " << atomo[2] << ", " << atomo[3] << ")" << endl;
-    };
+    minhaMol.doIRC();
 
-    minhaMol.standardOrientation();
-    for (int i = 0; i < 11; i++){
-        vector <string> atomo;
-        atomo = minhaMol.getAtom(i+1);
-        cout << "Atomo mudado " << atomo[0] << "    " << atomo[1] << "    " << atomo[2] << "    " << atomo[3] << "" << endl;
-    };
+
 
 };
