@@ -20,6 +20,7 @@ class PeriodicTable{
     private:
     map<string, int> symbolMap;
     map<string, float> massMap;
+    map<string, float> radiiMap;
     
     public:
     PeriodicTable();
@@ -27,7 +28,7 @@ class PeriodicTable{
     int getAtomicNumber(string symbol);
     float getAtomicMass(string symbol);
     string getSymbol(int atomicNumber);
-    
+    float getCovalentRadii(string symbol);
 };
 
 #endif /* PeriodicTable_hpp */

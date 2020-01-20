@@ -258,6 +258,132 @@ PeriodicTable::PeriodicTable(){
     this->massMap.insert(pair<string, float>("00", 0.0000));
     this->massMap.insert(pair<string, float>("dice_ghost_label", 0.0000));
 
+    //Covalent Raddi as in https://pubs.acs.org/doi/pdf/10.1021/jp5065819 R1
+    this->radiiMap.insert(pair<string, int>("H", 0.320));
+    this->radiiMap.insert(pair<string, int>("H(iso=2)", 0.320)); //Look up
+    this->radiiMap.insert(pair<string, int>("He", 0.460));
+    this->radiiMap.insert(pair<string, int>("Li", 1.330));
+    this->radiiMap.insert(pair<string, int>("Be", 1.020));
+    this->radiiMap.insert(pair<string, int>("B", 0.850));
+    this->radiiMap.insert(pair<string, int>("C", 0.750));
+    this->radiiMap.insert(pair<string, int>("N", 0.710));
+    this->radiiMap.insert(pair<string, int>("O", 0.630));
+    this->radiiMap.insert(pair<string, int>("F", 0.640));
+    this->radiiMap.insert(pair<string, int>("Ne", 0.670));
+    this->radiiMap.insert(pair<string, int>("Na", 1.550));
+    this->radiiMap.insert(pair<string, int>("Mg", 1.390));
+    this->radiiMap.insert(pair<string, int>("Al", 1.260));
+    this->radiiMap.insert(pair<string, int>("Si", 1.160));
+    this->radiiMap.insert(pair<string, int>("P", 1.110));
+    this->radiiMap.insert(pair<string, int>("S", 1.030));
+    this->radiiMap.insert(pair<string, int>("Cl", 0.990));
+    this->radiiMap.insert(pair<string, int>("Ar", 0.960));
+    this->radiiMap.insert(pair<string, int>("K", 1.960));
+    this->radiiMap.insert(pair<string, int>("Ca", 1.710));
+    this->radiiMap.insert(pair<string, int>("Sc", 1.480));
+    this->radiiMap.insert(pair<string, int>("Ti", 1.360));
+    this->radiiMap.insert(pair<string, int>("V", 1.340));
+    this->radiiMap.insert(pair<string, int>("Cr", 1.220));
+    this->radiiMap.insert(pair<string, int>("Mn", 1.190));
+    this->radiiMap.insert(pair<string, int>("Fe", 1.160));
+    this->radiiMap.insert(pair<string, int>("Co", 1.110));
+    this->radiiMap.insert(pair<string, int>("Ni", 1.100));
+    this->radiiMap.insert(pair<string, int>("Cu", 1.120));
+    this->radiiMap.insert(pair<string, int>("Zn", 1.180));
+    this->radiiMap.insert(pair<string, int>("Ga", 1.240));
+    this->radiiMap.insert(pair<string, int>("Ge", 1.210));
+    this->radiiMap.insert(pair<string, int>("As", 1.210));
+    this->radiiMap.insert(pair<string, int>("Se", 1.160));
+    this->radiiMap.insert(pair<string, int>("Br", 1.140));
+    this->radiiMap.insert(pair<string, int>("Kr", 1.170));
+    this->radiiMap.insert(pair<string, int>("Rb", 2.100));
+    this->radiiMap.insert(pair<string, int>("Sr", 1.850));
+    this->radiiMap.insert(pair<string, int>("Y", 1.630));
+    this->radiiMap.insert(pair<string, int>("Zr", 1.540));
+    this->radiiMap.insert(pair<string, int>("Nb", 1.470));
+    this->radiiMap.insert(pair<string, int>("Mo", 1.380));
+    this->radiiMap.insert(pair<string, int>("Tc", 1.280));
+    this->radiiMap.insert(pair<string, int>("Ru", 1.250));
+    this->radiiMap.insert(pair<string, int>("Rh", 1.250));
+    this->radiiMap.insert(pair<string, int>("Pd", 1.200));
+    this->radiiMap.insert(pair<string, int>("Ag", 1.280));
+    this->radiiMap.insert(pair<string, int>("Cd", 1.360));
+    this->radiiMap.insert(pair<string, int>("In", 1.420));
+    this->radiiMap.insert(pair<string, int>("Sn", 1.400));
+    this->radiiMap.insert(pair<string, int>("Sb", 1.400));
+    this->radiiMap.insert(pair<string, int>("Te", 1.360));
+    this->radiiMap.insert(pair<string, int>("I", 1.330));
+    this->radiiMap.insert(pair<string, int>("Xe", 1.310));
+    this->radiiMap.insert(pair<string, int>("Cs", 2.320));
+    this->radiiMap.insert(pair<string, int>("Ba", 1.960));
+    this->radiiMap.insert(pair<string, int>("La", 1.800));
+    this->radiiMap.insert(pair<string, int>("Ce", 1.630));
+    this->radiiMap.insert(pair<string, int>("Pr", 1.760));
+    this->radiiMap.insert(pair<string, int>("Nd", 1.740));
+    this->radiiMap.insert(pair<string, int>("Pm", 1.730));
+    this->radiiMap.insert(pair<string, int>("Sm", 1.720));
+    this->radiiMap.insert(pair<string, int>("Eu", 1.680));
+    this->radiiMap.insert(pair<string, int>("Gd", 1.690));
+    this->radiiMap.insert(pair<string, int>("Tb", 1.680));
+    this->radiiMap.insert(pair<string, int>("Dy", 1.670));
+    this->radiiMap.insert(pair<string, int>("Ho", 1.660));
+    this->radiiMap.insert(pair<string, int>("Er", 1.650));
+    this->radiiMap.insert(pair<string, int>("Tm", 1.640));
+    this->radiiMap.insert(pair<string, int>("Yb", 1.700));
+    this->radiiMap.insert(pair<string, int>("Lu", 1.620));
+    this->radiiMap.insert(pair<string, int>("Hf", 1.520));
+    this->radiiMap.insert(pair<string, int>("Ta", 1.460));
+    this->radiiMap.insert(pair<string, int>("W", 1.370));
+    this->radiiMap.insert(pair<string, int>("Re", 1.310));
+    this->radiiMap.insert(pair<string, int>("Os", 1.290));
+    this->radiiMap.insert(pair<string, int>("Ir", 1.220));
+    this->radiiMap.insert(pair<string, int>("Pt", 1.230));
+    this->radiiMap.insert(pair<string, int>("Au", 1.240));
+    this->radiiMap.insert(pair<string, int>("Hg", 1.330));
+    this->radiiMap.insert(pair<string, int>("Tl", 1.440));
+    this->radiiMap.insert(pair<string, int>("Pb", 1.440));
+    this->radiiMap.insert(pair<string, int>("Bi", 1.510));
+    this->radiiMap.insert(pair<string, int>("Po", 1.450));
+    this->radiiMap.insert(pair<string, int>("At", 1.470));
+    this->radiiMap.insert(pair<string, int>("Rn", 1.420));
+    this->radiiMap.insert(pair<string, int>("Fr", 2.230));
+    this->radiiMap.insert(pair<string, int>("Ra", 2.010));
+    this->radiiMap.insert(pair<string, int>("Ac", 1.860));
+    this->radiiMap.insert(pair<string, int>("Th", 1.750));
+    this->radiiMap.insert(pair<string, int>("Pa", 1.690));
+    this->radiiMap.insert(pair<string, int>("U",  1.700));
+    this->radiiMap.insert(pair<string, int>("Np", 1.710));
+    this->radiiMap.insert(pair<string, int>("Pu", 1.720));
+    this->radiiMap.insert(pair<string, int>("Am", 1.660));
+    this->radiiMap.insert(pair<string, int>("Cm", 1.660));
+    this->radiiMap.insert(pair<string, int>("Bk", 1.680));
+    this->radiiMap.insert(pair<string, int>("Cf", 1.680));
+    this->radiiMap.insert(pair<string, int>("Es", 1.650));
+    this->radiiMap.insert(pair<string, int>("Fm", 1.670));
+    this->radiiMap.insert(pair<string, int>("Md", 1.730));
+    this->radiiMap.insert(pair<string, int>("No", 1.760));
+    this->radiiMap.insert(pair<string, int>("Lr", 1.610));
+    this->radiiMap.insert(pair<string, int>("Rf", 1.570));
+    this->radiiMap.insert(pair<string, int>("Db", 1.490));
+    this->radiiMap.insert(pair<string, int>("Sg", 1.430));
+    this->radiiMap.insert(pair<string, int>("Bh", 1.410));
+    this->radiiMap.insert(pair<string, int>("Hs", 1.340));
+    this->radiiMap.insert(pair<string, int>("Mt", 1.290));
+    this->radiiMap.insert(pair<string, int>("Ds", 1.280));
+    this->radiiMap.insert(pair<string, int>("Rg", 1.210));
+    this->radiiMap.insert(pair<string, int>("Cn", 1.220));
+    this->radiiMap.insert(pair<string, int>("Uut", 1.360));
+    this->radiiMap.insert(pair<string, int>("Fl", 1.430));
+    this->radiiMap.insert(pair<string, int>("Uup", 1.620));
+    this->radiiMap.insert(pair<string, int>("Lv", 1.750));
+    this->radiiMap.insert(pair<string, int>("Uus", 1.650));
+    this->radiiMap.insert(pair<string, int>("Uuo", 1.570));
+    this->radiiMap.insert(pair<string, int>("Uue", 1.570));
+    this->radiiMap.insert(pair<string, int>("Ubn", 1.570));
+    this->radiiMap.insert(pair<string, int>("00", 0));
+    this->radiiMap.insert(pair<string, int>("dice_ghost_label", 0));
+
+
 };
 
 PeriodicTable::~PeriodicTable(){
@@ -271,6 +397,10 @@ int PeriodicTable::getAtomicNumber(string symbol){
 
 float PeriodicTable::getAtomicMass(string symbol){
     return this->massMap[symbol];
+};
+
+float PeriodicTable::getCovalentRadii(string symbol){
+    return this->radiiMap[symbol];
 };
 
 string PeriodicTable::getSymbol(int atomicNumber){
