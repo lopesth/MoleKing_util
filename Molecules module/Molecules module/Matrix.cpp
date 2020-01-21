@@ -23,9 +23,12 @@ Matrix::~Matrix(){
     this->matrix.resize(0);
 };
 
+Matrix::Matrix(int i, int j){
+    this->matrix = vector < vector < double > > (i, vector < double > (j));
+};
+
 vector <vector <double> > Matrix::sum(vector <vector <double> > matrixB){
-    vector <double> in(this->matrix[0].size());
-    vector < vector < double > > result(this->matrix.size(), in);
+    vector < vector < double > > result(this->matrix.size(), vector <double> (this->matrix[0].size()));
     if (this->matrix.size() == matrixB.size() && this->matrix[0].size() == matrixB[0].size()){
         for (int i = 0; i < this->matrix.size(); i++){
             for(int j = 0; j < this->matrix[0].size(); j++){

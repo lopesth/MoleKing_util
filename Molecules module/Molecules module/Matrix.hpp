@@ -25,6 +25,7 @@ class Matrix{
     public:
     Matrix(vector < vector <double> > matrix);
     Matrix();
+    Matrix(int i, int j);
     ~Matrix();
     void setMatrix(vector < vector <double> > matrix);
     vector < vector <double> > sum(vector < vector <double> > matrixB);

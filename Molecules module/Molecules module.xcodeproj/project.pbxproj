@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA00C34F23D77EFF0031A546 /* Hessian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA00C34D23D77EFF0031A546 /* Hessian.cpp */; };
+		DA00C35223D7806F0031A546 /* Molecule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA00C35023D7806F0031A546 /* Molecule.cpp */; };
 		DAFFB19723D72FBC00DB1366 /* AtomicScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB18C23D72FBC00DB1366 /* AtomicScale.cpp */; };
 		DAFFB19823D72FBC00DB1366 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB18E23D72FBC00DB1366 /* main.cpp */; };
 		DAFFB19923D72FBC00DB1366 /* MassCenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB18F23D72FBC00DB1366 /* MassCenter.cpp */; };
@@ -28,6 +30,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DA00C34D23D77EFF0031A546 /* Hessian.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Hessian.cpp; sourceTree = "<group>"; };
+		DA00C34E23D77EFF0031A546 /* Hessian.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Hessian.hpp; sourceTree = "<group>"; };
+		DA00C35023D7806F0031A546 /* Molecule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Molecule.cpp; sourceTree = "<group>"; };
+		DA00C35123D7806F0031A546 /* Molecule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Molecule.hpp; sourceTree = "<group>"; };
 		DAFFB17323D716E200DB1366 /* Molecules module */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Molecules module"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAFFB18C23D72FBC00DB1366 /* AtomicScale.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AtomicScale.cpp; sourceTree = "<group>"; };
 		DAFFB18D23D72FBC00DB1366 /* MassCenter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MassCenter.hpp; sourceTree = "<group>"; };
@@ -77,6 +83,10 @@
 				DAFFB19223D72FBC00DB1366 /* Geometry.cpp */,
 				DAFFB19623D72FBC00DB1366 /* Geometry.hpp */,
 				DAFFB18E23D72FBC00DB1366 /* main.cpp */,
+				DA00C35023D7806F0031A546 /* Molecule.cpp */,
+				DA00C35123D7806F0031A546 /* Molecule.hpp */,
+				DA00C34D23D77EFF0031A546 /* Hessian.cpp */,
+				DA00C34E23D77EFF0031A546 /* Hessian.hpp */,
 				DAFFB18F23D72FBC00DB1366 /* MassCenter.cpp */,
 				DAFFB18D23D72FBC00DB1366 /* MassCenter.hpp */,
 				DAFFB19323D72FBC00DB1366 /* Matrix.cpp */,
@@ -147,7 +157,9 @@
 				DAFFB19823D72FBC00DB1366 /* main.cpp in Sources */,
 				DAFFB19A23D72FBC00DB1366 /* Geometry.cpp in Sources */,
 				DAFFB19923D72FBC00DB1366 /* MassCenter.cpp in Sources */,
+				DA00C35223D7806F0031A546 /* Molecule.cpp in Sources */,
 				DAFFB19C23D72FBC00DB1366 /* PeriodicTable.cpp in Sources */,
+				DA00C34F23D77EFF0031A546 /* Hessian.cpp in Sources */,
 				DAFFB19723D72FBC00DB1366 /* AtomicScale.cpp in Sources */,
 				DAFFB19B23D72FBC00DB1366 /* Matrix.cpp in Sources */,
 			);
