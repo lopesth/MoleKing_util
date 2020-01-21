@@ -20,9 +20,9 @@ class Vector3D{
     double x_a, x_b, y_a, y_b, z_a, z_b, s_i, s_j, s_k;
 
     public:
-    Vector3D(vector<double> pointA, vector<double> pointB);
+    Vector3D(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0});
     Vector3D();
-    void setVector(vector<double> pointA, vector<double> pointB);
+    void setVector(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0});
     ~Vector3D();
     double magnitude();
     vector <double> getVector();

@@ -202,7 +202,7 @@ vector <double> SphericalCoords::toSpherical(){
 
 // Vector3D class ///
 
-Vector3D::Vector3D(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0}){
+Vector3D::Vector3D(vector<double> pointA, vector<double> pointB){
     this->x_a = pointA[0];
     this->x_b = pointB[0];
     this->s_i = this->x_a - this->x_b;
@@ -216,7 +216,7 @@ Vector3D::Vector3D(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0
 
 Vector3D::Vector3D(){};
 
-void Vector3D::setVector(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0}){
+void Vector3D::setVector(vector<double> pointA, vector<double> pointB){
     this->x_a = pointA[0];
     this->x_b = pointB[0];
     this->s_i = this->x_a - this->x_b;

@@ -58,23 +58,23 @@ vector <vector <double> > Matrix::multiplication(vector <vector <double> > matri
     return result;
 };
 
-vector <int> Matrix::getDimensions(){
-    int lines = this->matrix.size();
-    int columns = this->matrix[0].size();
-    return vector <int> {lines, columns};
+vector <long> Matrix::getDimensions(){
+    long lines = this->matrix.size();
+    long columns = this->matrix[0].size();
+    return vector <long> {lines, columns};
 };
 
 double Matrix::determinant(){
-    vector <int> dimensions = this->getDimensions();
+    vector <long> dimensions = this->getDimensions();
     if(dimensions[0] != dimensions[1]){
         exit(EXIT_FAILURE);
     };
-    int n = dimensions[0];
+    long n = dimensions[0];
     double D;
     return D = det(this->matrix, n); 
 };
 
-double Matrix::det(vector< vector <double> > mat, int n){
+double Matrix::det(vector< vector <double> > mat, long n){
     double D = 0;
     if (n == 1){
         return mat.at(0).at(0); 
@@ -85,14 +85,13 @@ double Matrix::det(vector< vector <double> > mat, int n){
 
     for (int f = 0; f < n; f++){ 
         vector < vector <double> > temp = getCofactor(mat, 0, f, n);
-        double det = this->det(temp, n - 1);
         D += sign * mat.at(0).at(f) * this->det(temp, n - 1); 
         sign = -sign; 
     };
     return D; 
 };
 
-vector < vector <double> >  Matrix::getCofactor(vector< vector <double> > mat, int p, int q, int n){
+vector < vector <double> >  Matrix::getCofactor(vector< vector <double> > mat, int p, int q, long n){
     vector <double> line(n-1);
     vector < vector <double> > temp(n-1, line);
     int i = 0, j = 0; 
@@ -110,6 +109,6 @@ vector < vector <double> >  Matrix::getCofactor(vector< vector <double> > mat, i
     return temp;
 };
 
-double Matrix::element(int i = 1, int j = 1){
+double Matrix::element(long i = 1, long j = 1){
     return matrix[i-1][j-1];
 };

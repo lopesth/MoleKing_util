@@ -64,11 +64,10 @@ class Molecule{
     };
 
     void getBonds(){
-        this->bonds.clear();
+        string symbol1, symbol2;
         for (int i = 0 ; i < this->molecule.size(); i++){
             for (int j = i; j < this->molecule.size(); j++){
                 double length = this->bondLength(i, j);
-                string symbol1, symbol2;
                 symbol1 = this->molecule[i].getAtomicSymbol();
                 symbol2 = this->molecule[j].getAtomicSymbol();
                 PeriodicTable table = PeriodicTable();
@@ -83,7 +82,6 @@ class Molecule{
     };
 
     void getAngles(){
-        this->angles.clear();
         for (int i = 0; i < bonds.size(); i++){
             int atom1 = this->bonds[i][0];
             int atom2 = this->bonds[i][1];
@@ -92,19 +90,19 @@ class Molecule{
                 int atom4 = this->bonds[j][1];
                 if (atom1 == atom3){
                     if (atom2 != atom4){
-                        this->angles.push_back(vector <int> {atom1, atom2, atom4});
+                        this->angles.push_back(vector <int> {atom2, atom1, atom4});
                     };
                 } else if (atom1 == atom4){
                     if (atom2 != atom3){
-                        this->angles.push_back(vector <int> {atom1, atom2, atom3});
+                        this->angles.push_back(vector <int> {atom2, atom1, atom3});
                     };
                 } else if (atom2 == atom3){
                     if (atom1 != atom4){
-                        this->angles.push_back(vector <int> {atom2, atom1, atom4});
+                        this->angles.push_back(vector <int> {atom1, atom2, atom4});
                     };
                 } else if (atom2 == atom4){
                     if (atom1 != atom3){
-                        this->angles.push_back(vector <int> {atom2, atom1, atom3});  
+                        this->angles.push_back(vector <int> {atom1, atom2, atom3});
                     };
                 };
             };
@@ -112,7 +110,6 @@ class Molecule{
     };
 
     void getDihedrals(){
-        dihedrals.clear();
         for (int i = 0; i < this->angles.size(); i++){
             int atom1 = this->angles[i][0];
             int atom2 = this->angles[i][1];
@@ -121,15 +118,15 @@ class Molecule{
                 int atom4= this->angles[j][0];
                 int atom5 = this->angles[j][1];
                 int atom6 = this->angles[j][2];
-                if (atom1 != atom4){
-                    if (atom1 == atom5 && atom4 == atom3){
-                        dihedrals.push_back(vector <int> {atom2, atom1, atom3, atom6});
-                    } else if (atom1 == atom5 && atom4 == atom2){
-                        dihedrals.push_back(vector <int> {atom2, atom1, atom2, atom6});
-                    } else if (atom1 == atom6 && atom4 == atom3){
-                        dihedrals.push_back(vector <int> {atom2, atom1, atom3, atom5});
-                    } else if (atom1 == atom6 && atom4 == atom2){
-                        dihedrals.push_back(vector <int> {atom3, atom1, atom2, atom5});
+                if (atom2 != atom5){
+                    if (atom2 == atom4 && atom5 == atom3){
+                        dihedrals.push_back(vector <int> {atom1, atom2, atom3, atom6});
+                    } else if (atom2 == atom4 && atom5 == atom1){
+                        dihedrals.push_back(vector <int> {atom3, atom2, atom1, atom6});
+                    } else if (atom2 == atom6 && atom5 == atom3){
+                        dihedrals.push_back(vector <int> {atom1, atom2, atom3, atom4});
+                    } else if (atom2 == atom6 && atom5 == atom1){
+                        dihedrals.push_back(vector <int> {atom3, atom2, atom1, atom4});
                     };
                 };
             };    
@@ -239,7 +236,7 @@ class Molecule{
         return cps;
     };
 
-    int getSize(){
+    long getSize(){
         return this->molecule.size();
     };
 
@@ -342,7 +339,7 @@ class Molecule{
 
     double valenceAngle(int atomN1, int atomN2, int atomN3){
         Vector3D bond1 = Vector3D(this->molecule[atomN1].getPos(), this->molecule[atomN2].getPos());
-        Vector3D bond2 = Vector3D(this->molecule[atomN1].getPos(), this->molecule[atomN3].getPos());
+        Vector3D bond2 = Vector3D(this->molecule[atomN3].getPos(), this->molecule[atomN2].getPos());
         return bond1.angle(bond2);
     };
 
@@ -352,22 +349,27 @@ class Molecule{
         Vector3D bond3 = Vector3D(this->molecule[atomN3].getPos(), this->molecule[atomN4].getPos());
         Vector3D semi_normal1 = bond1.crossProduct(bond2) / sin(bond1.angle(bond2, 'r'));
         Vector3D semi_normal2 = bond3.crossProduct(bond2) / sin(bond3.angle(bond2, 'r'));
-        cout << endl;
-        double angleD = semi_normal2.angle(semi_normal1);
-        double signal = semi_normal1.dotProduct(bond1);
-        if (signal < 0){
-            signal = -1;
-        } else {
+        double angleD = semi_normal1.angle(semi_normal2);
+        double signal_ = semi_normal1.dotProduct(bond3);
+        int signal;
+        if (signal_ > 0){
             signal = 1;
+        } else {
+            signal = -1;
         };
         return signal * angleD;
     };
 
     void doIRC(){
+        this->bonds.clear();
+        cout <<  this->bonds.size() << endl;
+        this->angles.clear();
+        this->dihedrals.clear();
         this->getBonds();
+        cout <<  this->bonds.size() << endl;
+
         this->getAngles();
         this->getDihedrals();
-        /*
         cout << "Name     Definition        Value" << endl;
         for (int i = 0; i < this->bonds.size(); i++){
             cout << "R" << i+1 << "     " << "R(" << this->bonds[i][0]+1 << ", " << this->bonds[i][1]+1 << ")        " << this->bondLength(this->bonds[i][0], this->bonds[i][1]) << endl;
@@ -375,9 +377,8 @@ class Molecule{
         for (int i = 0; i < this->angles.size(); i++){
             cout << "A" << i+1 << "     " << "A(" << this->angles[i][0]+1 << ", " << this->angles[i][1]+1 << ", " << this->angles[i][2]+1 << ")        " << this->valenceAngle(this->angles[i][0], this->angles[i][1], this->angles[i][2]) << endl;
         };
-        */
         for (int i = 0; i < this->dihedrals.size(); i++){
-            cout << "D(" << this->dihedrals[i][0] << ", " << this->dihedrals[i][1] << ", " << this->dihedrals[i][2] << ", " << this->dihedrals[i][3] << ")        " << this->torsion(this->dihedrals[i][0], this->dihedrals[i][1], this->dihedrals[i][2], this->dihedrals[i][3]) << endl << endl;
+            cout << "D" << i+1 << "     " << "D(" << this->dihedrals[i][0]+1 << ", " << this->dihedrals[i][1]+1 << ", " << this->dihedrals[i][2]+1 << ", " << this->dihedrals[i][3]+1 << ")        " << this->torsion(this->dihedrals[i][0], this->dihedrals[i][1], this->dihedrals[i][2], this->dihedrals[i][3]) << endl;
         };
         
     };
@@ -437,7 +438,7 @@ class SupraMolecule{
         return this->charge;
     };
 
-    int getSize(){
+    long getSize(){
         return this->supraMolecule.size();
     };
 
@@ -605,17 +606,17 @@ PYBIND11_MODULE(molecules, m) {
 
 int main(){
     Molecule minhaMol = Molecule();
-    minhaMol.addAtom("C", -3.61788608,  2.27642273,  0.00000000);
-    minhaMol.addAtom("H", -3.26121324,  2.78082092,  0.87365150);
-    minhaMol.addAtom("H", -3.26121324,  2.78082092, -0.87365150);
-    minhaMol.addAtom("H", -4.68788608,  2.27643591,  0.00000000);
-    minhaMol.addAtom("C", -3.10457037,  0.82449058,  0.00000000);
-    minhaMol.addAtom("H", -2.03457037,  0.82447793, -0.00000262);
-    minhaMol.addAtom("H", -3.46124509,  0.32009118, -0.87365004);
-    minhaMol.addAtom("C", -3.61790997,  0.09853523,  1.25740657);
-    minhaMol.addAtom("H", -3.26285566, -0.91083858,  1.25642781);
-    minhaMol.addAtom("H", -3.25963701,  0.60180287,  2.13105534);
-    minhaMol.addAtom("H", -4.68790815,  0.10024407,  1.25838880);
+    minhaMol.addAtom("C",   0.000000,    0.000000,    0.000000);
+    minhaMol.addAtom("H",   0.000000,    0.000000,    1.070000);
+    minhaMol.addAtom("H",  -0.504403,    0.873651,   -0.356667);
+    minhaMol.addAtom("C",  -0.725963,   -1.257405,   -0.513333);
+    minhaMol.addAtom("H",  -0.221558,   -2.131056,   -0.156668);
+    minhaMol.addAtom("H",  -1.734768,   -1.257405,   -0.156666);
+    minhaMol.addAtom("H",  -0.725965,   -1.257404,   -1.583333);
+    minhaMol.addAtom("C",   1.451926,    0.000000,   -0.513334);
+    minhaMol.addAtom("H",   1.451925,   -0.000000,   -1.583334);
+    minhaMol.addAtom("H",   1.956328,    0.873652,   -0.156668);
+    minhaMol.addAtom("H",   1.956329,   -0.873651,   -0.156668);
 
     minhaMol.doIRC();
 

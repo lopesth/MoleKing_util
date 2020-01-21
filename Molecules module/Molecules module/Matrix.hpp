@@ -19,8 +19,8 @@ using namespace std;
 class Matrix{
     private:
     vector < vector <double> > matrix;
-    vector < vector <double> > getCofactor(vector< vector <double> > mat, int p, int q, int n);
-    double det(vector< vector <double> > mat, int n);
+    vector < vector <double> > getCofactor(vector< vector <double> > mat, int p, int q, long n);
+    double det(vector< vector <double> > mat, long n);
 
     public:
     Matrix(vector < vector <double> > matrix);
@@ -31,8 +31,8 @@ class Matrix{
     vector < vector <double> > multiplication(double scalar);
     vector < vector <double> > multiplication(vector < vector <double> > matrixB);
     double determinant();
-    vector <int> getDimensions();
-    double element(int i, int j);
+    vector <long> getDimensions();
+    double element(long i, long j);
 };
 
 

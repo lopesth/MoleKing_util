@@ -1,0 +1,312 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DAFFB19723D72FBC00DB1366 /* AtomicScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB18C23D72FBC00DB1366 /* AtomicScale.cpp */; };
+		DAFFB19823D72FBC00DB1366 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB18E23D72FBC00DB1366 /* main.cpp */; };
+		DAFFB19923D72FBC00DB1366 /* MassCenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB18F23D72FBC00DB1366 /* MassCenter.cpp */; };
+		DAFFB19A23D72FBC00DB1366 /* Geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB19223D72FBC00DB1366 /* Geometry.cpp */; };
+		DAFFB19B23D72FBC00DB1366 /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB19323D72FBC00DB1366 /* Matrix.cpp */; };
+		DAFFB19C23D72FBC00DB1366 /* PeriodicTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB19423D72FBC00DB1366 /* PeriodicTable.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DAFFB17123D716E200DB1366 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		DAFFB17323D716E200DB1366 /* Molecules module */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Molecules module"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAFFB18C23D72FBC00DB1366 /* AtomicScale.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AtomicScale.cpp; sourceTree = "<group>"; };
+		DAFFB18D23D72FBC00DB1366 /* MassCenter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MassCenter.hpp; sourceTree = "<group>"; };
+		DAFFB18E23D72FBC00DB1366 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		DAFFB18F23D72FBC00DB1366 /* MassCenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MassCenter.cpp; sourceTree = "<group>"; };
+		DAFFB19023D72FBC00DB1366 /* AtomicScale.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AtomicScale.hpp; sourceTree = "<group>"; };
+		DAFFB19123D72FBC00DB1366 /* PeriodicTable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PeriodicTable.hpp; sourceTree = "<group>"; };
+		DAFFB19223D72FBC00DB1366 /* Geometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Geometry.cpp; sourceTree = "<group>"; };
+		DAFFB19323D72FBC00DB1366 /* Matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cpp; sourceTree = "<group>"; };
+		DAFFB19423D72FBC00DB1366 /* PeriodicTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PeriodicTable.cpp; sourceTree = "<group>"; };
+		DAFFB19523D72FBC00DB1366 /* Matrix.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Matrix.hpp; sourceTree = "<group>"; };
+		DAFFB19623D72FBC00DB1366 /* Geometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Geometry.hpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DAFFB17023D716E200DB1366 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DAFFB16A23D716E200DB1366 = {
+			isa = PBXGroup;
+			children = (
+				DAFFB17523D716E200DB1366 /* Molecules module */,
+				DAFFB17423D716E200DB1366 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DAFFB17423D716E200DB1366 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DAFFB17323D716E200DB1366 /* Molecules module */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DAFFB17523D716E200DB1366 /* Molecules module */ = {
+			isa = PBXGroup;
+			children = (
+				DAFFB18C23D72FBC00DB1366 /* AtomicScale.cpp */,
+				DAFFB19023D72FBC00DB1366 /* AtomicScale.hpp */,
+				DAFFB19223D72FBC00DB1366 /* Geometry.cpp */,
+				DAFFB19623D72FBC00DB1366 /* Geometry.hpp */,
+				DAFFB18E23D72FBC00DB1366 /* main.cpp */,
+				DAFFB18F23D72FBC00DB1366 /* MassCenter.cpp */,
+				DAFFB18D23D72FBC00DB1366 /* MassCenter.hpp */,
+				DAFFB19323D72FBC00DB1366 /* Matrix.cpp */,
+				DAFFB19523D72FBC00DB1366 /* Matrix.hpp */,
+				DAFFB19423D72FBC00DB1366 /* PeriodicTable.cpp */,
+				DAFFB19123D72FBC00DB1366 /* PeriodicTable.hpp */,
+			);
+			path = "Molecules module";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DAFFB17223D716E200DB1366 /* Molecules module */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DAFFB17A23D716E200DB1366 /* Build configuration list for PBXNativeTarget "Molecules module" */;
+			buildPhases = (
+				DAFFB16F23D716E200DB1366 /* Sources */,
+				DAFFB17023D716E200DB1366 /* Frameworks */,
+				DAFFB17123D716E200DB1366 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Molecules module";
+			productName = "Molecules module";
+			productReference = DAFFB17323D716E200DB1366 /* Molecules module */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DAFFB16B23D716E200DB1366 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = "Thiago Lopes";
+				TargetAttributes = {
+					DAFFB17223D716E200DB1366 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+				};
+			};
+			buildConfigurationList = DAFFB16E23D716E200DB1366 /* Build configuration list for PBXProject "Molecules module" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DAFFB16A23D716E200DB1366;
+			productRefGroup = DAFFB17423D716E200DB1366 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DAFFB17223D716E200DB1366 /* Molecules module */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DAFFB16F23D716E200DB1366 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAFFB19823D72FBC00DB1366 /* main.cpp in Sources */,
+				DAFFB19A23D72FBC00DB1366 /* Geometry.cpp in Sources */,
+				DAFFB19923D72FBC00DB1366 /* MassCenter.cpp in Sources */,
+				DAFFB19C23D72FBC00DB1366 /* PeriodicTable.cpp in Sources */,
+				DAFFB19723D72FBC00DB1366 /* AtomicScale.cpp in Sources */,
+				DAFFB19B23D72FBC00DB1366 /* Matrix.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		DAFFB17823D716E200DB1366 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		DAFFB17923D716E200DB1366 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		DAFFB17B23D716E200DB1366 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CODE_SIGN_STYLE = Automatic;
+				OTHER_LDFLAGS = "-std=c++11";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DAFFB17C23D716E200DB1366 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CODE_SIGN_STYLE = Automatic;
+				OTHER_LDFLAGS = "-std=c++11";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DAFFB16E23D716E200DB1366 /* Build configuration list for PBXProject "Molecules module" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAFFB17823D716E200DB1366 /* Debug */,
+				DAFFB17923D716E200DB1366 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DAFFB17A23D716E200DB1366 /* Build configuration list for PBXNativeTarget "Molecules module" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAFFB17B23D716E200DB1366 /* Debug */,
+				DAFFB17C23D716E200DB1366 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DAFFB16B23D716E200DB1366 /* Project object */;
+}
