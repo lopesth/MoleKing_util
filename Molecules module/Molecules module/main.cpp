@@ -16,6 +16,7 @@
 #include "Matrix.hpp"
 #include <math.h>
 #include "Molecule.hpp"
+#include "Hessian.hpp"
 
 using namespace std;
 //namespace py = pybind11;
@@ -254,8 +255,8 @@ int main(){
     minhaMol.addAtom("H",   1.956328,    0.873652,   -0.156668);
     minhaMol.addAtom("H",   1.956329,   -0.873651,   -0.156668);
 
-    minhaMol.doIRC();
-
-
-
+    Hessian h = Hessian(minhaMol);
+    Matrix m = h.doInitialGuess();
+    m.print();
+    return 0;
 };

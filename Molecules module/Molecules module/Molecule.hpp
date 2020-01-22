@@ -17,8 +17,6 @@
 #include "Matrix.hpp"
 #include <math.h>
 
-#endif /* Molecule_hpp */
-
 class Molecule{
 
 private:
@@ -63,8 +61,10 @@ public:
     double torsion(int atomN1, int atomN2, int atomN3, int atomN4);
     void doIRC();
     void printIRC();
-    vector < pair < vector <int>, double > > getIRCBonds();
-    vector < pair < vector <int>, double > > getIRCAngles();
-    vector < pair < vector <int>, double > > getIRCDihedrals();
+    vector < vector <int> > getIRCBonds();
+    vector < vector <int> > getIRCAngles();
+    vector < vector <int> > getIRCDihedrals();
 
 };
+
+#endif /* Molecule_hpp */

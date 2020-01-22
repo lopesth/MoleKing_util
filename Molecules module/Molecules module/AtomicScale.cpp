@@ -117,6 +117,10 @@ double Atom::getAtomicMass(){
     return this->atomicMass;
 };
 
+double Atom::getAtomicRadio(){
+    return PeriodicTable().getCovalentRadii(this->atomicSymbol);
+};
+
 string Atom::getAtomicSymbol(){
     return this->atomicSymbol;
 };

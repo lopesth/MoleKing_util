@@ -27,6 +27,10 @@ Matrix::Matrix(int i, int j){
     this->matrix = vector < vector < double > > (i, vector < double > (j));
 };
 
+void Matrix::replace(int i, int j, double newValue){
+    this->matrix.at(i).at(j) = newValue;
+};
+
 vector <vector <double> > Matrix::sum(vector <vector <double> > matrixB){
     vector < vector < double > > result(this->matrix.size(), vector <double> (this->matrix[0].size()));
     if (this->matrix.size() == matrixB.size() && this->matrix[0].size() == matrixB[0].size()){
@@ -114,4 +118,13 @@ vector < vector <double> >  Matrix::getCofactor(vector< vector <double> > mat, i
 
 double Matrix::element(long i = 1, long j = 1){
     return matrix[i-1][j-1];
+};
+
+void Matrix::print(){
+    for (int i = 0; i < this->matrix.size(); i++){
+        for (int j = 0; j < this->matrix[0].size(); j++){
+            cout << this->matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
 };

@@ -15,7 +15,8 @@
 #include <math.h>
 #include <vector>
 #include "Molecule.hpp"
-
+#include "AtomicScale.hpp"
+#include <iostream>
 
 using namespace std;
 
@@ -27,9 +28,10 @@ private:
     
 public:
     Hessian(Molecule molecule);
-    ~Hessian();
-    vector<Matrix> doInitialGuess();
-    
+    Matrix doInitialGuess();
+    double rho(vector <int> atoms);
+    double wAngle(vector <int> atoms);
+    double wDihedral(vector <int> atoms);
     
 };
 

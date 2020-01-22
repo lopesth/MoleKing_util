@@ -371,36 +371,21 @@ void Molecule::printIRC(){
     };
 };
 
-vector < pair < vector <int>, double > > Molecule::getIRCBonds(){
+vector < vector <int> > Molecule::getIRCBonds(){
     this->bonds.clear();
     this->getBonds();
-    vector < pair < vector <int>, double > > bondsH(this->bonds.size(), pair < vector <int>, double > {{0, 0}, 0.0});
-    for (int i = 0; i < this->bonds.size(); i++){
-        double length = this->bondLength(this->bonds[i][0], this->bonds[i][1]);
-        bondsH.at(i) = pair < vector <int>, double > {this->bonds[i] , length};
-    };
-    return bondsH;
+    return this->bonds;
 };
 
 
-vector < pair < vector <int>, double > > Molecule::getIRCAngles(){
+vector < vector <int> > Molecule::getIRCAngles(){
     this->angles.clear();
     this->getAngles();
-    vector < pair < vector <int>, double > > anglesH(this->angles.size(), pair < vector <int>, double > {{0, 0, 0}, 0.0});
-    for (int i = 0; i < this->angles.size(); i++){
-        double angle = this->valenceAngle(this->angles[i][0], this->angles[i][1], this->angles[i][2]);
-        anglesH.at(i) = pair < vector <int>, double > {this->angles[i] , angle};
-    };
-    return anglesH;
+    return this->angles;
 };
 
-vector < pair < vector <int>, double > > Molecule::getIRCDihedrals(){
+vector < vector <int> > Molecule::getIRCDihedrals(){
     this->dihedrals.clear();
     this->getDihedrals();
-    vector < pair < vector <int>, double > > dihedralsH(this->dihedrals.size(), pair < vector <int>, double > {{0, 0, 0, 0}, 0.0});
-    for (int i = 0; i < this->dihedrals.size(); i++){
-        double torsion = this->torsion(this->dihedrals[i][0], this->dihedrals[i][1], this->dihedrals[i][2], this->dihedrals[i][3]);
-        dihedralsH.at(i) = pair < vector <int>, double > {this->dihedrals[i] , torsion};
-    };
-    return dihedralsH;
+    return this->dihedrals;
 };

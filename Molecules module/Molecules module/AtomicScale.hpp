@@ -34,6 +34,7 @@ class Atom{
     double getX();
     double getY();
     double getZ();
+    double getAtomicRadio();
     void setNewPos(double newX, double newY, double newZ);
     void translation(Vector3D traslationVector);
     void rotationAxis(double tetha, Vector3D unitAxis);

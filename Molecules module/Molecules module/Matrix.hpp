@@ -32,8 +32,10 @@ class Matrix{
     vector < vector <double> > multiplication(double scalar);
     vector < vector <double> > multiplication(vector < vector <double> > matrixB);
     double determinant();
+    void replace(int i, int j, double newValue);
     vector <long> getDimensions();
     double element(long i, long j);
+    void print();
 };
 
 
