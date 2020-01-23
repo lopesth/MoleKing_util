@@ -3,7 +3,7 @@
 //  Molecules
 //
 //  Created by Thiago Lopes, Igor Santos, Sandro Brito and Mateus Barbosa on 14/01/20.
-//  Copyright © 2020 Thiago Lopes and Mateus Barbosa. All rights reserved.
+//  Copyright © 2020 LMSC. All rights reserved.
 //
 
 #ifndef Matrix_hpp

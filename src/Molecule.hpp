@@ -3,7 +3,7 @@
 //  Molecules module
 //
 //  Created by Thiago Lopes on 21/01/20.
-//  Copyright © 2020 Thiago Lopes. All rights reserved.
+//  Copyright © 2020 LMSC. All rights reserved.
 //
 
 #ifndef Molecule_hpp

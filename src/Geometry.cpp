@@ -3,7 +3,7 @@
 //  Molecules
 //
 //  Created by Thiago Lopes and Mateus Barbosa on 10/01/20.
-//  Copyright © 2020 Thiago Lopes and Mateus Barbosa. All rights reserved.
+//  Copyright © 2020 LMSC. All rights reserved.
 //
 
 #include "Geometry.hpp"
@@ -312,11 +312,11 @@ void Vector3D::show(){
 };
 
 double Vector3D::axisValue(char unitVector){
-    if (unitVector == 'i'){
+    if (unitVector == 'i' || unitVector == 'x'){
         return this->s_i;
-    } else if (unitVector == 'j'){
+    } else if (unitVector == 'j' || unitVector == 'y'){
         return this->s_j;
-    } else if (unitVector == 'k'){
+    } else if (unitVector == 'k' || unitVector == 'z'){
         return this->s_k;
     } else {
         return 0.0;

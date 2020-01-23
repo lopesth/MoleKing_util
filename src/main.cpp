@@ -3,7 +3,7 @@
 //  Molecules   
 //
 //  Created by Thiago Lopes and Mateus Barbosa on 09/01/20.
-//  Copyright © 2020 Thiago Lopes and Mateus Barbosa. All rights reserved.
+//  Copyright © 2020 LMSC. All rights reserved.
 //
 
 #include <iostream>
@@ -254,10 +254,27 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("rotation3D", &Point::rotationVector);
 
         py::class_<SphericalCoords>(m, "SphericalCoords", "This class allows the interchange between Cartesian and spherical coordinates.")
-        .def(py::init())
         .def(py::init<double, double, double, char>(), py::arg("coord1"), py::arg("coord2"), py::arg("coord3"), py::arg("spaceType") = 'c')
-        .def("toCartesian", &Point::toCartesian)
-        .def("toSpherical", &Point::toSpherical);
+        .def("toCartesian", &SphericalCoords::toCartesian)
+        .def("toSpherical", &SphericalCoords::toSpherical);
+    
+    
+    py::class_<Vector3D>(m, "Vector3D", "This class creates a vector (xi + yj + zk) variable type allowing for the usage in python like a primitive type.")
+    .def(py::init< vector<double>, vector<double>>(), py::arg("pointA"), py::arg("pointB") = vector <double> {0.0, 0.0, 0.0})
+    .def("magnitude", &Vector3D::magnitude)
+    .def("getVector", &Vector3D::getVector)
+    .def("show", &Vector3D::show)
+    .def("normalize", &Vector3D::normalize)
+    .def("conjugate", &Vector3D::conjugate)
+    .def("operator/", &Vector3D::operator/)
+    .def("operator*", &Vector3D::operator*)
+    .def("operator+", &Vector3D::operator+)
+    .def("operator-", &Vector3D::operator-)
+    .def("crossProduct", &Vector3D::crossProduct)
+    .def("dotProduct", &Vector3D::dotProduct)
+    .def("angle", &Vector3D::angle, py::arg("vectorB"), py::arg("unit") = 'd')
+    .def("unitVectorValue", &Vector3D::axisValue);
+
 
 };
 

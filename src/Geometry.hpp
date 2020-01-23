@@ -3,7 +3,7 @@
 //  Molecules
 //
 //  Created by Thiago Lopes and Mateus Barbosa on 10/01/20.
-//  Copyright © 2020 Thiago Lopes and Mateus Barbosa. All rights reserved.
+//  Copyright © 2020 LMSC. All rights reserved.
 //
 
 #ifndef Geometry_hpp
