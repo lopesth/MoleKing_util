@@ -87,7 +87,8 @@ Atom::Atom(int atomicNumber, double x, double y, double z, bool freezeCode_ = 0)
 
 Atom::Atom(string atomicSymbol, double x, double y, double z, bool freezeCode_ = 0){
     PeriodicTable temp;
-    this->atomicSymbol = atomicSymbol;
+    string symbol(atomicSymbol);
+    this->atomicSymbol = symbol;
     this->atomicNumber = temp.getAtomicNumber(atomicSymbol);
     this->point = Point(x, y, z, 'c');
     this->freezeCode = freezeCode_;

@@ -160,7 +160,7 @@ void Molecule::addAtom(int atomNumber, double xPos, double yPos, double zPos, bo
     this->molecule.push_back(atom);
 };
 
-vector <string> Molecule::getAtom(int number, bool symbol, char cartesian){
+vector <string> Molecule::getAtom(int number, bool symbol){
     vector<string> atomString(4);
     Atom atom = this->molecule.at(number-1);
     if(symbol == 0){
@@ -168,13 +168,11 @@ vector <string> Molecule::getAtom(int number, bool symbol, char cartesian){
     }else{
         atomString.at(0) = atom.getAtomicSymbol();
     };
-    if(cartesian == 'c'){
-        atomString.at(1) = to_string(atom.getX());
-        atomString.at(2) = to_string(atom.getY());
-        atomString.at(3) = to_string(atom.getZ());
-    } else{
-        cout << "Contruir aqui as coordenadas redundantes";
-    };
+
+    atomString.at(1) = to_string(atom.getX());
+    atomString.at(2) = to_string(atom.getY());
+    atomString.at(3) = to_string(atom.getZ());
+
     return atomString;
 };
 
@@ -198,26 +196,22 @@ int Molecule::getMultiplicity(){
     return this->multiplicity;
 };
 
-vector< vector<string> > Molecule::getMolecule(bool symbol, bool cartesian){
+vector< vector<string> > Molecule::getMolecule(bool symbol){
     vector< vector<string> > moleculeString;
     for (int i = 1; i < this->molecule.size()+1; i++){
-        vector <string> atom = this->getAtom(i, symbol, cartesian);
+        vector <string> atom = this->getAtom(i, symbol);
         moleculeString.push_back(atom);
     };
     return moleculeString;
 };
 
-vector< vector<string> > Molecule::getChargePoints(bool cartesian){
+vector< vector<string> > Molecule::getChargePoints(){
     vector< vector<string> > cps;
     for (int i=0; i < this->chargePoint.size(); i++){
         vector<string> cp(4);
-        if (cartesian == 0){
-            cp.at(0) = to_string(this->chargePoint.at(i).getX());
-            cp.at(1) = to_string(this->chargePoint.at(i).getY());
-            cp.at(2) = to_string(this->chargePoint.at(i).getZ());
-        } else{
-            cout << "Apagar a referencia fora de cartesiano" << endl;
-        };
+        cp.at(0) = to_string(this->chargePoint.at(i).getX());
+        cp.at(1) = to_string(this->chargePoint.at(i).getY());
+        cp.at(2) = to_string(this->chargePoint.at(i).getZ());
         cp.at(3) = to_string(this->chargePoint.at(i).getCharge());
         cps.push_back(cp);
     };

@@ -39,7 +39,7 @@ public:
     void addChargePoints(double xPos, double yPos, double zPos, double charge);
     void addAtom(string atomSymbol, double xPos, double yPos, double zPos, bool freezeCode_ = 0);
     void addAtom(int atomNumber, double xPos, double yPos, double zPos, bool freezeCode_ = 0);
-    vector <string> getAtom(int number, bool symbol = 0, char cartesian = 'c');
+    vector <string> getAtom(int number, bool symbol = 0);
     Atom getAtomObj(int number);
     void setCharge(int charge);
     int getCharge();
@@ -47,8 +47,8 @@ public:
     void setMultiplicity(int multiplicity);
     int getMultiplicity();
     void normalizeCPs(int norm);
-    vector< vector<string> > getMolecule(bool symbol = 0, bool cartesian = 0);
-    vector< vector<string> > getChargePoints(bool cartesian = 0);
+    vector< vector<string> > getMolecule(bool symbol = 0);
+    vector< vector<string> > getChargePoints();
     vector<double> getMassCenter();
     void spinMolecule(double angle, Vector3D spinVector);
     void spinMolecule(double angle, char axis);

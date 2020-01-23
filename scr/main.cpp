@@ -10,8 +10,8 @@
 #include <string>
 #include "MassCenter.hpp"
 #include "AtomicScale.hpp"
-//#include <pybind11/pybind11.h>
-//#include <pybind11/stl.h>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include "Geometry.hpp"
 #include "Matrix.hpp"
 #include <math.h>
@@ -19,7 +19,7 @@
 #include "Hessian.hpp"
 
 using namespace std;
-//namespace py = pybind11;
+namespace py = pybind11;
 
 
 
@@ -174,52 +174,30 @@ class SupraMolecule{
     };
 
 };
-/*
-PYBIND11_MODULE(molecules, m) {
-    py::class_<Molecule>(m, "Molecule", "This class creates a molecule variable type allowing for the usage in python like a primitive type.")
-        .def(py::init())
-        .def("addChargePoints", &Molecule::addChargePoints, "This method add a charge point in a existent molecule.")
-        .def("addAtom", (void (Molecule::*)(int, double, double, double)) &Molecule::addAtom)
-        .def("addAtom", (void (Molecule::*)(string, double, double, double)) &Molecule::addAtom)
-        .def("getAtom", &Molecule::getAtom, py::arg("number")=0, py::arg("symbol")=0, py::arg("cartesian") = 0)
-        .def("setCharge", &Molecule::setCharge)
-        .def("getCharge", &Molecule::getCharge)
-        .def("setMultiplicity", &Molecule::setMultiplicity)
-        .def("getMultiplicity", &Molecule::getMultiplicity)
-        .def("getMolecule", &Molecule::getMolecule, py::arg("symbol") = 0, py::arg("cartesian") = 0)
-        .def("getChargePoints", &Molecule::getChargePoints, py::arg("cartesian") = 0)
-        .def("getSize", &Molecule::getSize)
-        .def("normChargePoints", &Molecule::normalizeCPs)
-        .def("getMassCenter", &Molecule::getMassCenter, py::arg("typeCoord") = 'c')
-        .def("moveMassCenter", &Molecule::moveMassCenter, py::arg("typeCoord") = 'c', py::arg("newCoord1") = 0.0, py::arg("newCoord2") = 0.0, py::arg("newCoord3") = 0.0)
-        .def("stdOrientation", &Molecule::standardOrientation);
+
+PYBIND11_MODULE(MoleKing_util, m) {
     
     py::class_<Atom>(m, "Atom", "This class creates a atom variable type allowing for the usage in python like a primitive type.")
-        .def(py::init<int, double, double, double, bool, char>(), py::arg("atomicNumber"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_") = 0, py::arg("typeCoord") = 'c')
-        .def(py::init<string, double, double, double, bool, char>(), py::arg("atomicSymbol"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_") = 0, py::arg("typeCoord") = 'c')
+        .def(py::init<int, double, double, double, bool>(), py::arg("atomicNumber"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_") = 0)
+        .def(py::init<string, double, double, double, bool>(), py::arg("atomicSymbol"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_") = 0)
         .def("getAtomicMass", &Atom::getAtomicMass)
         .def("getAtomicSymbol", &Atom::getAtomicSymbol)
         .def("getAtomicNumber", &Atom::getAtomicNumber)
-        .def("getAtomicMass", &Atom::getAtomicMass)
+        .def("getAtomicRadio", &Atom::getAtomicRadio)
         .def("getX", &Atom::getX)
         .def("getY", &Atom::getY)
         .def("getZ", &Atom::getZ)
         .def("setX", &Atom::setX)
         .def("setY", &Atom::setY)
         .def("setZ", &Atom::setZ)
-        .def("setCartesianCoord", &Atom::setCartesianPos)
-        .def("getCartesianCoord", &Atom::getPos)
-        .def("getRadius", &Atom::getRadius)
-        .def("getTetha", &Atom::getTetha)
-        .def("getPhi", &Atom::getPhi)
-        .def("setRadius", &Atom::setRadius)
-        .def("setTetha", &Atom::setTetha)
-        .def("setPhi", &Atom::setPhi)
-        .def("setSphericalPos", &Atom::setSphericalPos)
-        .def("getSphericalPos", &Atom::getSphericalPos);
+        .def("operator==", &Atom::operator==)
+        .def("setNewPos", &Atom::setNewPos)
+        .def("getPos", &Atom::getPos)
+        .def("translation", &Atom::translation)
+        .def("rotationAxis", &Atom::rotationAxis);
 
      py::class_<ChargePoint>(m, "ChargePoint", "This class creates a charge point variable type allowing for the usage in python like a primitive type.")
-        .def(py::init<double, double, double, double, char>(), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("charge"), py::arg("typeCoord") = 'c')
+        .def(py::init<double, double, double, double>(), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("charge"))
         .def("getX", &ChargePoint::getX)
         .def("getY", &ChargePoint::getY)
         .def("getZ", &ChargePoint::getZ)
@@ -228,18 +206,61 @@ PYBIND11_MODULE(molecules, m) {
         .def("setZ", &ChargePoint::setZ)
         .def("getCharge", &ChargePoint::getCharge)
         .def("setCharge", &ChargePoint::setCharge)
-        .def("setCartesianCoord", &ChargePoint::setCartesianPos)
-        .def("getCartesianCoord", &ChargePoint::getPos)
-        .def("getRadius", &ChargePoint::getRadius)
-        .def("getTetha", &ChargePoint::getTetha)
-        .def("getPhi", &ChargePoint::getPhi)
-        .def("setRadius", &ChargePoint::setRadius)
-        .def("setTetha", &ChargePoint::setTetha)
-        .def("setPhi", &ChargePoint::setPhi)
-        .def("setSphericalPos", &ChargePoint::setSphericalPos)
-        .def("getSphericalPos", &ChargePoint::getSphericalPos);
+        .def("setNewPos", &ChargePoint::setNewPos)
+        .def("getPos", &ChargePoint::getPos)
+        .def("operator==", &ChargePoint::operator==)
+        .def("translation", &ChargePoint::translation)
+        .def("rotationAxis", &ChargePoint::rotationAxis);
+
+    py::class_<Molecule>(m, "Molecule", "This class creates a molecule variable type allowing for the usage in python like a primitive type.")
+        .def(py::init())
+        .def("addChargePoints", &Molecule::addChargePoints, "This method add a charge point in a existent molecule.")
+        .def("addAtom", (void (Molecule::*)(string, double, double, double, bool)) &Molecule::addAtom, py::arg("atomSymbol"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_")=0)
+        .def("addAtom", (void (Molecule::*)(int, double, double, double, bool)) &Molecule::addAtom, py::arg("atomNumber"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_")=0)
+        .def("getAtom", &Molecule::getAtom, py::arg("number")=0, py::arg("symbol")=0)
+        .def("getAtomObj", &Molecule::getAtomObj)
+        .def("setCharge", &Molecule::setCharge)
+        .def("getCharge", &Molecule::getCharge)
+        .def("getSize", &Molecule::getSize)
+        .def("setMultiplicity", &Molecule::setMultiplicity)
+        .def("getMultiplicity", &Molecule::getMultiplicity)
+        .def("normChargePoints", &Molecule::normalizeCPs)
+        .def("getMolecule", &Molecule::getMolecule)
+        .def("getChargePoints", &Molecule::getChargePoints)
+        .def("getMassCenter", &Molecule::getMassCenter)
+        .def("spinMolecule", (void (Molecule::*)(double, Vector3D)) &Molecule::spinMolecule)
+        .def("spinMolecule", (void (Molecule::*)(double, char)) &Molecule::spinMolecule)
+        .def("translation", &Molecule::translation)
+        .def("moveMassCenter", &Molecule::moveMassCenter, py::arg("x")=0, py::arg("y")=0, py::arg("z")=0)
+        .def("moveTail", &Molecule::moveTail, py::arg("atomNumber"), py::arg("x")=0, py::arg("y")=0, py::arg("z")=0)
+        .def("stdOrientation", &Molecule::standardOrientation)
+        .def("bondLength", &Molecule::bondLength)
+        .def("valenceAngle", &Molecule::valenceAngle)
+        .def("torsion", &Molecule::torsion)
+        .def("doIRC", &Molecule::doIRC)
+        .def("printIRC", &Molecule::printIRC)
+        .def("getIRCBonds", &Molecule::getIRCBonds)
+        .def("getIRCAngles", &Molecule::getIRCAngles)
+        .def("getIRCDihedrals", &Molecule::getIRCDihedrals);
+
+        py::class_<Point>(m, "Point", "This class creates a point variable type allowing for the usage in python like a primitive type.")
+        .def(py::init())
+        .def(py::init<double, double, double, char>(), py::arg("coord1"), py::arg("coord2"), py::arg("coord3"), py::arg("typeCoord") = 'c')
+        .def("operator==", &Point::operator==)
+        .def("getCoords", &Point::getCoords)
+        .def("setCoord", &Point::setCoord)
+        .def("setCoords", &Point::setCoords, py::arg("newValues"), py::arg("typeCoord") = 'c')
+        .def("translation", &Point::translation)
+        .def("rotation3D", &Point::rotationVector);
+
+        py::class_<SphericalCoords>(m, "SphericalCoords", "This class allows the interchange between Cartesian and spherical coordinates.")
+        .def(py::init())
+        .def(py::init<double, double, double, char>(), py::arg("coord1"), py::arg("coord2"), py::arg("coord3"), py::arg("spaceType") = 'c')
+        .def("toCartesian", &Point::toCartesian)
+        .def("toSpherical", &Point::toSpherical);
+
 };
-*/
+
 
 int main(){
     Molecule minhaMol = Molecule();
@@ -254,7 +275,7 @@ int main(){
     minhaMol.addAtom("H",   1.451925,   -0.000000,   -1.583334);
     minhaMol.addAtom("H",   1.956328,    0.873652,   -0.156668);
     minhaMol.addAtom("H",   1.956329,   -0.873651,   -0.156668);
-
+    minhaMol.moveMassCenter(1000, -10, 5000);
     Hessian h = Hessian(minhaMol);
     Matrix m = h.doInitialGuess();
     m.print();
