@@ -28,14 +28,17 @@ class Matrix{
     Matrix(int i, int j);
     ~Matrix();
     void setMatrix(vector < vector <double> > matrix);
-    vector < vector <double> > sum(vector < vector <double> > matrixB);
-    vector < vector <double> > multiplication(double scalar);
-    vector < vector <double> > multiplication(vector < vector <double> > matrixB);
+    Matrix sum(Matrix matrixB);
+    Matrix multiplication(double scalar);
+    vector < vector < double > > toVector();
+    Matrix multiplication(Matrix matrixB);
     double determinant();
     void replace(int i, int j, double newValue);
+    vector<double> getLine(int i);
     vector <long> getDimensions();
     double element(long i, long j);
     void print();
+    string toStr();
 };
 
 

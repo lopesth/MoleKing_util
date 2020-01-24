@@ -31,7 +31,8 @@ void Matrix::replace(int i, int j, double newValue){
     this->matrix.at(i).at(j) = newValue;
 };
 
-vector <vector <double> > Matrix::sum(vector <vector <double> > matrixB){
+Matrix Matrix::sum(Matrix matrix_B){
+    vector <vector <double> > matrixB = matrix_B.toVector();
     vector < vector < double > > result(this->matrix.size(), vector <double> (this->matrix[0].size()));
     if (this->matrix.size() == matrixB.size() && this->matrix[0].size() == matrixB[0].size()){
         for (int i = 0; i < this->matrix.size(); i++){
@@ -43,10 +44,13 @@ vector <vector <double> > Matrix::sum(vector <vector <double> > matrixB){
     } else {
         exit (EXIT_FAILURE);
     };
-    return result;
+    Matrix m_result = Matrix(result);
+    return m_result;
 };
 
-vector <vector <double> > Matrix::multiplication(vector <vector <double> > matrixB){
+
+Matrix Matrix::multiplication(Matrix matrix_B){
+    vector <vector <double> > matrixB = matrix_B.toVector();
     vector <double> in(matrixB[0].size(), 0);
     vector < vector < double > > result(this->matrix.size(), in);
     if (this->matrix[0].size() == matrixB.size()){
@@ -62,7 +66,19 @@ vector <vector <double> > Matrix::multiplication(vector <vector <double> > matri
     } else {
         exit (EXIT_FAILURE);
     };
-    return result;
+    Matrix m_result = Matrix(result);
+    return m_result;
+};
+
+Matrix Matrix::multiplication(double scalar){
+    vector < vector < double > > result(this->matrix.size(), vector <double> (this->matrix[0].size()));
+    for (int i = 0; i < this->matrix.size(); i++){
+        for (int j = 0; j < this->matrix[0].size(); j++){
+            result.at(i).at(j) = this->matrix.at(i).at(j) * scalar;
+        };
+    };
+    Matrix m_result = Matrix(result);
+    return m_result;
 };
 
 vector <long> Matrix::getDimensions(){
@@ -128,3 +144,22 @@ void Matrix::print(){
         cout << endl;
     }
 };
+
+vector <double> Matrix::getLine(int i){
+    return this->matrix[i];
+};
+
+string Matrix::toStr(){
+    string temp;
+    for (int i = 0; i < this->matrix.size(); i++){
+        for (int j = 0; j < this->matrix[0].size(); j++){
+            temp = temp + to_string(this->matrix[i][j]) + " ";
+        };
+        temp = temp + "\n";
+    };
+    return temp;
+};
+
+vector < vector <double> > Matrix::toVector(){
+    return this->matrix;
+}

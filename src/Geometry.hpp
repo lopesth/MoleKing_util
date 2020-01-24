@@ -37,6 +37,7 @@ class Vector3D{
     double dotProduct(Vector3D vectorB);
     double angle(Vector3D vectorB, char unit = 'd');
     double axisValue(char unitVector);
+    string toStr();
 };
 
 class Quaternion{

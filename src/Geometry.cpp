@@ -216,6 +216,10 @@ Vector3D::Vector3D(vector<double> pointA, vector<double> pointB){
 
 Vector3D::Vector3D(){};
 
+string Vector3D::toStr(){
+    return to_string(this->s_i) + "i " + to_string(this->s_j) + "j " + to_string(this->s_k) + "k ";
+}
+
 void Vector3D::setVector(vector<double> pointA, vector<double> pointB){
     this->x_a = pointA[0];
     this->x_b = pointB[0];

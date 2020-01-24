@@ -16,11 +16,12 @@
 #include "Geometry.hpp"
 #include "Matrix.hpp"
 #include <math.h>
+#include <iterator>
 
 class Molecule{
 
 private:
-    vector<Atom> molecule;
+    typedef vector<Atom> AtomList;
     vector<ChargePoint> chargePoint;
     vector < vector <int> > bonds;
     vector <vector <int> > angles;
@@ -31,8 +32,11 @@ private:
     void getAngles();
     void getDihedrals();
     vector<double> minNmaxValue(vector <double> v);
+    AtomList molecule;
 
 public:
+    typedef AtomList::iterator iterator;
+    typedef AtomList::const_iterator const_iterator;
 
     Molecule();
     ~Molecule();
@@ -44,6 +48,7 @@ public:
     void setCharge(int charge);
     int getCharge();
     long getSize();
+    vector <Atom> getMoleculeVector();
     void setMultiplicity(int multiplicity);
     int getMultiplicity();
     void normalizeCPs(int norm);
@@ -64,6 +69,13 @@ public:
     vector < vector <int> > getIRCBonds();
     vector < vector <int> > getIRCAngles();
     vector < vector <int> > getIRCDihedrals();
+    Atom operator[](int index);
+    iterator begin();
+    iterator end();
+    vector <Atom> moleculeList();
+    void removeAtom(int atomNumber);
+    void removeAtom(Atom atom);
+    string toStr();
 
 };
 

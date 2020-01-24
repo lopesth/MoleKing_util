@@ -91,6 +91,11 @@ void Molecule::getAngles(){
     };
 };
 
+vector <Atom> Molecule::getMoleculeVector(){
+    return this->molecule;
+};
+
+
 void Molecule::getDihedrals(){
     for (int i = 0; i < this->angles.size(); i++){
         int atom1 = this->angles[i][0];
@@ -382,4 +387,57 @@ vector < vector <int> > Molecule::getIRCDihedrals(){
     this->dihedrals.clear();
     this->getDihedrals();
     return this->dihedrals;
+};
+
+vector <Atom> Molecule::moleculeList(){
+    return this->molecule;
+};
+
+Molecule::iterator Molecule::begin(){
+    return this->molecule.begin();
+};
+
+Molecule::iterator Molecule::end(){
+    return this->molecule.end();
+};
+
+void Molecule::removeAtom(int atomNumber){
+    this->molecule.erase(this->molecule.begin() + atomNumber);
+};
+
+void Molecule::removeAtom(Atom atom){
+    for (int i = 0; i < this->molecule.size(); i++){
+        if (atom == this->molecule[i]){
+            this->molecule.erase(this->molecule.begin() + i);
+            break;
+        };
+    };
+};
+
+string Molecule::toStr(){
+    vector <pair <string, int> > s;
+    string result = "Molecule ";
+    s.push_back(pair <string, int> {this->molecule[0].getAtomicSymbol(), 1});
+    for (int i = 1; i < this->molecule.size(); i++){
+        string symbol = this->molecule[i].getAtomicSymbol();
+        for (int j = 0; j < s.size(); j++){
+            if (symbol == s[j].first){
+                int value = s[j].second + 1;
+                s.at(j) = (pair<string, int> {symbol, value});
+                break;
+            } else if (j == s.size()-1) {
+                s.push_back(pair <string, int> {symbol, 1});
+                break;
+            } else {
+                continue;
+            };
+        };
+    };
+    for (int j = 0; j < s.size(); j++){
+        cout << s[j].first << " " << s[j].second << endl;
+    };
+    for (int i = 0; i < s.size(); i++){
+        result = result + s[i].first + to_string(s[i].second);
+    };
+    return result;
 };
