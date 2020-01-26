@@ -234,7 +234,7 @@ void Molecule::normalizeCPs(int norm){
     };
 };
 
-vector<double> Molecule::getMassCenter(){
+Point Molecule::getMassCenter(){
     vector <double> massVector;
     vector <double> coordX;
     vector <double> coordY;
@@ -245,7 +245,7 @@ vector<double> Molecule::getMassCenter(){
         coordY.push_back(this->molecule.at(i).getY());
         coordZ.push_back(this->molecule.at(i).getZ());
     };
-    vector<double> temp = MassCenter(massVector, coordX, coordY, coordZ).getMassCenter();
+    Point temp = MassCenter(massVector, coordX, coordY, coordZ).getMassCenter();
     return temp;
 };
 
@@ -280,7 +280,7 @@ void Molecule::translation(Vector3D traslationVector){
 };
 
 void Molecule::moveMassCenter(double x, double y, double z){
-    Vector3D traslationVector = Vector3D({x, y, z}, this->getMassCenter());
+    Vector3D traslationVector = Vector3D({x, y, z}, this->getMassCenter().getCoords('c'));
     this->translation(traslationVector);
 };
 

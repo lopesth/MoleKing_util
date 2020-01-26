@@ -54,7 +54,7 @@ public:
     void normalizeCPs(int norm);
     vector< vector<string> > getMolecule(bool symbol = 0);
     vector< vector<string> > getChargePoints();
-    vector<double> getMassCenter();
+    Point getMassCenter();
     void spinMolecule(double angle, Vector3D spinVector);
     void spinMolecule(double angle, char axis);
     void translation(Vector3D traslationVector);

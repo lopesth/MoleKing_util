@@ -20,19 +20,18 @@ double MassCenter::axisMassCenter(vector <double> coords){
 
 MassCenter::~MassCenter(){
     this->massList.clear();
-    this->massCenterPoint.clear();
+    this->massCenterPoint.~Point();
     this->massList.resize(0);
-    this->massCenterPoint.resize(0);
 };
 
 MassCenter::MassCenter(vector <double> massList, vector <double> xCoords, vector <double> yCoords, vector <double> zCoords){
     this->massList = massList;
-    this->massCenterPoint.at(0)=this->axisMassCenter(xCoords);
-    this->massCenterPoint.at(1)=this->axisMassCenter(yCoords);
-    this->massCenterPoint.at(2)=this->axisMassCenter(zCoords);
+    this->massCenterPoint.setCoord('x', this->axisMassCenter(xCoords));
+    this->massCenterPoint.setCoord('y', this->axisMassCenter(yCoords));
+    this->massCenterPoint.setCoord('z', this->axisMassCenter(zCoords));
 };
 
-vector<double> MassCenter::getMassCenter(){
+Point MassCenter::getMassCenter(){
         return this->massCenterPoint;
 };
 

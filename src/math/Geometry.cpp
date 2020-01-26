@@ -12,7 +12,27 @@
 
 Point::Point(){};
 
-Point::Point(double coord1, double coord2, double coord3, char typeCoord = 'c'){
+Point::Point(double coord1, double coord2, double coord3, char typeCoord){
+    if (typeCoord == 'c'){
+        this->x = coord1;
+        this->y = coord2;
+        this->z = coord3;
+        vector<double> temp = SphericalCoords(this->x, this->y, this->z, 'c').toSpherical();
+        this->radius = temp[0];
+        this->tetha = temp[1];
+        this->phi = temp[2];
+    } else {
+        this->radius = coord1;
+        this->tetha = coord2;
+        this->phi = coord3;
+        vector<double> temp = SphericalCoords(this->radius, this->tetha, this->phi, 's').toCartesian();
+        this->x = temp[0];
+        this->y = temp[1];
+        this->z = temp[2];
+    };
+};
+
+void Point::setPoint(double coord1, double coord2, double coord3, char typeCoord){
     if (typeCoord == 'c'){
         this->x = coord1;
         this->y = coord2;
@@ -148,6 +168,18 @@ void Point::rotationVector(double angle, Vector3D unitVector){
     this->tetha = newPosSpherical[1];
     this->phi = newPosSpherical[2];
 }
+
+string Point::toStr(char spaceType){
+    string temp = "Coords in ";
+    if (spaceType == 'c'){
+        temp = temp + "Cartesian Space (x, y, z): ";
+        temp = temp + "(" + to_string(this->x) + ", " + to_string(this->y) + ", " + to_string(this->z) + ")";
+    } else {
+        temp = temp + "Spherical Space: (Radius, Polar Angle, Azimuthal Angle)";
+        temp = temp + "(" + to_string(this->radius) + ", " + to_string(this->tetha) + ", " + to_string(this->phi) + ")";
+    };
+    return temp;
+};
 
 // End of Point class //
 

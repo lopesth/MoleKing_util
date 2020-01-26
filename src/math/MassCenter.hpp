@@ -10,19 +10,20 @@
 #define MassCenter_hpp
 #include <stdio.h>
 #include <vector>
+#include "Geometry.hpp"
 
 using namespace std;
 
 class MassCenter{
     private:
     vector <double> massList;
-    vector <double> massCenterPoint = {0, 0, 0};
+    Point massCenterPoint;
     double axisMassCenter(vector <double> coords);
 
     public:
     MassCenter(vector <double> massList, vector <double> xCoords, vector <double> yCoords, vector <double> zCoords);
     ~MassCenter();
-    vector <double> getMassCenter();
+    Point getMassCenter();
 };
 
 

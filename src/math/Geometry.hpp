@@ -57,15 +57,17 @@ class Point{
     double radius, tetha, phi, x, y, z;
 
     public:
-    Point(double coord1, double coord2, double coord3, char typeCoord);
+    Point(double coord1, double coord2, double coord3, char typeCoord = 'c');
     Point();
     ~Point();
     bool operator==(Point point2);
     void setCoord(char coordName, double newValue);
+    void setPoint(double coord1, double coord2, double coord3, char typeCoord = 'c');
     vector <double> getCoords(char typeCoord);
     void setCoords(vector <double> newValues, char typeCoord);
     void translation(Vector3D traslationVector);
     void rotationVector(double angle, Vector3D unitVector);
+    string toStr(char spaceType = 'c');
 };
 
 class SphericalCoords{
