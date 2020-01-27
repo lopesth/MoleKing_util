@@ -8,14 +8,14 @@
 
 #include <iostream>
 #include <string>
-#include "MassCenter.hpp"
-#include "AtomicScale.hpp"
-#include "Geometry.hpp"
-#include "Matrix.hpp"
+#include "math/MassCenter.hpp"
+#include "chemicalUnits/AtomicScale.hpp"
+#include "math/Geometry.hpp"
+#include "math/Matrix.hpp"
 #include <math.h>
-#include "Molecule.hpp"
-#include "Hessian.hpp"
-#include "SupraMolecule.hpp"
+#include "chemicalUnits/Molecule.hpp"
+#include "berny/Hessian.hpp"
+#include "chemicalUnits/SupraMolecule.hpp"
 
 /*
 #include <pybind11/pybind11.h>

@@ -11,7 +11,7 @@
 double MassCenter::axisMassCenter(vector <double> coords){
     double rUp = 0;
     double rDown = 0;
-    for (int i = 0; i < coords.size(); i++){
+    for (int i = 0; i < (int) coords.size(); i++){
         rUp = rUp + (this->massList.at(i) * coords.at(i));
         rDown = rDown + this->massList.at(i);
     };

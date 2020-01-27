@@ -15,7 +15,7 @@ SupraMolecule::SupraMolecule(int nOfMolecules){
 
 void SupraMolecule::setCharge(){
     this->charge = 0;
-    for (int i = 0; i < this->supraMolecule.size(); i++){
+    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
         this->charge = this->charge + supraMolecule[i].getCharge();
     };
 };
@@ -27,7 +27,7 @@ double SupraMolecule::getS(int n){
 void SupraMolecule::setMultiplicity(){
     this->multiplicity = 0;
     double s = 0;
-    for (int i = 0; i < this->supraMolecule.size(); i++){
+    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
         s += getS(i);
     };
     this->multiplicity = (2 * s + 1);
@@ -64,7 +64,7 @@ Point SupraMolecule::getMassCenter(){
     vector <double> coordX;
     vector <double> coordY;
     vector <double> coordZ;
-    for (int i = 0; i < this->supraMolecule.size(); i++){
+    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
         for (int j = 0; j < this->supraMolecule[i].getSize(); j++){
             Atom atom = this->supraMolecule[i].getAtomObj(j);
             massVector.push_back(atom.getAtomicMass());
@@ -77,7 +77,7 @@ Point SupraMolecule::getMassCenter(){
 };
 
 void SupraMolecule::translation(Vector3D traslationVector){
-    for(int i = 0; i < this->supraMolecule.size(); i++){
+    for(int i = 0; i < (int) this->supraMolecule.size(); i++){
         this->supraMolecule[i].translation(traslationVector);
     };
 };
@@ -107,8 +107,8 @@ void SupraMolecule::spinSupraMolecule(double angle, char axis){
 };
 
 void SupraMolecule::spinSupraMolecule(double angle, Vector3D spinVector){
-    for (int i = 0; i < this->supraMolecule.size(); i++){
-        for (int j = 0; j < this->supraMolecule[i].getSize(); j++){
+    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
+        for (int j = 0; j < (int) this->supraMolecule[i].getSize(); j++){
             this->supraMolecule[i].getAtomObj(j).rotationAxis(angle, spinVector);
         };
     };
@@ -116,16 +116,16 @@ void SupraMolecule::spinSupraMolecule(double angle, Vector3D spinVector){
 
 void SupraMolecule::standardOrientation(){
     vector <Atom> supramol;
-    for (int u = 0 ; u < this->supraMolecule.size(); u++){
-        for (int n = 0; n < this->supraMolecule[u].getSize(); n++){
+    for (int u = 0 ; u < (int) this->supraMolecule.size(); u++){
+        for (int n = 0; n < (int) this->supraMolecule[u].getSize(); n++){
             supramol.push_back(this->supraMolecule[u].getAtomObj(n));
         };
     };
     int j = 0;
     vector <int> biggerDistanceSupra(2);
     double distance = 0;
-    while(j < this->supraMolecule.size()){
-        for(int i = j+1; i < supramol.size(); i++){
+    while(j < (int) this->supraMolecule.size()){
+        for(int i = j+1; i < (int) supramol.size(); i++){
             vector <double> atomCoord1 = supramol.at(j).getPos();
             vector <double> atomCoord2 = supramol.at(i).getPos();
             double dist = Vector3D(atomCoord1, atomCoord2).magnitude();
@@ -139,8 +139,8 @@ void SupraMolecule::standardOrientation(){
     };
     vector <vector <int> > biggerDistance(2, {0,0});
     int n = 0;
-    for (int i = 0; i < this->supraMolecule.size(); i++){
-        for (int j = 0; j < this->supraMolecule[i].getSize(); i++){
+    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
+        for (int j = 0; j < (int) this->supraMolecule[i].getSize(); i++){
             if (this->supraMolecule[i].getAtomObj(j) == supramol[biggerDistanceSupra[0]]){
                 biggerDistance.at(n) = {i, j};
                 n+=1;

@@ -11,10 +11,10 @@
 
 #include <stdio.h>
 #include <string>
-#include "MassCenter.hpp"
+#include "../math/MassCenter.hpp"
 #include "AtomicScale.hpp"
-#include "Geometry.hpp"
-#include "Matrix.hpp"
+#include "../math/Geometry.hpp"
+#include "../math/Matrix.hpp"
 #include <math.h>
 #include <iterator>
 

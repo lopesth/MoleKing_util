@@ -10,12 +10,12 @@
 #define Hessian_hpp
 
 #include <stdio.h>
-#include "Matrix.hpp"
-#include "Geometry.hpp"
+#include "../math/Matrix.hpp"
+#include "../math/Geometry.hpp"
 #include <math.h>
 #include <vector>
-#include "Molecule.hpp"
-#include "AtomicScale.hpp"
+#include "../chemicalUnits/Molecule.hpp"
+#include "../chemicalUnits/AtomicScale.hpp"
 #include <iostream>
 
 using namespace std;

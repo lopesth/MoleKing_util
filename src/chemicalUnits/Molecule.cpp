@@ -47,8 +47,8 @@ double Molecule::angleToSpinInAref(int ref, char axisName){
 
 void Molecule::getBonds(){
     string symbol1, symbol2;
-    for (int i = 0 ; i < this->molecule.size(); i++){
-        for (int j = i; j < this->molecule.size(); j++){
+    for (int i = 0 ; i < (int) this->molecule.size(); i++){
+        for (int j = i; j < (int) this->molecule.size(); j++){
             double length = this->bondLength(i, j);
             symbol1 = this->molecule[i].getAtomicSymbol();
             symbol2 = this->molecule[j].getAtomicSymbol();
@@ -64,10 +64,10 @@ void Molecule::getBonds(){
 };
 
 void Molecule::getAngles(){
-    for (int i = 0; i < bonds.size(); i++){
+    for (int i = 0; i < (int) bonds.size(); i++){
         int atom1 = this->bonds[i][0];
         int atom2 = this->bonds[i][1];
-        for (int j = i; j < this->bonds.size(); j++){
+        for (int j = i; j < (int) this->bonds.size(); j++){
             int atom3 = this->bonds[j][0];
             int atom4 = this->bonds[j][1];
             if (atom1 == atom3){
@@ -97,11 +97,11 @@ vector <Atom> Molecule::getMoleculeVector(){
 
 
 void Molecule::getDihedrals(){
-    for (int i = 0; i < this->angles.size(); i++){
+    for (int i = 0; i < (int) this->angles.size(); i++){
         int atom1 = this->angles[i][0];
         int atom2 = this->angles[i][1];
         int atom3 = this->angles[i][2];
-        for (int j = i; j < this->angles.size(); j++){
+        for (int j = i; j < (int) this->angles.size(); j++){
             int atom4= this->angles[j][0];
             int atom5 = this->angles[j][1];
             int atom6 = this->angles[j][2];
@@ -124,7 +124,7 @@ vector<double> Molecule::minNmaxValue(vector <double> v){
     vector<double> minMAX(2);
     minMAX.at(0) = v.at(0);
     minMAX.at(1) = v.at(0);
-    for(int i = 1; i < v.size(); i++){
+    for(int i = 1; i < (int) v.size(); i++){
         if(v.at(i) < minMAX.at(0)){
             minMAX.at(0) = v.at(i);
         };
@@ -203,7 +203,7 @@ int Molecule::getMultiplicity(){
 
 vector< vector<string> > Molecule::getMolecule(bool symbol){
     vector< vector<string> > moleculeString;
-    for (int i = 1; i < this->molecule.size()+1; i++){
+    for (int i = 1; i < (int) this->molecule.size()+1; i++){
         vector <string> atom = this->getAtom(i, symbol);
         moleculeString.push_back(atom);
     };
@@ -212,7 +212,7 @@ vector< vector<string> > Molecule::getMolecule(bool symbol){
 
 vector< vector<string> > Molecule::getChargePoints(){
     vector< vector<string> > cps;
-    for (int i=0; i < this->chargePoint.size(); i++){
+    for (int i=0; i < (int) this->chargePoint.size(); i++){
         vector<string> cp(4);
         cp.at(0) = to_string(this->chargePoint.at(i).getX());
         cp.at(1) = to_string(this->chargePoint.at(i).getY());
@@ -228,7 +228,7 @@ long Molecule::getSize(){
 };
 
 void Molecule::normalizeCPs(int norm){
-    for (int i=0; i < this->chargePoint.size(); i++){
+    for (int i=0; i < (int) this->chargePoint.size(); i++){
         double charge = this->chargePoint.at(i).getCharge();
         this->chargePoint.at(i).setCharge(charge/norm);
     };
@@ -239,7 +239,7 @@ Point Molecule::getMassCenter(){
     vector <double> coordX;
     vector <double> coordY;
     vector <double> coordZ;
-    for (int i = 0; i < this->molecule.size(); i++){
+    for (int i = 0; i < (int) this->molecule.size(); i++){
         massVector.push_back(this->molecule.at(i).getAtomicMass());
         coordX.push_back(this->molecule.at(i).getX());
         coordY.push_back(this->molecule.at(i).getY());
@@ -250,7 +250,7 @@ Point Molecule::getMassCenter(){
 };
 
 void Molecule::spinMolecule(double angle, Vector3D spinVector){
-    for (int i = 0; i < this->molecule.size(); i++){
+    for (int i = 0; i < (int) this->molecule.size(); i++){
         this->molecule[i].rotationAxis(angle, spinVector);
     };
 };
@@ -269,11 +269,11 @@ void Molecule::spinMolecule(double angle, char axis){
 };
 
 void Molecule::translation(Vector3D traslationVector){
-    for(int i = 0; i < this->molecule.size(); i++){
+    for(int i = 0; i < (int) this->molecule.size(); i++){
         this->molecule.at(i).translation(traslationVector);
     };
     if (this->chargePoint.size() != 0){
-        for(int i = 0; i < this->chargePoint.size(); i++){
+        for(int i = 0; i < (int) this->chargePoint.size(); i++){
             this->chargePoint.at(i).translation(traslationVector);
         };
     };
@@ -293,8 +293,8 @@ void Molecule::standardOrientation(){
     int j = 0;
     vector<int> biggerDistance(2);
     double distance = 0;
-    while(j < this->molecule.size()){
-        for(int i = j+1; i < this->molecule.size(); i++){
+    while(j < (int) this->molecule.size()){
+        for(int i = j+1; i < (int) this->molecule.size(); i++){
             vector<double> atomCoord1 = this->molecule.at(j).getPos();
             vector<double> atomCoord2 = this->molecule.at(i).getPos();
             double dist = Vector3D(atomCoord1, atomCoord2).magnitude();
@@ -359,13 +359,13 @@ void Molecule::doIRC(){
 void Molecule::printIRC(){
     this->doIRC();
     cout << "Name     Definition        Value" << endl;
-    for (int i = 0; i < this->bonds.size(); i++){
+    for (int i = 0; i < (int) this->bonds.size(); i++){
         cout << "R" << i+1 << "     " << "R(" << this->bonds[i][0]+1 << ", " << this->bonds[i][1]+1 << ")        " << this->bondLength(this->bonds[i][0], this->bonds[i][1]) << endl;
     };
-    for (int i = 0; i < this->angles.size(); i++){
+    for (int i = 0; i < (int) this->angles.size(); i++){
         cout << "A" << i+1 << "     " << "A(" << this->angles[i][0]+1 << ", " << this->angles[i][1]+1 << ", " << this->angles[i][2]+1 << ")        " << this->valenceAngle(this->angles[i][0], this->angles[i][1], this->angles[i][2]) << endl;
     };
-    for (int i = 0; i < this->dihedrals.size(); i++){
+    for (int i = 0; i < (int) this->dihedrals.size(); i++){
         cout << "D" << i+1 << "     " << "D(" << this->dihedrals[i][0]+1 << ", " << this->dihedrals[i][1]+1 << ", " << this->dihedrals[i][2]+1 << ", " << this->dihedrals[i][3]+1 << ")        " << this->torsion(this->dihedrals[i][0], this->dihedrals[i][1], this->dihedrals[i][2], this->dihedrals[i][3]) << endl;
     };
 };
@@ -406,7 +406,7 @@ void Molecule::removeAtom(int atomNumber){
 };
 
 void Molecule::removeAtom(Atom atom){
-    for (int i = 0; i < this->molecule.size(); i++){
+    for (int i = 0; i < (int) this->molecule.size(); i++){
         if (atom == this->molecule[i]){
             this->molecule.erase(this->molecule.begin() + i);
             break;
@@ -418,14 +418,14 @@ string Molecule::toStr(){
     vector <pair <string, int> > s;
     string result = "Molecule ";
     s.push_back(pair <string, int> {this->molecule[0].getAtomicSymbol(), 1});
-    for (int i = 1; i < this->molecule.size(); i++){
+    for (int i = 1; i < (int) this->molecule.size(); i++){
         string symbol = this->molecule[i].getAtomicSymbol();
-        for (int j = 0; j < s.size(); j++){
+        for (int j = 0; j < (int) s.size(); j++){
             if (symbol == s[j].first){
                 int value = s[j].second + 1;
                 s.at(j) = (pair<string, int> {symbol, value});
                 break;
-            } else if (j == s.size()-1) {
+            } else if (j == (int) s.size()-1) {
                 s.push_back(pair <string, int> {symbol, 1});
                 break;
             } else {
@@ -433,10 +433,10 @@ string Molecule::toStr(){
             };
         };
     };
-    for (int j = 0; j < s.size(); j++){
+    for (int j = 0; j < (int) s.size(); j++){
         cout << s[j].first << " " << s[j].second << endl;
     };
-    for (int i = 0; i < s.size(); i++){
+    for (int i = 0; i < (int) s.size(); i++){
         result = result + s[i].first + to_string(s[i].second);
     };
     return result;

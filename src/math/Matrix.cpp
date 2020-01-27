@@ -35,8 +35,8 @@ Matrix Matrix::sum(Matrix matrix_B){
     vector <vector <double> > matrixB = matrix_B.toVector();
     vector < vector < double > > result(this->matrix.size(), vector <double> (this->matrix[0].size()));
     if (this->matrix.size() == matrixB.size() && this->matrix[0].size() == matrixB[0].size()){
-        for (int i = 0; i < this->matrix.size(); i++){
-            for(int j = 0; j < this->matrix[0].size(); j++){
+        for (int i = 0; i < (int) this->matrix.size(); i++){
+            for(int j = 0; j < (int) this->matrix[0].size(); j++){
                 double newValue = this->matrix[i][j] + matrixB[i][j];
                 result.at(i).at(j) = newValue;
             };
@@ -54,10 +54,10 @@ Matrix Matrix::multiplication(Matrix matrix_B){
     vector <double> in(matrixB[0].size(), 0);
     vector < vector < double > > result(this->matrix.size(), in);
     if (this->matrix[0].size() == matrixB.size()){
-        for (int i = 0; i < this->matrix.size(); i++){
-            for (int j = 0; j < matrixB[0].size(); j++){
+        for (int i = 0; i < (int) this->matrix.size(); i++){
+            for (int j = 0; j < (int) matrixB[0].size(); j++){
                 double newValue = 0;
-                for(int k = 0; k < this->matrix[0].size(); k++){
+                for(int k = 0; k < (int) this->matrix[0].size(); k++){
                     newValue = newValue + this->matrix[i][k] * matrixB[k][j];
                 };
                 result.at(i).at(j) = newValue;
@@ -72,8 +72,8 @@ Matrix Matrix::multiplication(Matrix matrix_B){
 
 Matrix Matrix::multiplication(double scalar){
     vector < vector < double > > result(this->matrix.size(), vector <double> (this->matrix[0].size()));
-    for (int i = 0; i < this->matrix.size(); i++){
-        for (int j = 0; j < this->matrix[0].size(); j++){
+    for (int i = 0; i < (int) this->matrix.size(); i++){
+        for (int j = 0; j < (int) this->matrix[0].size(); j++){
             result.at(i).at(j) = this->matrix.at(i).at(j) * scalar;
         };
     };
@@ -137,8 +137,8 @@ double Matrix::element(long i = 1, long j = 1){
 };
 
 void Matrix::print(){
-    for (int i = 0; i < this->matrix.size(); i++){
-        for (int j = 0; j < this->matrix[0].size(); j++){
+    for (int i = 0; i < (int) this->matrix.size(); i++){
+        for (int j = 0; j < (int) this->matrix[0].size(); j++){
             cout << this->matrix[i][j] << " ";
         }
         cout << endl;
@@ -151,8 +151,8 @@ vector <double> Matrix::getLine(int i){
 
 string Matrix::toStr(){
     string temp;
-    for (int i = 0; i < this->matrix.size(); i++){
-        for (int j = 0; j < this->matrix[0].size(); j++){
+    for (int i = 0; i < (int) this->matrix.size(); i++){
+        for (int j = 0; j < (int) this->matrix[0].size(); j++){
             temp = temp + to_string(this->matrix[i][j]) + " ";
         };
         temp = temp + "\n";
