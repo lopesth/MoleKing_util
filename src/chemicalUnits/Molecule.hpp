@@ -22,17 +22,20 @@ class Molecule{
 
 private:
     typedef vector<Atom> AtomList;
-    vector<ChargePoint> chargePoint;
-    vector < vector <int> > bonds;
-    vector <vector <int> > angles;
-    vector < vector <int> > dihedrals;
+    AtomList molecule;
+    typedef vector<ChargePoint> ChargeList;
+    ChargeList chargePoint;
+    typedef vector < vector <int> > VectorsInt;
+    VectorsInt bonds;
+    VectorsInt angles;
+    VectorsInt dihedrals;
     int multiplicity, charge;
     double angleToSpinInAref(int ref, char axisName);
     void getBonds();
     void getAngles();
     void getDihedrals();
     vector<double> minNmaxValue(vector <double> v);
-    AtomList molecule;
+
 
 public:
     typedef AtomList::iterator iterator;
@@ -66,9 +69,9 @@ public:
     double torsion(int atomN1, int atomN2, int atomN3, int atomN4);
     void doIRC();
     void printIRC();
-    vector < vector <int> > getIRCBonds();
-    vector < vector <int> > getIRCAngles();
-    vector < vector <int> > getIRCDihedrals();
+    VectorsInt getIRCBonds();
+    VectorsInt getIRCAngles();
+    VectorsInt getIRCDihedrals();
     Atom operator[](int index);
     iterator begin();
     iterator end();
@@ -76,6 +79,7 @@ public:
     void removeAtom(int atomNumber);
     void removeAtom(Atom atom);
     string toStr();
+    bool operator==(Molecule mol);
 
 };
 
