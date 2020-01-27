@@ -1,17 +1,17 @@
 //
-//  Geometry.hpp
+//  Geometry.hh
 //  Molecules
 //
 //  Created by Thiago Lopes and Mateus Barbosa on 10/01/20.
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#ifndef Geometry_hpp
-#define Geometry_hpp
+#ifndef Geometry_hh
+#define Geometry_hh
 #include<vector>
 #include <math.h>
 #include <iostream>
-#include "Matrix.hpp"
+#include "Matrix.hh"
 
 using namespace std;
 
@@ -83,4 +83,4 @@ class SphericalCoords{
 
 };
 
-#endif /* Geometry_hpp */
+#endif /* Geometry_hh */

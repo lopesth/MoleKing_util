@@ -1,16 +1,16 @@
 //
-//  MassCenter.hpp
+//  MassCenter.hh
 //  Molecules
 //
 //  Created by Thiago Lopes and Mateus Barbosa on 09/01/20.
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#ifndef MassCenter_hpp
-#define MassCenter_hpp
+#ifndef MassCenter_hh
+#define MassCenter_hh
 #include <stdio.h>
 #include <vector>
-#include "Geometry.hpp"
+#include "Geometry.hh"
 
 using namespace std;
 
@@ -27,4 +27,4 @@ class MassCenter{
 };
 
 
-#endif /* MassCenter_hpp */
+#endif /* MassCenter_hh */

@@ -6,7 +6,7 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#include "Molecule.hpp"
+#include "Molecule.hh"
 
 
 

@@ -1,21 +1,21 @@
 //
-//  Hessian.hpp
+//  Hessian.hh
 //  Molecules module
 //
 //  Created by Thiago Lopes on 21/01/20.
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#ifndef Hessian_hpp
-#define Hessian_hpp
+#ifndef Hessian_hh
+#define Hessian_hh
 
 #include <stdio.h>
-#include "../math/Matrix.hpp"
-#include "../math/Geometry.hpp"
+#include "../math/Matrix.hh"
+#include "../math/Geometry.hh"
 #include <math.h>
 #include <vector>
-#include "../chemicalUnits/Molecule.hpp"
-#include "../chemicalUnits/AtomicScale.hpp"
+#include "../chemicalUnits/Molecule.hh"
+#include "../chemicalUnits/AtomicScale.hh"
 #include <iostream>
 
 using namespace std;
@@ -36,4 +36,4 @@ public:
 };
 
 
-#endif /* Hessian_hpp */
+#endif /* Hessian_hh */

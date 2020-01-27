@@ -6,7 +6,7 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#include "AtomicScale.hpp"
+#include "AtomicScale.hh"
 
 ChargePoint::ChargePoint(double x, double y, double z, double charge){
     this->charge = charge;

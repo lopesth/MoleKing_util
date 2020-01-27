@@ -6,7 +6,7 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#include "MassCenter.hpp"
+#include "MassCenter.hh"
 
 double MassCenter::axisMassCenter(vector <double> coords){
     double rUp = 0;

@@ -6,7 +6,7 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#include "Hessian.hpp"
+#include "Hessian.hh"
 
 #define DAMPING 0.12
 #define BOND_WEIGHT 0.45

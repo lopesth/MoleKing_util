@@ -6,7 +6,7 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#include "PeriodicTable.hpp"
+#include "PeriodicTable.hh"
 
 PeriodicTable::PeriodicTable(){
     //Atomic number table

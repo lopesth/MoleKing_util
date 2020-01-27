@@ -6,7 +6,7 @@
 //  Copyright © 2020 Laboratório de Estrutura Eletrônica e Dinâmica Molecular. All rights reserved.
 //
 
-#include "SupraMolecule.hpp"
+#include "SupraMolecule.hh"
 
 
 SupraMolecule::SupraMolecule(int nOfMolecules){

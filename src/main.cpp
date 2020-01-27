@@ -8,25 +8,47 @@
 
 #include <iostream>
 #include <string>
-#include "math/MassCenter.hpp"
-#include "chemicalUnits/AtomicScale.hpp"
-#include "math/Geometry.hpp"
-#include "math/Matrix.hpp"
+#include "math/MassCenter.hh"
+#include "chemicalUnits/AtomicScale.hh"
+#include "math/Geometry.hh"
+#include "math/Matrix.hh"
 #include <math.h>
-#include "chemicalUnits/Molecule.hpp"
-#include "berny/Hessian.hpp"
-#include "chemicalUnits/SupraMolecule.hpp"
-
-/*
+#include "chemicalUnits/Molecule.hh"
+#include "berny/Hessian.hh"
+#include "chemicalUnits/SupraMolecule.hh"
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/pytypes.h>
 namespace py = pybind11;
-*/
 
 using namespace std;
 
-/*
+int main(int argc, char **argv){
+    /*
+    Molecule minhaMol1 = Molecule();
+    Molecule minhaMol2 = Molecule();
+    minhaMol1.addAtom("C",   0.000000,    0.000000,    0.000000);
+    minhaMol1.addAtom("H",   0.000000,    0.000000,    1.070000);
+    minhaMol1.addAtom("H",  -0.504403,    0.873651,   -0.356667);
+    minhaMol1.addAtom("C",  -0.725963,   -1.257405,   -0.513333);
+    minhaMol1.addAtom("H",  -0.221558,   -2.131056,   -0.156668);
+    minhaMol1.addAtom("H",  -1.734768,   -1.257405,   -0.156666);
+    minhaMol1.addAtom("H",  -0.725965,   -1.257404,   -1.583333);
+    minhaMol2.addAtom("C",   1.451926,    0.000000,   -0.513334);
+    minhaMol2.addAtom("H",   1.451925,   -0.000000,   -1.583334);
+    minhaMol2.addAtom("H",   1.956328,    0.873652,   -0.156668);
+    minhaMol2.addAtom("H",   1.956329,   -0.873651,   -0.156668);
+    
+    SupraMolecule supra = SupraMolecule(2);
+    supra.addMolecule(minhaMol1);
+    supra.addMolecule(minhaMol2);
+    Point mc = supra.getMassCenter();
+    cout << mc.toStr() << endl;
+     */
+    return 0;
+};
+
+
 PYBIND11_MODULE(MoleKing_util, m) {
     
     py::class_<Atom>(m, "Atom", "This class creates a atom variable type allowing for the usage in python like a primitive type.")
@@ -147,27 +169,6 @@ PYBIND11_MODULE(MoleKing_util, m) {
     .def("show", &Matrix::print)
     .def("__str__", &Matrix::toStr);
 };
-*/
 
-int main(){
-    Molecule minhaMol1 = Molecule();
-    Molecule minhaMol2 = Molecule();
-    minhaMol1.addAtom("C",   0.000000,    0.000000,    0.000000);
-    minhaMol1.addAtom("H",   0.000000,    0.000000,    1.070000);
-    minhaMol1.addAtom("H",  -0.504403,    0.873651,   -0.356667);
-    minhaMol1.addAtom("C",  -0.725963,   -1.257405,   -0.513333);
-    minhaMol1.addAtom("H",  -0.221558,   -2.131056,   -0.156668);
-    minhaMol1.addAtom("H",  -1.734768,   -1.257405,   -0.156666);
-    minhaMol1.addAtom("H",  -0.725965,   -1.257404,   -1.583333);
-    minhaMol2.addAtom("C",   1.451926,    0.000000,   -0.513334);
-    minhaMol2.addAtom("H",   1.451925,   -0.000000,   -1.583334);
-    minhaMol2.addAtom("H",   1.956328,    0.873652,   -0.156668);
-    minhaMol2.addAtom("H",   1.956329,   -0.873651,   -0.156668);
-    
-    SupraMolecule supra = SupraMolecule(2);
-    supra.addMolecule(minhaMol1);
-    supra.addMolecule(minhaMol2);
-    Point mc = supra.getMassCenter();
-    cout << mc.toStr() << endl;
-    return 0;
-};
+
+

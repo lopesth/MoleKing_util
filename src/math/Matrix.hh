@@ -1,13 +1,13 @@
 //
-//  Matrix.hpp
+//  Matrix.hh
 //  Molecules
 //
 //  Created by Thiago Lopes, Igor Santos, Sandro Brito and Mateus Barbosa on 14/01/20.
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#ifndef Matrix_hpp
-#define Matrix_hpp
+#ifndef Matrix_hh
+#define Matrix_hh
 #include <math.h>
 #include <vector>
 
@@ -44,4 +44,4 @@ class Matrix{
 
 
 
-#endif /* Matrix_hpp */
+#endif /* Matrix_hh */

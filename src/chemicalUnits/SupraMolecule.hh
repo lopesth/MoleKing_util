@@ -1,16 +1,16 @@
 //
-//  SupraMolecule.hpp
+//  SupraMolecule.hh
 //  MoleKing_util
 //
 //  Created by Thiago Lopes on 26/01/20.
 //  Copyright © 2020 Laboratório de Estrutura Eletrônica e Dinâmica Molecular. All rights reserved.
 //
 
-#ifndef SupraMolecule_hpp
-#define SupraMolecule_hpp
+#ifndef SupraMolecule_hh
+#define SupraMolecule_hh
 
 #include <stdio.h>
-#include "Molecule.hpp"
+#include "Molecule.hh"
 #include <vector>
 
 
@@ -34,7 +34,6 @@ private:
 
 public:
     SupraMolecule(int nOfMolecules);
-    ~SupraMolecule();
     void addMolecule(Molecule molecule);
     void addAtomToMolecule(int molNumber, Atom atom);
     string toStr();
@@ -62,4 +61,4 @@ public:
 };
 
 
-#endif /* SupraMolecule_hpp */
+#endif /* SupraMolecule_hh */

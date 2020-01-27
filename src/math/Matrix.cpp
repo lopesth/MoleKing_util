@@ -6,7 +6,7 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#include "Matrix.hpp"
+#include "Matrix.hh"
 
 Matrix::Matrix(vector < vector <double> > matrix){
     this->matrix = matrix;

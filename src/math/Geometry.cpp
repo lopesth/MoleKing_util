@@ -6,7 +6,7 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#include "Geometry.hpp"
+#include "Geometry.hh"
 
 // Point class //
 

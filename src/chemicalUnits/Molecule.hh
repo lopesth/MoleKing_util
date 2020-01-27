@@ -1,20 +1,20 @@
 //
-//  Molecule.hpp
+//  Molecule.hh
 //  Molecules module
 //
 //  Created by Thiago Lopes on 21/01/20.
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#ifndef Molecule_hpp
-#define Molecule_hpp
+#ifndef Molecule_hh
+#define Molecule_hh
 
 #include <stdio.h>
 #include <string>
-#include "../math/MassCenter.hpp"
-#include "AtomicScale.hpp"
-#include "../math/Geometry.hpp"
-#include "../math/Matrix.hpp"
+#include "../math/MassCenter.hh"
+#include "AtomicScale.hh"
+#include "../math/Geometry.hh"
+#include "../math/Matrix.hh"
 #include <math.h>
 #include <iterator>
 
@@ -83,4 +83,4 @@ public:
 
 };
 
-#endif /* Molecule_hpp */
+#endif /* Molecule_hh */

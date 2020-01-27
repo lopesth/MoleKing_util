@@ -1,16 +1,16 @@
 //
-//  AtomicScale.hpp
+//  AtomicScale.hh
 //  Molecules
 //
 //  Created by Thiago Lopes on 19/01/20.
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#ifndef AtomicScale_hpp
-#define AtomicScale_hpp
+#ifndef AtomicScale_hh
+#define AtomicScale_hh
 
-#include "PeriodicTable.hpp"
-#include "../math/Geometry.hpp"
+#include "PeriodicTable.hh"
+#include "../math/Geometry.hh"
 #include <string>
 
 class Atom{
@@ -63,4 +63,4 @@ class ChargePoint{
     vector<double>  getPos();
 };
 
-#endif /* AtomicScale_hpp */
+#endif /* AtomicScale_hh */
