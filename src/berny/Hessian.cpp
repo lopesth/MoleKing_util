@@ -46,16 +46,16 @@ Matrix Hessian::doInitialGuess(){
     int dimension = (int) bonds.size() + (int) angles.size() + (int) dihedrals.size();
     Matrix hessian = Matrix(dimension, dimension);
     map < vector <int>, double > rhos;
-    for (int i = 0; i < bonds.size(); i++){
+    for (int i = 0; i < (int) bonds.size(); i++){
         rhos.insert(pair< vector <int>, double> ( bonds[i], this->rho(bonds[i]) ) );
     };
     vector <double> k_s(dimension);
     int a = 0;
-    for (int i = 0; i < bonds.size(); i++){
+    for (int i = 0; i < (int) bonds.size(); i++){
         k_s.at(a) = BOND_WEIGHT * rhos[bonds[i]];
         a += 1;
     };
-    for (int i = 0; i < angles.size(); i++){
+    for (int i = 0; i < (int) angles.size(); i++){
         vector <int> ref1, ref2;
         if(angles[i][0] < angles[i][1]){
              ref1 = {angles[i][0], angles[i][1]};
@@ -70,7 +70,7 @@ Matrix Hessian::doInitialGuess(){
         k_s.at(a) = ANGLE_WEIGHT * rhos[ref1] * rhos[ref2];
         a += 1;
     };
-    for (int i = 0; i < dihedrals.size(); i++){
+    for (int i = 0; i < (int) dihedrals.size(); i++){
         vector <int> ref1, ref2, ref3;
         if(dihedrals[i][0] < dihedrals[i][1]){
              ref1 = {dihedrals[i][0], dihedrals[i][1]};
@@ -90,7 +90,7 @@ Matrix Hessian::doInitialGuess(){
         k_s.at(a) = DIHEDRAL_WEIGHT * rhos[ref1] * rhos[ref2];
         a += 1;
     };
-    for (int i = 0; i < k_s.size(); i++){
+    for (int i = 0; i < (int) k_s.size(); i++){
         hessian.replace(i, i, k_s[i]);
     };
     
