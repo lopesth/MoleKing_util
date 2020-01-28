@@ -14,21 +14,20 @@ else
 endif
  
 all:	
-	rm -r ../MoleKing_util
-	mkdir ../MoleKing_util
-	mv $(PROJ_NAME) ../MoleKing_util
-	rm -rf */*.o
-	rm -rf *.o
+	mkdir MoleKing_util
+	mv $(PROJ_NAME) MoleKing_util/
+	rm -rf ./src/*/*.o
+	rm -rf ./src/*.o
 	@echo ''
 	@echo "Sucess!"
 	@echo "MoleKing_util was compiled for a "$(OS)" System."
 		
 
 # .c files
-C_SOURCE=$(wildcard  */*.cpp)
+C_SOURCE=$(wildcard  ./src/*/*.cpp)
  
 # .h files
-H_SOURCE=$(wildcard */*.hh)
+H_SOURCE=$(wildcard ./src/*/*.hh)
  
 # Object files
 OBJ=$(C_SOURCE:.cpp=.o)
@@ -46,12 +45,11 @@ $(PROJ_NAME): $(OBJ) main.o
 %.o: %.cpp %.hh
 	$(CC) -o $@ $< $(CC_FLAGS)
  
-main.o: main.cpp $(H_SOURCE)
+main.o: ./src/main.cpp $(H_SOURCE)
 	$(CC) $(CC_FLAGS) $<  -o $@ 
  
 clean:
-	rm -rf */*.o
-	rm -rf $(PROJ_NAME)
-	rm -rf *.o
-	rm -r ../MoleKing_util
+	rm -rf ./src/*/*.o
+	rm -rf ./src/*.o
+	rm -r ./MoleKing_util
 
