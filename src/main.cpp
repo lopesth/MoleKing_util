@@ -24,7 +24,8 @@ namespace py = pybind11;
 using namespace std;
 
 int main(int argc, char **argv){
-    /*
+
+/*
     Molecule minhaMol1 = Molecule();
     Molecule minhaMol2 = Molecule();
     minhaMol1.addAtom("C",   0.000000,    0.000000,    0.000000);
@@ -44,7 +45,7 @@ int main(int argc, char **argv){
     supra.addMolecule(minhaMol2);
     Point mc = supra.getMassCenter();
     cout << mc.toStr() << endl;
-     */
+*/
     return 0;
 };
 

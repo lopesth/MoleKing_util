@@ -18,21 +18,17 @@ C_SOURCE=$(wildcard  ./src/*/*.cpp)
 # .h files
 H_SOURCE=$(wildcard ./src/*/*.hh)
  
+O_PATH= ./bin/
+
 # Object files
-OBJ=$(C_SOURCE:.cpp=.o)
- 
+OBJ= $(O_PATH)Hessian.o $(O_PATH)AtomicScale.o $(O_PATH)Molecule.o $(O_PATH)PeriodicTable.o $(O_PATH)Geometry.o $(O_PATH)MassCenter.o $(O_PATH)Matrix.o $(O_PATH)Matrix.o
+
 # Compiler
 CC := c++
  
 # Compilation and linking
 #
 all: $(PROJ_NAME)
-	rm -fr ./MoleKing_util
-	mkdir MoleKing_util
-	mv $(PROJ_NAME) MoleKing_util/
-	rm -rf ./src/*/*.o
-	rm -rf ./src/*.o
-	rm -rf *.o
 	@echo ''
 	@echo "####################################################"
 	@echo ''
@@ -42,18 +38,39 @@ all: $(PROJ_NAME)
 	@echo "####################################################"
 	@echo ''
 
-$(PROJ_NAME): $(OBJ) main.o
+$(PROJ_NAME): $(OBJ) $(O_PATH)main.o
 	$(CC) -o $@ $^
- 
-%.o: %.cpp %.hh
+
+$(O_PATH)Hessian.o: ./src/berny/Hessian.cpp ./src/berny/Hessian.hh
+	$(CC) -o $@ $< $(CC_FLAGS)
+
+$(O_PATH)AtomicScale.o: ./src/chemicalUnits/AtomicScale.cpp ./src/chemicalUnits/AtomicScale.hh
 	$(CC) -o $@ $< $(CC_FLAGS)
  
-main.o: ./src/main.cpp $(H_SOURCE)
+$(O_PATH)Molecule.o: ./src/chemicalUnits/Molecule.cpp ./src/chemicalUnits/Molecule.hh
+	$(CC) -o $@ $< $(CC_FLAGS)
+
+$(O_PATH)PeriodicTable.o: ./src/chemicalUnits/PeriodicTable.cpp ./src/chemicalUnits/PeriodicTable.hh
+	$(CC) -o $@ $< $(CC_FLAGS)
+
+$(O_PATH)SupraMolecule.o: ./src/chemicalUnits/SupraMolecule.cpp ./src/chemicalUnits/SupraMolecule.hh
+	$(CC) -o $@ $< $(CC_FLAGS)
+
+$(O_PATH)Geometry.o: ./src/math/Geometry.cpp ./src/math/Geometry.hh
+	$(CC) -o $@ $< $(CC_FLAGS)
+
+$(O_PATH)MassCenter.o: ./src/math/MassCenter.cpp ./src/math/MassCenter.hh
+	$(CC) -o $@ $< $(CC_FLAGS)
+
+$(O_PATH)Matrix.o: ./src/math/Matrix.cpp ./src/math/Matrix.hh
+	$(CC) -o $@ $< $(CC_FLAGS)
+
+$(O_PATH)main.o: ./src/main.cpp $(H_SOURCE)
 	$(CC) $(CC_FLAGS) $<  -o $@ 
  
 clean:
-	rm -rf ./src/*/*.o
-	rm -rf ./src/*.o
-	rm -rf *.o
-	rm -r ./MoleKing_util
+	rm -rf bin
+	mkdir bin
+	mkdir ./bin/include
+
 
