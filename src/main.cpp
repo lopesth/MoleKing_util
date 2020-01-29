@@ -147,8 +147,8 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("setCoord", &Point::setCoord)
         .def("setCoords", &Point::setCoords, py::arg("newValues"), py::arg("typeCoord") = 'c')
         .def("translation", &Point::translation)
-        .def("rotation3D", &Point::rotationVector);
-        .def("__str__", &Point::toStr)
+        .def("rotation3D", &Point::rotationVector)
+        .def("__str__", &Point::toStr);
 
     
     py::class_<SphericalCoords>(m, "SphericalCoords", "This class allows the interchange between Cartesian and spherical coordinates.")
