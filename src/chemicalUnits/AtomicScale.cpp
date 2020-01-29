@@ -8,6 +8,9 @@
 
 #include "AtomicScale.hh"
 
+
+/* #########    ChargePoint Class    ######### */
+
 ChargePoint::ChargePoint(double x, double y, double z, double charge){
     this->charge = charge;
     this->point = Point(x, y, z, 'c');
@@ -28,6 +31,21 @@ bool ChargePoint::operator==(ChargePoint charge2){
         };
     } else {
         value = 0;
+    };
+    return value;
+};
+
+bool ChargePoint::operator!=(ChargePoint charge2){
+    bool value;
+    Point point2 = Point(charge2.getX(), charge2.getY(), charge2.getZ(), 'c');
+    if (this->charge == charge2.getCharge()){
+        if (this->point == point2){
+            value = 0;
+        } else {
+            value = 1;
+        };
+    } else {
+        value = 1;
     };
     return value;
 };
@@ -76,6 +94,45 @@ vector<double>  ChargePoint::getPos(){
     return this->point.getCoords('c');
 };
 
+bool ChargePoint::operator<(ChargePoint chargePoint){
+    if (this->charge < chargePoint.getCharge()){
+        return 1;
+    }
+    return 0;
+};
+
+bool ChargePoint::operator>(ChargePoint chargePoint){
+    if (this->charge > chargePoint.getCharge()){
+        return 1;
+    }
+    return 0;
+};
+
+bool ChargePoint::operator<=(ChargePoint chargePoint){
+    if (this->charge <= chargePoint.getCharge()){
+        return 1;
+    }
+    return 0;
+};
+
+bool ChargePoint::operator>=(ChargePoint chargePoint){
+    if (this->charge >= chargePoint.getCharge()){
+        return 1;
+    }
+    return 0;
+};
+
+int ChargePoint::comp(ChargePoint chargePoint){
+    if (this->charge < chargePoint.getCharge()){
+        return -1;
+    } else if(this->charge > chargePoint.getCharge()){
+        return 1;
+    };
+    return 0;
+};
+
+/* #########    Atom Class    ######### */
+
 Atom::Atom(int atomicNumber, double x, double y, double z, bool freezeCode_ = 0){
     PeriodicTable temp;
     this->atomicNumber = atomicNumber;
@@ -110,6 +167,25 @@ bool Atom::operator==(Atom atom2){
         };
     } else {
         value = 0;
+    };
+    return value;
+};
+
+bool Atom::operator!=(Atom atom2){
+    bool value;
+    if (this->atomicNumber == atom2.getAtomicNumber()){
+        if (this->atomicMass == atom2.getAtomicMass()){
+            Point point2 = Point(atom2.getX(), atom2.getY(), atom2.getZ(), 'c');
+            if (this->point == point2){
+                value = 0;
+            } else {
+                value = 1;
+            };
+        } else {
+            value = 1;
+        };
+    } else {
+        value = 1;
     };
     return value;
 };
@@ -168,4 +244,42 @@ void Atom::rotationAxis(double tetha, Vector3D unitAxis){
 
 vector<double>  Atom::getPos(){
     return this->point.getCoords('c');
+};
+
+
+bool Atom::operator<(Atom atom){
+    if (this->atomicMass < atom.getAtomicMass()){
+        return 1;
+    }
+    return 0;
+};
+
+bool Atom::operator>(Atom atom){
+    if (this->atomicMass > atom.getAtomicMass()){
+        return 1;
+    }
+    return 0;
+};
+
+bool Atom::operator<=(Atom atom){
+    if (this->atomicMass <= atom.getAtomicMass()){
+        return 1;
+    }
+    return 0;
+};
+
+bool Atom::operator>=(Atom atom){
+    if (this->atomicMass >= atom.getAtomicMass()){
+        return 1;
+    }
+    return 0;
+};
+
+int Atom::comp(Atom atom){
+    if (this->atomicMass < atom.getAtomicMass()){
+        return -1;
+    } else if(this->atomicMass > atom.getAtomicMass()){
+        return 1;
+    };
+    return 0;
 };

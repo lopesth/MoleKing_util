@@ -28,6 +28,7 @@ class Atom{
     string getAtomicSymbol();
     int getAtomicNumber();
     bool operator==(Atom atom2);
+    bool operator!=(Atom atom2);
     void setX(double newX);
     void setY(double newY);
     void setZ(double newZ);
@@ -38,7 +39,13 @@ class Atom{
     void setNewPos(double newX, double newY, double newZ);
     void translation(Vector3D traslationVector);
     void rotationAxis(double tetha, Vector3D unitAxis);
-    vector<double>  getPos();
+    vector<double> getPos();
+    bool operator<(Atom atom);
+    bool operator>(Atom atom);
+    bool operator<=(Atom atom);
+    bool operator>=(Atom atom);
+    int comp(Atom atom);
+
 };
 
 class ChargePoint{
@@ -51,6 +58,7 @@ class ChargePoint{
     void setCharge(double newCharge);
     double getCharge();
     bool operator==(ChargePoint charge2);
+    bool operator!=(ChargePoint charge2);
     void setX(double newX);
     void setY(double newY);
     void setZ(double newZ);
@@ -60,7 +68,12 @@ class ChargePoint{
     void setNewPos(double newX, double newY, double newZ);
     void translation(Vector3D traslationVector);
     void rotationAxis(double tetha, Vector3D unitAxis);
-    vector<double>  getPos();
+    vector<double> getPos();
+    bool operator<(ChargePoint chargePoint);
+    bool operator>(ChargePoint chargePoint);
+    bool operator<=(ChargePoint chargePoint);
+    bool operator>=(ChargePoint chargePoint);
+    int comp(ChargePoint chargePoint);
 };
 
 #endif /* AtomicScale_hh */
