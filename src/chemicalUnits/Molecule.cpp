@@ -441,3 +441,33 @@ string Molecule::toStr(){
     };
     return result;
 };
+
+bool Molecule::operator==(Molecule mol){
+    if (this->molecule.size() == mol.getSize()){
+        for (int i = 0; i < (int) this->molecule.size(); i++){
+            if (this->molecule[i] == mol.getAtomObj(i)){
+                continue;
+            } else {
+                return 0;
+            };
+        };
+    } else{
+        return 0;
+    };
+    return 1;
+};
+
+bool Molecule::operator!=(Molecule mol){
+    if (this->molecule.size() == mol.getSize()){
+        for (int i = 0; i < (int) this->molecule.size(); i++){
+            if (this->molecule[i] == mol.getAtomObj(i)){
+                continue;
+            } else {
+                return 1;
+            };
+        };
+    } else{
+        return 1;
+    };
+    return 0;
+};

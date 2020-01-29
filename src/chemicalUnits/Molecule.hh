@@ -80,6 +80,7 @@ public:
     void removeAtom(Atom atom);
     string toStr();
     bool operator==(Molecule mol);
+    bool operator!=(Molecule mol);
 
 };
 

@@ -99,6 +99,7 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("__str__", &Molecule::toStr)
         .def("setCharge", &Molecule::setCharge)
         .def("getCharge", &Molecule::getCharge)
+        .def("__eq__", &Molecule::operator==)
         .def("__len__", &Molecule::getSize)
         .def("__iter__", [](Molecule &mol) {return py::make_iterator(mol.begin(), mol.end());}, py::keep_alive<0, 1>())
         .def("setMultiplicity", &Molecule::setMultiplicity)
