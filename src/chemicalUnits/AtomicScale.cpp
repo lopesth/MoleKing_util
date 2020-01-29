@@ -131,6 +131,12 @@ int ChargePoint::comp(ChargePoint chargePoint){
     return 0;
 };
 
+string ChargePoint::toStr(){
+    string temp = "Charge " + to_string(this->charge);
+    temp = temp + " Cartesian pos: (" + to_string(this->getX()) + ", " + to_string(this->getY()) + ", " + to_string(this->getZ()) + ")";
+    return temp;
+}
+
 /* #########    Atom Class    ######### */
 
 Atom::Atom(int atomicNumber, double x, double y, double z, bool freezeCode_ = 0){
@@ -140,6 +146,7 @@ Atom::Atom(int atomicNumber, double x, double y, double z, bool freezeCode_ = 0)
     this->point = Point(x, y, z, 'c');
     this->freezeCode = freezeCode_;
     this->atomicMass = temp.getAtomicMass(this->atomicSymbol);
+    this->atomicRadio = PeriodicTable().getCovalentRadii(this->atomicSymbol);
 };
 
 Atom::Atom(string atomicSymbol, double x, double y, double z, bool freezeCode_ = 0){
@@ -150,44 +157,7 @@ Atom::Atom(string atomicSymbol, double x, double y, double z, bool freezeCode_ =
     this->point = Point(x, y, z, 'c');
     this->freezeCode = freezeCode_;
     this->atomicMass = temp.getAtomicMass(this->atomicSymbol);
-};
-
-bool Atom::operator==(Atom atom2){
-    bool value;
-    if (this->atomicNumber == atom2.getAtomicNumber()){
-        if (this->atomicMass == atom2.getAtomicMass()){
-            Point point2 = Point(atom2.getX(), atom2.getY(), atom2.getZ(), 'c');
-            if (this->point == point2){
-                value = 1;
-            } else {
-                value = 0;
-            };
-        } else {
-            value = 0;
-        };
-    } else {
-        value = 0;
-    };
-    return value;
-};
-
-bool Atom::operator!=(Atom atom2){
-    bool value;
-    if (this->atomicNumber == atom2.getAtomicNumber()){
-        if (this->atomicMass == atom2.getAtomicMass()){
-            Point point2 = Point(atom2.getX(), atom2.getY(), atom2.getZ(), 'c');
-            if (this->point == point2){
-                value = 0;
-            } else {
-                value = 1;
-            };
-        } else {
-            value = 1;
-        };
-    } else {
-        value = 1;
-    };
-    return value;
+    this->atomicRadio = PeriodicTable().getCovalentRadii(this->atomicSymbol);
 };
 
 double Atom::getAtomicMass(){
@@ -195,7 +165,7 @@ double Atom::getAtomicMass(){
 };
 
 double Atom::getAtomicRadio(){
-    return PeriodicTable().getCovalentRadii(this->atomicSymbol);
+    return this->atomicRadio;
 };
 
 string Atom::getAtomicSymbol(){
@@ -242,44 +212,88 @@ void Atom::rotationAxis(double tetha, Vector3D unitAxis){
     this->point.rotationVector(tetha, unitAxis);
 };
 
-vector<double>  Atom::getPos(){
+vector<double> Atom::getPos(){
     return this->point.getCoords('c');
 };
 
 
 bool Atom::operator<(Atom atom){
-    if (this->atomicMass < atom.getAtomicMass()){
+    if (this->atomicRadio < atom.getAtomicRadio()){
         return 1;
     }
     return 0;
 };
 
 bool Atom::operator>(Atom atom){
-    if (this->atomicMass > atom.getAtomicMass()){
+    if (this->atomicRadio > atom.getAtomicRadio()){
         return 1;
     }
     return 0;
 };
 
 bool Atom::operator<=(Atom atom){
-    if (this->atomicMass <= atom.getAtomicMass()){
+    if (this->atomicRadio <= atom.getAtomicRadio()){
         return 1;
     }
     return 0;
 };
 
 bool Atom::operator>=(Atom atom){
-    if (this->atomicMass >= atom.getAtomicMass()){
+    if (this->atomicRadio >= atom.getAtomicRadio()){
         return 1;
     }
     return 0;
 };
 
+bool Atom::operator==(Atom atom2){
+    bool value;
+    if (this->atomicNumber == atom2.getAtomicNumber()){
+        if (this->atomicMass == atom2.getAtomicMass()){
+            Point point2 = Point(atom2.getX(), atom2.getY(), atom2.getZ(), 'c');
+            if (this->point == point2){
+                value = 1;
+            } else {
+                value = 0;
+            };
+        } else {
+            value = 0;
+        };
+    } else {
+        value = 0;
+    };
+    return value;
+};
+
+bool Atom::operator!=(Atom atom2){
+    bool value;
+    if (this->atomicNumber == atom2.getAtomicNumber()){
+        if (this->atomicMass == atom2.getAtomicMass()){
+            Point point2 = Point(atom2.getX(), atom2.getY(), atom2.getZ(), 'c');
+            if (this->point == point2){
+                value = 0;
+            } else {
+                value = 1;
+            };
+        } else {
+            value = 1;
+        };
+    } else {
+        value = 1;
+    };
+    return value;
+};
+
 int Atom::comp(Atom atom){
-    if (this->atomicMass < atom.getAtomicMass()){
+    if (this->atomicRadio < atom.getAtomicRadio()){
         return -1;
-    } else if(this->atomicMass > atom.getAtomicMass()){
+    } else if(this->atomicRadio > atom.getAtomicRadio()){
         return 1;
     };
     return 0;
 };
+
+string Atom::toStr(){
+    string temp = "Element " + this->getAtomicSymbol() + " (Z = " + to_string(this->atomicNumber) +")";
+    temp = temp + " Cartesian pos: (" + to_string(this->getX()) + ", " + to_string(this->getY()) + ", " + to_string(this->getZ()) + ")";
+    return temp;
+}

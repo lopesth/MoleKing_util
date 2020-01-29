@@ -71,11 +71,13 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("__gt__", &Atom::operator>)
         .def("__le__", &Atom::operator<=)
         .def("__ge__", &Atom::operator>=)
+        .def("__str__", &Atom::toStr)
         .def("setNewPos", &Atom::setNewPos)
         .def("getPos", &Atom::getPos)
         .def("translation", &Atom::translation)
         .def("rotationAxis", &Atom::rotationAxis);
 
+    
      py::class_<ChargePoint>(m, "ChargePoint", "This class creates a charge point variable type allowing for the usage in python like a primitive type.")
         .def(py::init<double, double, double, double>(), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("charge"))
         .def("getX", &ChargePoint::getX)
@@ -94,9 +96,11 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("__gt__", &ChargePoint::operator>)
         .def("__le__", &ChargePoint::operator<=)
         .def("__ge__", &ChargePoint::operator>=)
+        .def("__str__", &ChargePoint::toStr)
         .def("translation", &ChargePoint::translation)
         .def("rotationAxis", &ChargePoint::rotationAxis);
 
+    
     py::class_<Molecule>(m, "Molecule", "This class creates a molecule variable type allowing for the usage in python like a primitive type.")
         .def(py::init())
         .def("addChargePoints", &Molecule::addChargePoints, "This method add a charge point in a existent molecule.")
@@ -134,7 +138,8 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("getIRCAngles", &Molecule::getIRCAngles)
         .def("getIRCDihedrals", &Molecule::getIRCDihedrals);
 
-        py::class_<Point>(m, "Point", "This class creates a point variable type allowing for the usage in python like a primitive type.")
+    
+    py::class_<Point>(m, "Point", "This class creates a point variable type allowing for the usage in python like a primitive type.")
         .def(py::init())
         .def(py::init<double, double, double, char>(), py::arg("coord1"), py::arg("coord2"), py::arg("coord3"), py::arg("typeCoord") = 'c')
         .def("__eq__", &Point::operator==)
@@ -143,44 +148,46 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("setCoords", &Point::setCoords, py::arg("newValues"), py::arg("typeCoord") = 'c')
         .def("translation", &Point::translation)
         .def("rotation3D", &Point::rotationVector);
+        .def("__str__", &Point::toStr)
 
-        py::class_<SphericalCoords>(m, "SphericalCoords", "This class allows the interchange between Cartesian and spherical coordinates.")
+    
+    py::class_<SphericalCoords>(m, "SphericalCoords", "This class allows the interchange between Cartesian and spherical coordinates.")
         .def(py::init<double, double, double, char>(), py::arg("coord1"), py::arg("coord2"), py::arg("coord3"), py::arg("spaceType") = 'c')
         .def("toCartesian", &SphericalCoords::toCartesian)
         .def("toSpherical", &SphericalCoords::toSpherical);
     
     
     py::class_<Vector3D>(m, "Vector3D", "This class creates a vector (xi + yj + zk) variable type allowing for the usage in python like a primitive type.")
-    .def(py::init< vector<double>, vector<double>>(), py::arg("pointA"), py::arg("pointB") = vector <double> {0.0, 0.0, 0.0})
-    .def("__abs__", &Vector3D::magnitude)
-    .def("getVector", &Vector3D::getVector)
-    .def("show", &Vector3D::show)
-    .def("normalize", &Vector3D::normalize)
-    .def("__invert__", &Vector3D::conjugate)
-    .def("__div__", &Vector3D::operator/)
-    .def("__mul__", &Vector3D::operator*)
-    .def("__add__", &Vector3D::operator+)
-    .def("__sub__", &Vector3D::operator-)
-    .def("__str__", &Vector3D::toStr)
-    .def("crossProduct", &Vector3D::crossProduct)
-    .def("dotProduct", &Vector3D::dotProduct)
-    .def("angle", &Vector3D::angle, py::arg("vectorB"), py::arg("unit") = 'd')
-    .def("unitVectorValue", &Vector3D::axisValue);
+        .def(py::init< vector<double>, vector<double>>(), py::arg("pointA"), py::arg("pointB") = vector <double> {0.0, 0.0, 0.0})
+        .def("__abs__", &Vector3D::magnitude)
+        .def("getVector", &Vector3D::getVector)
+        .def("normalize", &Vector3D::normalize)
+        .def("__invert__", &Vector3D::conjugate)
+        .def("__div__", &Vector3D::operator/)
+        .def("__mul__", &Vector3D::operator*)
+        .def("__add__", &Vector3D::operator+)
+        .def("__sub__", &Vector3D::operator-)
+        .def("__str__", &Vector3D::toStr)
+        .def("crossProduct", &Vector3D::crossProduct)
+        .def("dotProduct", &Vector3D::dotProduct)
+        .def("angle", &Vector3D::angle, py::arg("vectorB"), py::arg("unit") = 'd')
+        .def("unitVectorValue", &Vector3D::axisValue);
 
+    
     py::class_<Matrix>(m, "Matrix", "This class creates a Matrix variable type allowing for the usage in python like a primitive type.")
-    .def(py::init< vector < vector<double> > >())
-    .def(py::init< int, int >())
-    .def(py::init())
-    .def("setMatrix", &Matrix::setMatrix)
-    .def("add", &Matrix::sum)
-    .def("multip", (Matrix (Matrix::*)(double)) &Matrix::multiplication)
-    .def("multip", (Matrix (Matrix::*)(Matrix)) &Matrix::multiplication)
-    .def("determinant", &Matrix::determinant)
-    .def("replace", &Matrix::replace)
-    .def("__getitem__", &Matrix::getLine)
-    .def("elem", &Matrix::element)
-    .def("show", &Matrix::print)
-    .def("__str__", &Matrix::toStr);
+        .def(py::init< vector < vector<double> > >())
+        .def(py::init< int, int >())
+        .def(py::init())
+        .def("setMatrix", &Matrix::setMatrix)
+        .def("add", &Matrix::sum)
+        .def("multip", (Matrix (Matrix::*)(double)) &Matrix::multiplication)
+        .def("multip", (Matrix (Matrix::*)(Matrix)) &Matrix::multiplication)
+        .def("determinant", &Matrix::determinant)
+        .def("replace", &Matrix::replace)
+        .def("__getitem__", &Matrix::getLine)
+        .def("elem", &Matrix::element)
+        .def("show", &Matrix::print)
+        .def("__str__", &Matrix::toStr);
 };
 
 

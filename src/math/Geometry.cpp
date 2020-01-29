@@ -230,8 +230,6 @@ vector <double> SphericalCoords::toSpherical(){
     return vector <double> {c.radius, c.tetha, c.phi};
 };
 
-// Endo fo SphericalCoords class //
-
 // Vector3D class ///
 
 Vector3D::Vector3D(vector<double> pointA, vector<double> pointB){
@@ -249,7 +247,19 @@ Vector3D::Vector3D(vector<double> pointA, vector<double> pointB){
 Vector3D::Vector3D(){};
 
 string Vector3D::toStr(){
-    return to_string(this->s_i) + "i " + to_string(this->s_j) + "j " + to_string(this->s_k) + "k ";
+    string temp;
+    temp = to_string(this->s_i) + "i";
+    if(this->s_j >= 0){
+        temp = temp + " +" + to_string(this->s_j) + "j";
+    } else {
+        temp = temp + " -" + to_string(this->s_j) + "j";
+    };
+    if(this->s_k >= 0){
+        temp = temp + " +" + to_string(this->s_k) + "k";
+    } else {
+        temp = temp + " -" + to_string(this->s_k) + "k";
+    };
+    return temp;
 }
 
 void Vector3D::setVector(vector<double> pointA, vector<double> pointB){
@@ -343,10 +353,6 @@ double Vector3D::angle(Vector3D vectorB, char unit){
         
 };
 
-void Vector3D::show(){
-    cout << "v = " << this->s_i << "i +" << this->s_j << "j +" << this->s_k << "k" << endl;
-};
-
 double Vector3D::axisValue(char unitVector){
     if (unitVector == 'i' || unitVector == 'x'){
         return this->s_i;
@@ -358,8 +364,6 @@ double Vector3D::axisValue(char unitVector){
         return 0.0;
     };
 };
-
-// End of Vector3D class //
 
 // Quaternion class //
 
@@ -391,4 +395,3 @@ vector <double> Quaternion::getQuaternion(){
     return vector <double> {this->u, this->s_i, this->s_j, this->s_k};
 };
 
-// End of Quaternion class //

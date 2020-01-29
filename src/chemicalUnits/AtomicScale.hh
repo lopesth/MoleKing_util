@@ -20,6 +20,7 @@ class Atom{
     double atomicMass;
     Point point;
     bool freezeCode;
+    double atomicRadio;
 
     public:
     Atom(int atomicNumber, double x, double y, double z, bool freezeCode_);
@@ -44,6 +45,7 @@ class Atom{
     bool operator>(Atom atom);
     bool operator<=(Atom atom);
     bool operator>=(Atom atom);
+    string toStr();
     int comp(Atom atom);
 
 };
@@ -73,6 +75,7 @@ class ChargePoint{
     bool operator>(ChargePoint chargePoint);
     bool operator<=(ChargePoint chargePoint);
     bool operator>=(ChargePoint chargePoint);
+    string toStr();
     int comp(ChargePoint chargePoint);
 };
 
