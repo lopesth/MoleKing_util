@@ -146,7 +146,8 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("printIRC", &Molecule::printIRC)
         .def("getIRCBonds", &Molecule::getIRCBonds)
         .def("getIRCAngles", &Molecule::getIRCAngles)
-        .def("getIRCDihedrals", &Molecule::getIRCDihedrals);
+        .def("getIRCDihedrals", &Molecule::getIRCDihedrals)
+        .def("removeElement", &Molecule::removeElement);
 
     
     py::class_<Point>(m, "Point", "This class creates a point variable type allowing for the usage in python like a primitive type.")

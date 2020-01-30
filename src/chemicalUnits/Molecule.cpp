@@ -503,3 +503,11 @@ bool Molecule::operator!=(Molecule mol){
     };
     return 0;
 };
+
+void Molecule::removeElement(string element){
+    for (int i = 0; i < (int) this->molecule.size(); i++) {
+        if (this->molecule[i].getAtomicSymbol() == element){
+            this->molecule.erase(this->molecule.begin() + i);
+        };
+    };
+};
