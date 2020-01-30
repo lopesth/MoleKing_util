@@ -1,4 +1,4 @@
-import os, platform, sys
+import os, platform, sys, shutil
 
 OS = platform.system()
 Version = platform.version().split()[0]
@@ -6,6 +6,7 @@ PyVersion = sys.version.split()[0]
 home = os.getcwd()
 
 print('Runing Setup for MoleKing_util on {} -{}- with python {}:'.format(OS, Version, PyVersion))
+pyPath = input('Type the path for Python3 SitePackages Directory: ')
 
 try:
     os.chdir('{}/MoleKing_util'.format(home))
@@ -41,6 +42,7 @@ obj = os.popen('c++ {0} {2} -o {1}'.format(flags, target, objs), 'r')
 obj.read()
 
 pyarq = open('__init__.py', 'w')
+pyarq.write('############ MoleKing_util constructor file ############\n')
 pyarq.write('from MoleKing_util.MoleKing_util import Atom\n')
 pyarq.write('from MoleKing_util.MoleKing_util import ChargePoint\n')
 pyarq.write('from MoleKing_util.MoleKing_util import Molecule\n')
@@ -52,19 +54,8 @@ pyarq.write('from MoleKing_util.MoleKing_util import PeriodicTable\n')
 pyarq.write('from MoleKing_util.MoleKing_util import SupraMolecule\n')
 pyarq.close()
 
-print('Success, MoleKiing_util was compiled on {} -{}- with python {}!'.format(OS, Version, PyVersion))
+os.chdir(home)
+shutil.move(home+"/MoleKing_util", pyPath)
+print('Success, MoleKing_util was compiled on {} -{}- with python {}!'.format(OS, Version, PyVersion))
 
 
-
-
-
-
-
-###### Comments ######
-'''for Cfile in CList:
-    if 'main' in Cfile:
-        obj = os.popen('c++ -o {0}.o {1}.cpp {2}'.format(Cfile.split('/')[-1], Cfile, flags), 'r')
-        obj.read()
-    else:
-        obj = os.popen('c++ -o {0}.o {1}.cpp {1}.hh {2}'.format(Cfile.split('/')[-1], Cfile, flags), 'r')
-        obj.read()'''
