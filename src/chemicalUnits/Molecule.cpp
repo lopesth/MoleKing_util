@@ -468,7 +468,7 @@ string Molecule::toStr(){
 };
 
 bool Molecule::operator==(Molecule mol){
-    if (this->molecule.size() == mol.getSize()){
+    if ((int) this->molecule.size() ==(int) mol.getSize()){
         for (int i = 0; i < (int) this->molecule.size(); i++){
             if (this->molecule[i] == mol.getAtomObj(i)){
                 continue;
@@ -483,7 +483,7 @@ bool Molecule::operator==(Molecule mol){
 };
 
 bool Molecule::operator!=(Molecule mol){
-    if (this->molecule.size() == mol.getSize()){
+    if ((int) this->molecule.size() == (int) mol.getSize()){
         for (int i = 0; i < (int) this->molecule.size(); i++){
             if (this->molecule[i] == mol.getAtomObj(i)){
                 continue;
