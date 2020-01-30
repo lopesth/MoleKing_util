@@ -1,8 +1,8 @@
 //
 //  main.cpp
-//  Molecules   
+//  MoleculeKing_util 
 //
-//  Created by Thiago Lopes and Mateus Barbosa on 09/01/20.
+//  Created by Thiago Lopes, Sandro Brito and Mateus Barbosa on 09/01/20.
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
@@ -176,7 +176,7 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("removeElement", (void (SupraMolecule::*)(int, string)) &SupraMolecule::removeElement)
         .def("removeElement", (void (SupraMolecule::*)(string)) &SupraMolecule::removeElement)
         .def("removeMolecule", (void (SupraMolecule::*)(int)) &SupraMolecule::removeMolecule)
-        .def("removeMolecule", (void (SupraMolecule::*)(Molecule)) &SupraMolecule::removeMolecule)
+        .def("removeMolecule", (void (SupraMolecule::*)(Molecule)) &SupraMolecule::removeMolecule);
 
     
     py::class_<Point>(m, "Point", "This class creates a point variable type allowing for the usage in python like a primitive type.")

@@ -1,6 +1,6 @@
 //
 //  AtomicScale.cpp
-//  Molecules
+//  MoleKing_util
 //
 //  Created by Thiago Lopes on 19/01/20.
 //  Copyright © 2020 LMSC. All rights reserved.

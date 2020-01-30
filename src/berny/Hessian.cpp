@@ -1,8 +1,8 @@
 //
 //  Hessian.cpp
-//  Molecules module
+//  MoleKing_util
 //
-//  Created by Thiago Lopes, Mateus Barbosa and Ueslei Vasconcelos on 21/01/20.
+//  Created by Thiago Lopes and Mateus Barbosa on 21/01/20.
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 

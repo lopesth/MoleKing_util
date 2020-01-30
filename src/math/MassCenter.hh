@@ -1,6 +1,6 @@
 //
 //  MassCenter.hh
-//  Molecules
+//  MoleKing_util
 //
 //  Created by Thiago Lopes and Mateus Barbosa on 09/01/20.
 //  Copyright © 2020 LMSC. All rights reserved.

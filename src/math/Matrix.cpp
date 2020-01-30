@@ -1,6 +1,6 @@
 //
 //  Matrix.cpp
-//  Molecules
+//  MoleKing_util
 //
 //  Created by Thiago Lopes, Igor Santos, Sandro Brito and Mateus Barbosa on 14/01/20.
 //  Copyright © 2020 LMSC. All rights reserved.

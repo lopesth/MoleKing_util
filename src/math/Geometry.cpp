@@ -1,6 +1,6 @@
 //
 //  Geometry.cpp
-//  Molecules
+//  MoleKing_util
 //
 //  Created by Thiago Lopes and Mateus Barbosa on 10/01/20.
 //  Copyright © 2020 LMSC. All rights reserved.
