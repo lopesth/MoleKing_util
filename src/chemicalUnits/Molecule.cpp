@@ -155,6 +155,10 @@ void Molecule::addChargePoints(double xPos, double yPos, double zPos, double cha
     this->chargePoint.push_back(cp);
 };
 
+void Molecule::addChargePoints(ChargePoint cp){
+    this->chargePoint.push_back(cp);
+};
+
 void Molecule::addAtom(string atomSymbol, double xPos, double yPos, double zPos, bool freezeCode_){
     Atom atom(atomSymbol, xPos, yPos, zPos, freezeCode_);
     this->molecule.push_back(atom);

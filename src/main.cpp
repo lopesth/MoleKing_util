@@ -103,7 +103,8 @@ PYBIND11_MODULE(MoleKing_util, m) {
     
     py::class_<Molecule>(m, "Molecule", "This class creates a molecule variable type allowing for the usage in python like a primitive type.")
         .def(py::init())
-        .def("addChargePoints", &Molecule::addChargePoints, "This method add a charge point in a existent molecule.")
+        .def("addChargePoints", (void (Molecule::*)(double, double, double, double)) &Molecule::addChargePoints, "This method add a charge point in a existent molecule.")
+        .def("addChargePoints", (void (Molecule::*)(ChargePoint)) &Molecule::addChargePoints, "This method add a charge point in a existent molecule.")
         .def("addAtom", (void (Molecule::*)(string, double, double, double, bool)) &Molecule::addAtom, py::arg("atomSymbol"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_")=0)
         .def("removeAtom", (void (Molecule::*)(int)) &Molecule::removeAtom)
         .def("removeAtom", (void (Molecule::*)(Atom)) &Molecule::removeAtom)

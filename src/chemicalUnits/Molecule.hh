@@ -44,6 +44,7 @@ public:
     Molecule();
     ~Molecule();
     void addChargePoints(double xPos, double yPos, double zPos, double charge);
+    void addChargePoints(ChargePoint cp);
     void addAtom(string atomSymbol, double xPos, double yPos, double zPos, bool freezeCode_ = 0);
     void addAtom(int atomNumber, double xPos, double yPos, double zPos, bool freezeCode_ = 0);
     vector <string> getAtom(int number, bool symbol = 0);
