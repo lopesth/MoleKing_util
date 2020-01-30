@@ -33,12 +33,25 @@ elif OS == 'Darwin':
     flags = '-O3 -Wall -shared -std=c++11 -undefined dynamic_lookup `python3 -m pybind11 --includes`'
     target = 'MoleKing_util`python3-config --extension-suffix`'
 else:
-    print('Recomendamos usar um OS feito para adultos...')
+    print('MoleKing_util does not work on DOS base systems to this date.')
 
 objs = ' '.join(CList)
 os.chdir('{}/MoleKing_util'.format(home))
 obj = os.popen('c++ {0} {2} -o {1}'.format(flags, target, objs), 'r')
 obj.read()
+
+pyarq = open('__init__.py', 'w')
+pyarq.write('from MoleKing_util.MoleKing_util import Atom\n')
+pyarq.write('from MoleKing_util.MoleKing_util import ChargePoint\n')
+pyarq.write('from MoleKing_util.MoleKing_util import Molecule\n')
+pyarq.write('from MoleKing_util.MoleKing_util import Point\n')
+pyarq.write('from MoleKing_util.MoleKing_util import SphericalCoords\n')
+pyarq.write('from MoleKing_util.MoleKing_util import Vector3D\n')
+pyarq.write('from MoleKing_util.MoleKing_util import Matrix\n')
+pyarq.write('from MoleKing_util.MoleKing_util import PeriodicTable\n')
+pyarq.write('from MoleKing_util.MoleKing_util import SupraMolecule\n')
+pyarq.close()
+
 print('Success, MoleKiing_util was compiled on {} -{}- with python {}!'.format(OS, Version, PyVersion))
 
 
