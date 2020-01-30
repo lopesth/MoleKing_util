@@ -33,6 +33,7 @@ public:
     SupraMolecule();
     void addMolecule(Molecule molecule);
     void addAtomToMolecule(int molNumber, Atom atom);
+    void addAtomToMolecule(int molNumber, string atomSymbol, double xPos, double yPos, double zPos);
     string toStr();
     Molecule getMolecule(int numberMolecule);
     void setMultiplicity(int multiplicity);

@@ -52,6 +52,14 @@ int main(int argc, char **argv){
 
 PYBIND11_MODULE(MoleKing_util, m) {
     
+    py::class_<PeriodicTable>(m, "PeriodicTable", "This class creates a virtual Periodic Table.")
+        .def(py::init())
+        .def("getAtomicNumber", &PeriodicTable::getAtomicNumber)
+        .def("getAtomicMass", &PeriodicTable::getAtomicMass)
+        .def("getSymbol", &PeriodicTable::getSymbol)
+        .def("getCovalentRadii", &PeriodicTable::getCovalentRadii);
+    
+    
     py::class_<Atom>(m, "Atom", "This class creates a atom variable type allowing for the usage in python like a primitive type.")
         .def(py::init<int, double, double, double, bool>(), py::arg("atomicNumber"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_") = 0)
         .def(py::init<string, double, double, double, bool>(), py::arg("atomicSymbol"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_") = 0)
@@ -76,7 +84,7 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("getPos", &Atom::getPos)
         .def("translation", &Atom::translation)
         .def("rotationAxis", &Atom::rotationAxis);
-
+    
     
      py::class_<ChargePoint>(m, "ChargePoint", "This class creates a charge point variable type allowing for the usage in python like a primitive type.")
         .def(py::init<double, double, double, double>(), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("charge"))
@@ -106,9 +114,10 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("addChargePoints", (void (Molecule::*)(double, double, double, double)) &Molecule::addChargePoints, "This method add a charge point in a existent molecule.")
         .def("addChargePoints", (void (Molecule::*)(ChargePoint)) &Molecule::addChargePoints, "This method add a charge point in a existent molecule.")
         .def("addAtom", (void (Molecule::*)(string, double, double, double, bool)) &Molecule::addAtom, py::arg("atomSymbol"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_")=0)
+        .def("addAtom", (void (Molecule::*)(int, double, double, double, bool)) &Molecule::addAtom, py::arg("atomNumber"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_")=0)
+        .def("addAtom", (void (Molecule::*)(Atom)) &Molecule::addAtom)
         .def("removeAtom", (void (Molecule::*)(int)) &Molecule::removeAtom)
         .def("removeAtom", (void (Molecule::*)(Atom)) &Molecule::removeAtom)
-        .def("addAtom", (void (Molecule::*)(int, double, double, double, bool)) &Molecule::addAtom, py::arg("atomNumber"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_")=0)
         .def("getAtom", &Molecule::getAtom, py::arg("number")=0, py::arg("symbol")=0)
         .def("__getitem__", &Molecule::getAtomObj)
         .def("__str__", &Molecule::toStr)

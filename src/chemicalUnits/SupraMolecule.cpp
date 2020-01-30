@@ -23,6 +23,24 @@ void SupraMolecule::addMolecule(Molecule molecule){
     this->setCharge();
 };
 
+void SupraMolecule::addAtomToMolecule(int molNumber, Atom atom){
+    this->supraMolecule[molNumber].addAtom(atom);
+    this->setCharge();
+};
+
+void SupraMolecule::addAtomToMolecule(int molNumber, string atomSymbol, double xPos, double yPos, double zPos){
+    this->supraMolecule[molNumber].addAtom(atomSymbol, xPos, yPos, zPos);
+    this->setCharge();
+};
+
+string SupraMolecule::toStr(){
+    string result = "Supramolecule:";
+    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
+        result = result + "\n    " + this->supraMolecule[i].toStr();
+    };
+    return result;
+}
+
 Molecule SupraMolecule::getMolecule(int numberMolecule){
     return this->supraMolecule[numberMolecule];
 };
@@ -33,52 +51,6 @@ void SupraMolecule::setMultiplicity(int multiplicity){
 
 int SupraMolecule::getMultiplicity(){
     return this->multiplicity;
-};
-
-void SupraMolecule::getMoleculeBonds(){
-    bonds.clear();
-    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
-        VectorsInt temp = this->supraMolecule[i].getIRCBonds();
-        bonds.push_back(temp);
-    };
-};
-
-void SupraMolecule::getMoleculeAngles(){
-    angles.clear();
-    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
-        VectorsInt temp = this->supraMolecule[i].getIRCAngles();
-        bonds.push_back(temp);
-    };
-};
-
-void SupraMolecule::getMoleculeTorsions(){
-    dihedrals.clear();
-    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
-        VectorsInt temp = this->supraMolecule[i].getIRCDihedrals();
-        bonds.push_back(temp);
-    };
-};
-
-void SupraMolecule::standardOrientation(int molNumber){
-    vector <int> molAxis = this->supraMolecule[molNumber].molecularAxis();
-    Vector3D moveTailVec = Vector3D({0, 0, 0}, this->supraMolecule[molNumber].getAtomObj(molAxis[0]).getPos());
-    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
-        this->supraMolecule[i].translation(moveTailVec);
-    };
-    vector <double> angles = this->supraMolecule[molNumber].standardOrientationPath();
-    Vector3D mMassCent = Vector3D({0, 0, 0}, this->supraMolecule[molNumber].getMassCenter().getCoords('c'));
-    this->supraMolecule[molNumber].translation(mMassCent);
-    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
-        if (i != molNumber){
-            this->supraMolecule[i].spinMolecule(angles[0], 'y');
-            this->supraMolecule[i].spinMolecule(angles[1], 'z');
-            this->supraMolecule[i].spinMolecule(angles[2], 'x');
-            this->supraMolecule[i].spinMolecule(90, 'z');
-            this->supraMolecule[i].spinMolecule(90, 'y');
-            this->supraMolecule[i].translation(mMassCent);
-        };
-    };
-    
 };
 
 double SupraMolecule::getCharge(){
@@ -144,3 +116,49 @@ void SupraMolecule::spinSupraMolecule(double angle, Vector3D spinVector){
     };
 };
 
+
+void SupraMolecule::getMoleculeBonds(){
+    bonds.clear();
+    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
+        VectorsInt temp = this->supraMolecule[i].getIRCBonds();
+        bonds.push_back(temp);
+    };
+};
+
+void SupraMolecule::getMoleculeAngles(){
+    angles.clear();
+    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
+        VectorsInt temp = this->supraMolecule[i].getIRCAngles();
+        bonds.push_back(temp);
+    };
+};
+
+void SupraMolecule::getMoleculeTorsions(){
+    dihedrals.clear();
+    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
+        VectorsInt temp = this->supraMolecule[i].getIRCDihedrals();
+        bonds.push_back(temp);
+    };
+};
+
+void SupraMolecule::standardOrientation(int molNumber){
+    vector <int> molAxis = this->supraMolecule[molNumber].molecularAxis();
+    Vector3D moveTailVec = Vector3D({0, 0, 0}, this->supraMolecule[molNumber].getAtomObj(molAxis[0]).getPos());
+    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
+        this->supraMolecule[i].translation(moveTailVec);
+    };
+    vector <double> angles = this->supraMolecule[molNumber].standardOrientationPath();
+    Vector3D mMassCent = Vector3D({0, 0, 0}, this->supraMolecule[molNumber].getMassCenter().getCoords('c'));
+    this->supraMolecule[molNumber].translation(mMassCent);
+    for (int i = 0; i < (int) this->supraMolecule.size(); i++){
+        if (i != molNumber){
+            this->supraMolecule[i].spinMolecule(angles[0], 'y');
+            this->supraMolecule[i].spinMolecule(angles[1], 'z');
+            this->supraMolecule[i].spinMolecule(angles[2], 'x');
+            this->supraMolecule[i].spinMolecule(90, 'z');
+            this->supraMolecule[i].spinMolecule(90, 'y');
+            this->supraMolecule[i].translation(mMassCent);
+        };
+    };
+    
+};

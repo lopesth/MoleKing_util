@@ -169,6 +169,10 @@ void Molecule::addAtom(int atomNumber, double xPos, double yPos, double zPos, bo
     this->molecule.push_back(atom);
 };
 
+void Molecule::addAtom(Atom atom){
+    this->molecule.push_back(atom);
+};
+
 vector <string> Molecule::getAtom(int number, bool symbol){
     vector<string> atomString(4);
     Atom atom = this->molecule.at(number-1);
@@ -463,6 +467,9 @@ string Molecule::toStr(){
     };
     for (int i = 0; i < (int) s.size(); i++){
         result = result + s[i].first + to_string(s[i].second);
+    };
+    if (this->chargePoint.size() != 0){
+        result = result + " with " + to_string(this->chargePoint.size()) + " charge points";
     };
     return result;
 };
