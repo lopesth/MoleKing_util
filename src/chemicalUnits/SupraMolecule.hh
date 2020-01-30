@@ -20,20 +20,17 @@ private:
     typedef vector<Molecule> MoleculeList;
     MoleculeList supraMolecule;
     typedef vector < vector <int> > VectorsInt;
-    VectorsInt bonds;
-    VectorsInt angles;
-    VectorsInt dihedrals;
+    vector <VectorsInt> bonds;
+    vector <VectorsInt> angles;
+    vector <VectorsInt> dihedrals;
     int multiplicity, charge;
     void setCharge();
-    double getS(int n);
-    void setMultiplicity();
     void getMoleculeBonds();
     void getMoleculeAngles();
     void getMoleculeTorsions();
-    double angleToSpinInAref(int ref, char axisName);
 
 public:
-    SupraMolecule(int nOfMolecules);
+    SupraMolecule();
     void addMolecule(Molecule molecule);
     void addAtomToMolecule(int molNumber, Atom atom);
     string toStr();
@@ -48,7 +45,7 @@ public:
     void moveTail(int molNumber, int atomNumber, double x = 0.0, double y = 0.0, double z = 0.0);
     void spinSupraMolecule(double angle, char axis);
     void spinSupraMolecule(double angle, Vector3D spinVector);
-    void standardOrientation();
+    void standardOrientation(int molNumber);
     VectorsInt getIRCBonds();
     VectorsInt getIRCAngles();
     VectorsInt getIRCDihedrals();

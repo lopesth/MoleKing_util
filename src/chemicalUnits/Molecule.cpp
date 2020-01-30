@@ -294,22 +294,7 @@ void Molecule::moveTail(int atomNumber, double x, double y, double z){
 };
 
 void Molecule::standardOrientation(){
-    int j = 0;
-    vector<int> biggerDistance(2);
-    double distance = 0;
-    while(j < (int) this->molecule.size()){
-        for(int i = j+1; i < (int) this->molecule.size(); i++){
-            vector<double> atomCoord1 = this->molecule.at(j).getPos();
-            vector<double> atomCoord2 = this->molecule.at(i).getPos();
-            double dist = Vector3D(atomCoord1, atomCoord2).magnitude();
-            if(dist > distance){
-                distance = dist;
-                biggerDistance.at(0) = j;
-                biggerDistance.at(1) = i;
-            };
-        };
-        j++;
-    };
+    vector<int> biggerDistance = this->molecularAxis();
     this->moveTail(biggerDistance[0]);
     double angle1 = this->angleToSpinInAref(biggerDistance[1], 'y');
     this->spinMolecule(angle1, 'y');
@@ -321,6 +306,42 @@ void Molecule::standardOrientation(){
     this->spinMolecule(90, 'z');
     this->spinMolecule(90, 'y');
     this->moveMassCenter();
+};
+
+vector <double> Molecule::standardOrientationPath(){
+    vector<int> biggerDistance = this->molecularAxis();
+    this->moveTail(biggerDistance[0]);
+    double angle1 = this->angleToSpinInAref(biggerDistance[1], 'y');
+    this->spinMolecule(angle1, 'y');
+    vector <double> zspin = this->molecule[biggerDistance[1]].getPos();
+    vector <double> zspinSpherical = SphericalCoords(zspin[0], zspin[1], zspin[2], 'c').toSpherical();
+    this->spinMolecule(zspinSpherical[2], 'z');
+    double angle2 = this->angleToSpinInAref(biggerDistance[1], 'x');
+    this->spinMolecule(angle2, 'x');
+    this->spinMolecule(90, 'z');
+    this->spinMolecule(90, 'y');
+    this->moveMassCenter();
+    return vector <double> {angle1, zspinSpherical[2], angle2};
+};
+
+vector <int> Molecule::molecularAxis(){
+    int j = 0;
+    vector <int> temp;
+    double distance = 0;
+    while(j < (int) this->molecule.size()){
+        for(int i = j+1; i < (int) this->molecule.size(); i++){
+            vector<double> atomCoord1 = this->molecule.at(j).getPos();
+            vector<double> atomCoord2 = this->molecule.at(i).getPos();
+            double dist = Vector3D(atomCoord1, atomCoord2).magnitude();
+            if(dist > distance){
+                distance = dist;
+                temp.at(0) = j;
+                temp.at(1) = i;
+            };
+        };
+        j++;
+    };
+    return temp;
 };
 
 double Molecule::bondLength(int atomN1, int atomN2){

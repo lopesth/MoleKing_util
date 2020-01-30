@@ -65,10 +65,12 @@ public:
     void moveMassCenter(double x = 0.0, double y = 0.0, double z= 0.0);
     void moveTail(int atomNumber, double x = 0.0, double y = 0.0, double z= 0.0);
     void standardOrientation();
+    vector <double> standardOrientationPath();
     double bondLength(int atomN1, int atomN2);
     double valenceAngle(int atomN1, int atomN2, int atomN3);
     double torsion(int atomN1, int atomN2, int atomN3, int atomN4);
     void doIRC();
+    vector <int> molecularAxis();
     void printIRC();
     VectorsInt getIRCBonds();
     VectorsInt getIRCAngles();
