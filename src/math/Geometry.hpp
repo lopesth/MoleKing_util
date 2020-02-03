@@ -51,6 +51,7 @@ class StraightSegment{
 private:
     Point a, b;
     double absValue;
+    void calcAbs();
     
 public:
     StraightSegment(Point a, Point b);
@@ -63,6 +64,7 @@ class Angle{
 private:
     Point a, b, c;
     double absValue;
+    void calcAbs();
     
 public:
     Angle(Point a, Point b, Point c);
@@ -73,11 +75,12 @@ public:
 
 class Torsion{
 private:
-    Point pointA, pointB, pointC, pointD;
+    Point a, b, c, d;
     double absValue;
-        
+    void calcAbs();
+    
 public:
-    Torsion(Point pointA, Point pointB, Point pointC, Point pointD);
+    Torsion(Point a, Point b, Point c, Point d);
     double getValue();
     vector <Point> getPoints();
     void increaseNdecrease(double increment, vector <char> freezePoints = {'a', 'b'});

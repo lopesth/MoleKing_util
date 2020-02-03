@@ -233,7 +233,7 @@ vector <double> SphericalCoords::toSpherical(){
 StraightSegment::StraightSegment(Point a, Point b){
     this->a = a;
     this->b = b;
-    this->absValue = Vector3D(a.getCoords(), b.getCoords()).magnitude();
+    this->calcAbs();
 };
 
 double StraightSegment::getValue(){
@@ -244,6 +244,10 @@ vector <Point> StraightSegment::getPoints(){
     return vector <Point> {this->a, this->b};
 };
 
+void StraightSegment::calcAbs(){
+    this->absValue = Vector3D(this->a.getCoords(), this->b.getCoords()).magnitude();
+};
+
 void StraightSegment::stretchNcontract(double increment, char freezePoint){
     double factor = (this->absValue + increment)/this->absValue;
     vector<double> oldA = this->a.getCoords();
@@ -252,18 +256,86 @@ void StraightSegment::stretchNcontract(double increment, char freezePoint){
         Vector3D vec = Vector3D(oldB, oldA);
         vec = vec * factor;
         vector <double> vTrans = vec.getVector();
-        this->a = Point(0+oldA[0], 0+oldA[1], 0+oldA[2]);
+        this->a = Point(oldA[0], oldA[1],oldA[2]);
         this->b = Point(vTrans[0]+oldA[0], vTrans[1]+oldA[1], vTrans[2]+oldA[2]);
-        this->absValue = Vector3D(this->a.getCoords(), this->b.getCoords()).magnitude();
+        this->calcAbs();
     } else if (freezePoint == 'b'){
         Vector3D vec = Vector3D(oldA, oldB);
         vec = vec * factor;
         vector <double> vTrans = vec.getVector();
         this->a = Point(vTrans[0]+oldB[0], vTrans[1]+oldB[1], vTrans[2]+oldB[2]);
-        this->b = Point(0+oldB[0], 0+oldB[1], 0+oldB[2]);
-        this->absValue = Vector3D(this->a.getCoords(), this->b.getCoords()).magnitude();
+        this->b = Point(oldB[0], oldB[1], oldB[2]);
+        this->calcAbs();
     } else{
         cout << "stretchNcontract method of StraightSegment." << endl;
         exit(0);
     }
-}
+};
+
+// Angle class //
+
+Angle::Angle(Point a, Point b, Point c){
+    this->a = a;
+    this->b = b;
+    this->c = c;
+    this->calcAbs();
+};
+
+void Angle::calcAbs(){
+    Vector3D r1 = Vector3D(this->a.getCoords(), this->b.getCoords());
+    Vector3D r2 = Vector3D(this->c.getCoords(), this->b.getCoords());
+    this->absValue = r1.angle(r2);
+};
+
+double Angle::getValue(){
+    return this->absValue;
+};
+
+vector <Point> Angle::getPoints(){
+    return vector <Point> {this->a, this->b, this->c};
+};
+
+void Angle::increaseNdecrease(double increment, char freezePoint){
+
+
+};
+
+// Torsion class //
+
+Torsion::Torsion(Point a, Point b, Point c, Point d){
+    this->a = a;
+    this->b = b;
+    this->c = c;
+    this->d = d;
+    this->calcAbs();
+};
+
+void Torsion::calcAbs(){
+    Vector3D r1 = Vector3D(this->b.getCoords(), this->a.getCoords());
+    Vector3D r2 = Vector3D(this->b.getCoords(), this->c.getCoords());
+    Vector3D r3 = Vector3D(this->c.getCoords(), this->d.getCoords());
+    Vector3D semi_normal1 = r1.crossProduct(r2) / sin(r1.angle(r2, 'r'));
+    Vector3D semi_normal2 = r3.crossProduct(r2) / sin(r3.angle(r2, 'r'));
+    double angleD = semi_normal1.angle(semi_normal2);
+    double signal_ = semi_normal1.dotProduct(r3);
+    int signal;
+    if (signal_ > 0){
+        signal = 1;
+    } else {
+        signal = -1;
+    };
+    this->absValue = signal * angleD;
+};
+
+double Torsion::getValue(){
+    return this->absValue;
+};
+
+vector <Point> Torsion::getPoints(){
+    return vector <Point> {this->a, this->b, this->c, this->d};
+};
+
+void Torsion::increaseNdecrease(double increment, vector <char> freezePoints){
+    
+};
+
