@@ -6,7 +6,7 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#include "AtomicScale.hh"
+#include "AtomicScale.hpp"
 
 
 /* #########    ChargePoint Class    ######### */

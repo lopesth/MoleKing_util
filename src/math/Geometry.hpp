@@ -6,51 +6,15 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#ifndef Geometry_hh
-#define Geometry_hh
-#include<vector>
+#ifndef Geometry_hpp
+#define Geometry_hpp
+#include <vector>
 #include <math.h>
 #include <iostream>
-#include "Matrix.hh"
+#include "Matrix.hpp"
+#include "Vectors.hpp"
 
 using namespace std;
-
-class Vector3D{
-    private:
-    double x_a, x_b, y_a, y_b, z_a, z_b, s_i, s_j, s_k;
-
-    public:
-    Vector3D(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0});
-    Vector3D();
-    void setVector(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0});
-    ~Vector3D();
-    double magnitude();
-    vector <double> getVector();
-    void show();
-    Vector3D normalize();
-    Vector3D conjugate();
-    Vector3D operator/ (double mag);
-    Vector3D operator* (double mag);
-    Vector3D operator+ (Vector3D vectorB);
-    Vector3D operator- (Vector3D vectorB);
-    Vector3D crossProduct(Vector3D vectorB);
-    double dotProduct(Vector3D vectorB);
-    double angle(Vector3D vectorB, char unit = 'd');
-    double axisValue(char unitVector);
-    string toStr();
-};
-
-class Quaternion{
-    private:
-    double u, s_i, s_j, s_k;
-
-    public:
-    Quaternion(double u, vector <double> vectorA, vector <double> vectorB);
-    ~Quaternion();
-    double magnitude();
-    vector <double> getQuaternion();
-    void show();
-};
 
 class Point{
     private:
@@ -83,4 +47,40 @@ class SphericalCoords{
 
 };
 
-#endif /* Geometry_hh */
+class StraightSegment{
+private:
+    Point a, b;
+    double absValue;
+    
+public:
+    StraightSegment(Point a, Point b);
+    double getValue();
+    vector <Point> getPoints();
+    void stretchNcontract(double increment, char freezePoint = 'a');
+};
+
+class Angle{
+private:
+    Point a, b, c;
+    double absValue;
+    
+public:
+    Angle(Point a, Point b, Point c);
+    double getValue();
+    vector <Point> getPoints();
+    void increaseNdecrease(double increment, char freezePoint = 'a');
+};
+
+class Torsion{
+private:
+    Point pointA, pointB, pointC, pointD;
+    double absValue;
+        
+public:
+    Torsion(Point pointA, Point pointB, Point pointC, Point pointD);
+    double getValue();
+    vector <Point> getPoints();
+    void increaseNdecrease(double increment, vector <char> freezePoints = {'a', 'b'});
+};
+
+#endif /* Geometry_hpp */

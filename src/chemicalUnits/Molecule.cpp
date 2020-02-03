@@ -6,8 +6,7 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#include "Molecule.hh"
-
+#include "Molecule.hpp"
 
 
 double Molecule::angleToSpinInAref(int ref, char axisName){

@@ -6,8 +6,8 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#ifndef Matrix_hh
-#define Matrix_hh
+#ifndef Matrix_hpp
+#define Matrix_hpp
 #include <math.h>
 #include <vector>
 
@@ -44,4 +44,4 @@ class Matrix{
 
 
 
-#endif /* Matrix_hh */
+#endif /* Matrix_hpp */

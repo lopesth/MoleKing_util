@@ -6,8 +6,8 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#ifndef PeriodicTable_hh
-#define PeriodicTable_hh
+#ifndef PeriodicTable_hpp
+#define PeriodicTable_hpp
 
 #include <stdio.h>
 #include <map>
@@ -31,4 +31,4 @@ class PeriodicTable{
     double getCovalentRadii(string symbol);
 };
 
-#endif /* PeriodicTable_hh */
+#endif /* PeriodicTable_hpp */

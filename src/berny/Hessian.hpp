@@ -6,16 +6,16 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#ifndef Hessian_hh
-#define Hessian_hh
+#ifndef Hessian_hpp
+#define Hessian_hpp
 
 #include <stdio.h>
-#include "../math/Matrix.hh"
-#include "../math/Geometry.hh"
+#include "../math/Matrix.hpp"
+#include "../math/Geometry.hpp"
 #include <math.h>
 #include <vector>
-#include "../chemicalUnits/Molecule.hh"
-#include "../chemicalUnits/AtomicScale.hh"
+#include "../chemicalUnits/Molecule.hpp"
+#include "../chemicalUnits/AtomicScale.hpp"
 #include <iostream>
 
 using namespace std;
@@ -36,4 +36,4 @@ public:
 };
 
 
-#endif /* Hessian_hh */
+#endif /* Hessian_hpp */

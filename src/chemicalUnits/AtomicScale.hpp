@@ -6,11 +6,11 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#ifndef AtomicScale_hh
-#define AtomicScale_hh
+#ifndef AtomicScale_hpp
+#define AtomicScale_hpp
 
-#include "PeriodicTable.hh"
-#include "../math/Geometry.hh"
+#include "PeriodicTable.hpp"
+#include "../math/Geometry.hpp"
 #include <string>
 
 class Atom{
@@ -79,4 +79,4 @@ class ChargePoint{
     int comp(ChargePoint chargePoint);
 };
 
-#endif /* AtomicScale_hh */
+#endif /* AtomicScale_hpp */

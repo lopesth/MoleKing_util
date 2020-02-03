@@ -6,11 +6,11 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#ifndef MassCenter_hh
-#define MassCenter_hh
+#ifndef MassCenter_hpp
+#define MassCenter_hpp
 #include <stdio.h>
 #include <vector>
-#include "Geometry.hh"
+#include "Geometry.hpp"
 
 using namespace std;
 
@@ -27,4 +27,4 @@ class MassCenter{
 };
 
 
-#endif /* MassCenter_hh */
+#endif /* MassCenter_hpp */

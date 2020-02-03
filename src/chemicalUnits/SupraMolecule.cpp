@@ -6,7 +6,8 @@
 //  Copyright © 2020 Laboratório de Estrutura Eletrônica e Dinâmica Molecular. All rights reserved.
 //
 
-#include "SupraMolecule.hh"
+#include "SupraMolecule.hpp"
+
 typedef vector <vector <int> > VectorsInt;
 
 SupraMolecule::SupraMolecule(){};

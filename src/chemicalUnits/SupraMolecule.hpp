@@ -6,11 +6,11 @@
 //  Copyright © 2020 Laboratório de Estrutura Eletrônica e Dinâmica Molecular. All rights reserved.
 //
 
-#ifndef SupraMolecule_hh
-#define SupraMolecule_hh
+#ifndef SupraMolecule_hpp
+#define SupraMolecule_hpp
 
 #include <stdio.h>
-#include "Molecule.hh"
+#include "Molecule.hpp"
 #include <vector>
 
 

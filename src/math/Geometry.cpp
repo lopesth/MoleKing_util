@@ -6,7 +6,7 @@
 //  Copyright © 2020 LMSC. All rights reserved.
 //
 
-#include "Geometry.hh"
+#include "Geometry.hpp"
 
 // Point class //
 
@@ -181,8 +181,6 @@ string Point::toStr(char spaceType){
     return temp;
 };
 
-// End of Point class //
-
 // SphericalCoords class //
 
 SphericalCoords::SphericalCoords(double coord1/*x or radius*/, double coord2/*y or tetha*/, double coord3/*z or phi*/, char spaceType = 'c'/* 'c' for cartesian ou 's' for spherical*/){
@@ -230,168 +228,42 @@ vector <double> SphericalCoords::toSpherical(){
     return vector <double> {c.radius, c.tetha, c.phi};
 };
 
-// Vector3D class ///
+// StraightSegment class //
 
-Vector3D::Vector3D(vector<double> pointA, vector<double> pointB){
-    this->x_a = pointA[0];
-    this->x_b = pointB[0];
-    this->s_i = this->x_a - this->x_b;
-    this->y_a = pointA[1];
-    this->y_b = pointB[1];
-    this->s_j = this->y_a - this->y_b;
-    this->z_a = pointA[2];
-    this->z_b = pointB[2];
-    this->s_k = this->z_a - this->z_b;
+StraightSegment::StraightSegment(Point a, Point b){
+    this->a = a;
+    this->b = b;
+    this->absValue = Vector3D(a.getCoords(), b.getCoords()).magnitude();
 };
 
-Vector3D::Vector3D(){};
+double StraightSegment::getValue(){
+    return this->absValue;
+};
 
-string Vector3D::toStr(){
-    string temp;
-    temp = to_string(this->s_i) + "i";
-    if(this->s_j >= 0){
-        temp = temp + " +" + to_string(this->s_j) + "j";
-    } else {
-        temp = temp + " -" + to_string(this->s_j) + "j";
-    };
-    if(this->s_k >= 0){
-        temp = temp + " +" + to_string(this->s_k) + "k";
-    } else {
-        temp = temp + " -" + to_string(this->s_k) + "k";
-    };
-    return temp;
+vector <Point> StraightSegment::getPoints(){
+    return vector <Point> {this->a, this->b};
+};
+
+void StraightSegment::stretchNcontract(double increment, char freezePoint){
+    double factor = (this->absValue + increment)/this->absValue;
+    vector<double> oldA = this->a.getCoords();
+    vector<double> oldB = this->b.getCoords();
+    if (freezePoint == 'a'){
+        Vector3D vec = Vector3D(oldB, oldA);
+        vec = vec * factor;
+        vector <double> vTrans = vec.getVector();
+        this->a = Point(0+oldA[0], 0+oldA[1], 0+oldA[2]);
+        this->b = Point(vTrans[0]+oldA[0], vTrans[1]+oldA[1], vTrans[2]+oldA[2]);
+        this->absValue = Vector3D(this->a.getCoords(), this->b.getCoords()).magnitude();
+    } else if (freezePoint == 'b'){
+        Vector3D vec = Vector3D(oldA, oldB);
+        vec = vec * factor;
+        vector <double> vTrans = vec.getVector();
+        this->a = Point(vTrans[0]+oldB[0], vTrans[1]+oldB[1], vTrans[2]+oldB[2]);
+        this->b = Point(0+oldB[0], 0+oldB[1], 0+oldB[2]);
+        this->absValue = Vector3D(this->a.getCoords(), this->b.getCoords()).magnitude();
+    } else{
+        cout << "stretchNcontract method of StraightSegment." << endl;
+        exit(0);
+    }
 }
-
-void Vector3D::setVector(vector<double> pointA, vector<double> pointB){
-    this->x_a = pointA[0];
-    this->x_b = pointB[0];
-    this->s_i = this->x_a - this->x_b;
-    this->y_a = pointA[1];
-    this->y_b = pointB[1];
-    this->s_j = this->y_a - this->y_b;
-    this->z_a = pointA[2];
-    this->z_b = pointB[2];
-    this->s_k = this->z_a - this->z_b;
-};
-
-Vector3D::~Vector3D(){
-    x_a = 0.0;
-    x_b = 0.0;
-    y_a = 0.0;
-    y_b = 0.0;
-    z_a = 0.0;
-    z_b = 0.0;
-    s_i = 0.0;
-    s_j = 0.0;
-    s_k = 0.0;
-};
-
-double Vector3D::magnitude(){
-    double norm = pow(this->s_i, 2) + pow(this->s_j, 2) + pow(this->s_k, 2);
-    return sqrt(norm);
-};
-
-vector <double> Vector3D::getVector(){
-    return vector <double> {this->s_i, this->s_j, this->s_k};
-};
-
-Vector3D Vector3D::normalize(){
-    Vector3D v = *this;
-    double mag = 1/this->magnitude();
-    return Vector3D(vector <double> {this->s_i * mag, this->s_j * mag, this->s_k * mag});
-};
-
-Vector3D Vector3D::conjugate(){
-    Vector3D v = *this;
-    double mag = -1.0;
-    return Vector3D(vector <double> {this->s_i * mag, this->s_j * mag, this->s_k * mag});
-};
-
-Vector3D Vector3D::operator/ (double mag){
-    Vector3D v = *this;
-    return Vector3D(vector <double> {this->s_i / mag, this->s_j / mag, this->s_k / mag});
-};
-
-Vector3D Vector3D::operator* (double mag){
-    Vector3D v = *this;
-    return Vector3D(vector <double> {this->s_i * mag, this->s_j * mag, this->s_k * mag});
-};
-
-Vector3D Vector3D::crossProduct(Vector3D vectorB){
-    Vector3D v = *this;
-    vector < double > b = vectorB.getVector();
-    return Vector3D(vector <double> {(this->s_j * b[2]) - (this->s_k * b[1]), (this->s_k * b[0]) - (this->s_i * b[2]), (this->s_i *b[1]) - (b[0] * this->s_j)});
-};
-
-double Vector3D::dotProduct(Vector3D vectorB){
-    Vector3D v = *this;
-    vector < double > b = vectorB.getVector();
-    double r = double (this->s_i * b[0] + this->s_j * b[1] + this->s_k * b[2]);
-    return r;
-};
-
-Vector3D Vector3D::operator+ (Vector3D vectorB){
-    Vector3D v = *this;
-    vector < double > b = vectorB.getVector();
-    return Vector3D(vector <double> {this->s_i + b[0], this->s_j + b[1], this->s_k + b[2]});
-};
-
-Vector3D Vector3D::operator-(Vector3D vectorB){
-    Vector3D v = *this;
-    return this->operator+(vectorB.conjugate());
-};
-
-double Vector3D::angle(Vector3D vectorB, char unit){
-    double tetha;
-
-    tetha = acos( this->dotProduct(vectorB) / ( vectorB.magnitude() * this->magnitude() ) );
-    if (unit == 'd'){
-        return (tetha * 180) / M_PI;
-    } else {
-        return tetha;
-    };
-        
-};
-
-double Vector3D::axisValue(char unitVector){
-    if (unitVector == 'i' || unitVector == 'x'){
-        return this->s_i;
-    } else if (unitVector == 'j' || unitVector == 'y'){
-        return this->s_j;
-    } else if (unitVector == 'k' || unitVector == 'z'){
-        return this->s_k;
-    } else {
-        return 0.0;
-    };
-};
-
-// Quaternion class //
-
-Quaternion::Quaternion(double u, vector <double> vectorA, vector <double> vectorB = {0.0, 0.0, 0.0}){
-    Quaternion q = *this;
-    this->u = u;
-    this->s_i = vectorA[0] - vectorB[0];
-    this->s_j = vectorA[0] - vectorB[0];
-    this->s_k = vectorA[0] - vectorB[0];
-};
-
-Quaternion::~Quaternion(){
-    u = 0.0;
-    s_i = 0.0;
-    s_j = 0.0;
-    s_k = 0.0;
-};
-
-double Quaternion::magnitude(){
-    double norm = pow(this->u, 2) + pow(this->s_i, 2) + pow(this->s_j, 2) + pow(this->s_k, 2);
-    return sqrt(norm);
-};
-
-void Quaternion::show(){
-    cout << "q = " << this->u << " + " << this->s_i << "i +" << this->s_j << "j +" << this->s_k << "k" << endl;
-}
-
-vector <double> Quaternion::getQuaternion(){
-    return vector <double> {this->u, this->s_i, this->s_j, this->s_k};
-};
-
