@@ -17,14 +17,15 @@
 #include "berny/Hessian.hpp"
 #include "chemicalUnits/SupraMolecule.hpp"
 #include "math/Vectors.hpp"
-/*
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/pytypes.h>
 namespace py = pybind11;
-*/
+
 using namespace std;
 
+/*
 int main(int argc, char **argv){
     Point a = Point(1, 2, 3);
     Point b = Point(3, 2, 1);
@@ -35,8 +36,9 @@ int main(int argc, char **argv){
 
     return 0;
 };
+*/
 
-/*
+
 PYBIND11_MODULE(MoleKing_util, m) {
     
     py::class_<PeriodicTable>(m, "PeriodicTable", "This class creates a virtual Periodic Table.")
@@ -216,6 +218,6 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("show", &Matrix::print)
         .def("__str__", &Matrix::toStr);
 };
-*/
+
 
 
