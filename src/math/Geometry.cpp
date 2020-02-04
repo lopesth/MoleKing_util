@@ -296,8 +296,15 @@ vector <Point> Angle::getPoints(){
 };
 
 void Angle::increaseNdecrease(double increment, char freezePoint){
-
-
+    Vector3D r1 = Vector3D(this->a.getCoords(), this->b.getCoords());
+    Vector3D r2 = Vector3D(this->c.getCoords(), this->b.getCoords());
+    Vector3D norm = r1.crossProduct(r2);
+    if (freezePoint == 'a'){
+        this->a.rotationVector(this->absValue, norm);
+    } else {
+        this->c.rotationVector(this->absValue, norm);
+    }
+    this->calcAbs();
 };
 
 // Torsion class //
@@ -336,6 +343,13 @@ vector <Point> Torsion::getPoints(){
 };
 
 void Torsion::increaseNdecrease(double increment, vector <char> freezePoints){
-    
+    Vector3D r = Vector3D(this->b.getCoords(), this->c.getCoords());
+    vector <char> opt1 = {'a', 'b', 'c'};
+    if (freezePoints == opt1){
+        this->d.rotationVector(this->absValue+increment, r);
+    } else {
+        this->a.rotationVector(this->absValue+increment, r);
+    };
+    this->calcAbs();
 };
 
