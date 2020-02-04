@@ -23,8 +23,8 @@ class Atom{
     double atomicRadio;
 
     public:
-    Atom(int atomicNumber, double x, double y, double z, bool freezeCode_);
-    Atom(string atomicSymbol, double x, double y, double z, bool freezeCode_);
+    Atom(int atomicNumber, double x, double y, double z, bool freezeCode_ = '0');
+    Atom(string atomicSymbol, double x, double y, double z, bool freezeCode_ = '0');
     double getAtomicMass();
     string getAtomicSymbol();
     int getAtomicNumber();
@@ -45,6 +45,7 @@ class Atom{
     bool operator>(Atom atom);
     bool operator<=(Atom atom);
     bool operator>=(Atom atom);
+    Point getPoint();
     string toStr();
     int comp(Atom atom);
 
@@ -75,6 +76,7 @@ class ChargePoint{
     bool operator>(ChargePoint chargePoint);
     bool operator<=(ChargePoint chargePoint);
     bool operator>=(ChargePoint chargePoint);
+    Point getPoint();
     string toStr();
     int comp(ChargePoint chargePoint);
 };

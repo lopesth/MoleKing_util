@@ -55,7 +55,8 @@ void Molecule::getBonds(){
             double radii = 1.3 * (table.getCovalentRadii(symbol1) + table.getCovalentRadii(symbol2));
             if (length <= radii){
                 if (i != j){
-                    this->bonds.push_back(vector <int> {i, j});
+                    StraightSegment bond = StraightSegment(this->molecule[i].getPoint(), this->molecule[j].getPoint());
+                    this->bonds.push_back(pair < vector <int> , StraightSegment > {vector <int> {i,j}, bond});
                 };
             };
         };
@@ -64,26 +65,30 @@ void Molecule::getBonds(){
 
 void Molecule::getAngles(){
     for (int i = 0; i < (int) bonds.size(); i++){
-        int atom1 = this->bonds[i][0];
-        int atom2 = this->bonds[i][1];
+        int atom1 = this->bonds[i].first[0];
+        int atom2 = this->bonds[i].first[1];
         for (int j = i; j < (int) this->bonds.size(); j++){
-            int atom3 = this->bonds[j][0];
-            int atom4 = this->bonds[j][1];
+            int atom3 = this->bonds[j].first[0];
+            int atom4 = this->bonds[j].first[1];
             if (atom1 == atom3){
                 if (atom2 != atom4){
-                    this->angles.push_back(vector <int> {atom2, atom1, atom4});
+                    Angle angle = Angle(this->molecule[atom2].getPoint(), this->molecule[atom1].getPoint(), this->molecule[atom4].getPoint());
+                    this->angles.push_back(pair < vector <int>, Angle > {vector <int> {atom2, atom1, atom4}, angle});
                 };
             } else if (atom1 == atom4){
                 if (atom2 != atom3){
-                    this->angles.push_back(vector <int> {atom2, atom1, atom3});
+                    Angle angle = Angle(this->molecule[atom2].getPoint(), this->molecule[atom1].getPoint(), this->molecule[atom3].getPoint());
+                    this->angles.push_back(pair < vector <int>, Angle > {vector <int> {atom2, atom1, atom3}, angle});
                 };
             } else if (atom2 == atom3){
                 if (atom1 != atom4){
-                    this->angles.push_back(vector <int> {atom1, atom2, atom4});
+                    Angle angle = Angle(this->molecule[atom1].getPoint(), this->molecule[atom2].getPoint(), this->molecule[atom4].getPoint());
+                    this->angles.push_back(pair < vector <int>, Angle > {vector <int> {atom1, atom2, atom4}, angle});
                 };
             } else if (atom2 == atom4){
                 if (atom1 != atom3){
-                    this->angles.push_back(vector <int> {atom1, atom2, atom3});
+                    Angle angle = Angle(this->molecule[atom1].getPoint(), this->molecule[atom2].getPoint(), this->molecule[atom3].getPoint());
+                    this->angles.push_back(pair < vector <int>, Angle > {vector <int> {atom1, atom2, atom3}, angle});
                 };
             };
         };
@@ -94,25 +99,28 @@ vector <Atom> Molecule::getMoleculeVector(){
     return this->molecule;
 };
 
-
 void Molecule::getDihedrals(){
     for (int i = 0; i < (int) this->angles.size(); i++){
-        int atom1 = this->angles[i][0];
-        int atom2 = this->angles[i][1];
-        int atom3 = this->angles[i][2];
+        int atom1 = this->angles[i].first[0];
+        int atom2 = this->angles[i].first[1];
+        int atom3 = this->angles[i].first[2];
         for (int j = i; j < (int) this->angles.size(); j++){
-            int atom4= this->angles[j][0];
-            int atom5 = this->angles[j][1];
-            int atom6 = this->angles[j][2];
+            int atom4 = this->angles[j].first[0];
+            int atom5 = this->angles[j].first[1];
+            int atom6 = this->angles[j].first[2];
             if (atom2 != atom5){
                 if (atom2 == atom4 && atom5 == atom3){
-                    dihedrals.push_back(vector <int> {atom1, atom2, atom3, atom6});
+                    Torsion dihedral = Torsion(this->molecule[atom1].getPoint(), this->molecule[atom2].getPoint(), this->molecule[atom3].getPoint(), this->molecule[atom6].getPoint());
+                    dihedrals.push_back(pair < vector <int>, Torsion > {vector <int> {atom1, atom2, atom3, atom6}, dihedral});
                 } else if (atom2 == atom4 && atom5 == atom1){
-                    dihedrals.push_back(vector <int> {atom3, atom2, atom1, atom6});
+                    Torsion dihedral = Torsion(this->molecule[atom3].getPoint(), this->molecule[atom2].getPoint(), this->molecule[atom1].getPoint(), this->molecule[atom6].getPoint());
+                    dihedrals.push_back(pair < vector <int>, Torsion > {vector <int> {atom3, atom2, atom1, atom6}, dihedral});
                 } else if (atom2 == atom6 && atom5 == atom3){
-                    dihedrals.push_back(vector <int> {atom1, atom2, atom3, atom4});
+                    Torsion dihedral = Torsion(this->molecule[atom1].getPoint(), this->molecule[atom2].getPoint(), this->molecule[atom3].getPoint(), this->molecule[atom4].getPoint());
+                    dihedrals.push_back(pair < vector <int>, Torsion > {vector <int> {atom1, atom2, atom3, atom4}, dihedral});
                 } else if (atom2 == atom6 && atom5 == atom1){
-                    dihedrals.push_back(vector <int> {atom3, atom2, atom1, atom4});
+                    Torsion dihedral = Torsion(this->molecule[atom3].getPoint(), this->molecule[atom2].getPoint(), this->molecule[atom1].getPoint(), this->molecule[atom4].getPoint());
+                    dihedrals.push_back(pair < vector <int>, Torsion > {vector <int> {atom3, atom2, atom1, atom4}, dihedral});
                 };
             };
         };
@@ -384,37 +392,38 @@ void Molecule::doIRC(){
     this->getDihedrals();
 };
 
-void Molecule::printIRC(){
-    this->doIRC();
-    cout << "Name     Definition        Value" << endl;
-    for (int i = 0; i < (int) this->bonds.size(); i++){
-        cout << "R" << i+1 << "     " << "R(" << this->bonds[i][0]+1 << ", " << this->bonds[i][1]+1 << ")        " << this->bondLength(this->bonds[i][0], this->bonds[i][1]) << endl;
-    };
-    for (int i = 0; i < (int) this->angles.size(); i++){
-        cout << "A" << i+1 << "     " << "A(" << this->angles[i][0]+1 << ", " << this->angles[i][1]+1 << ", " << this->angles[i][2]+1 << ")        " << this->valenceAngle(this->angles[i][0], this->angles[i][1], this->angles[i][2]) << endl;
-    };
-    for (int i = 0; i < (int) this->dihedrals.size(); i++){
-        cout << "D" << i+1 << "     " << "D(" << this->dihedrals[i][0]+1 << ", " << this->dihedrals[i][1]+1 << ", " << this->dihedrals[i][2]+1 << ", " << this->dihedrals[i][3]+1 << ")        " << this->torsion(this->dihedrals[i][0], this->dihedrals[i][1], this->dihedrals[i][2], this->dihedrals[i][3]) << endl;
-    };
-};
-
 vector < vector <int> > Molecule::getIRCBonds(){
-    this->bonds.clear();
-    this->getBonds();
-    return this->bonds;
+    if (this->bonds.size() == 0){
+        this->doIRC();
+    }
+    vector < vector <int> > temp(this->bonds.size());
+    for (int i = 0; i < (int) this->bonds.size(); i++){
+        temp.push_back(this->bonds[i].first);
+    }
+    return temp;
 };
 
 
 vector < vector <int> > Molecule::getIRCAngles(){
-    this->angles.clear();
-    this->getAngles();
-    return this->angles;
+    if (this->angles.size() == 0){
+        this->doIRC();
+    }
+    vector < vector <int> > temp(this->angles.size());
+    for (int i = 0; i < (int) this->angles.size(); i++){
+        temp.push_back(this->angles[i].first);
+    }
+    return temp;
 };
 
 vector < vector <int> > Molecule::getIRCDihedrals(){
-    this->dihedrals.clear();
-    this->getDihedrals();
-    return this->dihedrals;
+    if (this->dihedrals.size() == 0){
+        this->doIRC();
+    }
+    vector < vector <int> > temp(this->dihedrals.size());
+    for (int i = 0; i < (int) this->dihedrals.size(); i++){
+        temp.push_back(this->dihedrals[i].first);
+    }
+    return temp;
 };
 
 vector <Atom> Molecule::moleculeList(){

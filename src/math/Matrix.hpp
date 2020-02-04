@@ -41,7 +41,4 @@ class Matrix{
     string toStr();
 };
 
-
-
-
 #endif /* Matrix_hpp */

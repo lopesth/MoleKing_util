@@ -20,6 +20,10 @@ void ChargePoint::setCharge(double newCharge){
     this->charge = newCharge;
 };
 
+Point ChargePoint::getPoint(){
+    return this->point;
+};
+
 bool ChargePoint::operator==(ChargePoint charge2){
     bool value;
     Point point2 = Point(charge2.getX(), charge2.getY(), charge2.getZ(), 'c');
@@ -139,7 +143,7 @@ string ChargePoint::toStr(){
 
 /* #########    Atom Class    ######### */
 
-Atom::Atom(int atomicNumber, double x, double y, double z, bool freezeCode_ = 0){
+Atom::Atom(int atomicNumber, double x, double y, double z, bool freezeCode_){
     PeriodicTable temp;
     this->atomicNumber = atomicNumber;
     this->atomicSymbol = temp.getSymbol(this->atomicNumber);
@@ -149,7 +153,7 @@ Atom::Atom(int atomicNumber, double x, double y, double z, bool freezeCode_ = 0)
     this->atomicRadio = PeriodicTable().getCovalentRadii(this->atomicSymbol);
 };
 
-Atom::Atom(string atomicSymbol, double x, double y, double z, bool freezeCode_ = 0){
+Atom::Atom(string atomicSymbol, double x, double y, double z, bool freezeCode_){
     PeriodicTable temp;
     string symbol(atomicSymbol);
     this->atomicSymbol = symbol;
@@ -162,6 +166,10 @@ Atom::Atom(string atomicSymbol, double x, double y, double z, bool freezeCode_ =
 
 double Atom::getAtomicMass(){
     return this->atomicMass;
+};
+
+Point Atom::getPoint(){
+    return point;
 };
 
 double Atom::getAtomicRadio(){

@@ -8,15 +8,19 @@
 
 #include <iostream>
 #include <string>
+#include <math.h>
+
 #include "math/MassCenter.hpp"
 #include "chemicalUnits/AtomicScale.hpp"
 #include "math/Geometry.hpp"
 #include "math/Matrix.hpp"
-#include <math.h>
 #include "chemicalUnits/Molecule.hpp"
 #include "berny/Hessian.hpp"
 #include "chemicalUnits/SupraMolecule.hpp"
 #include "math/Vectors.hpp"
+
+
+
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -25,18 +29,18 @@ namespace py = pybind11;
 
 using namespace std;
 
-/*
+
 int main(int argc, char **argv){
+    /*
     Point a = Point(1, 2, 3);
     Point b = Point(3, 2, 1);
     StraightSegment ab = StraightSegment(a, b);
     cout << ab.getPoints()[0].toStr() << " " << ab.getPoints()[1].toStr() << " " << ab.getValue() << endl;
     ab.stretchNcontract(-1.1, 'b');
     cout << ab.getPoints()[0].toStr() << " " << ab.getPoints()[1].toStr() << " " << ab.getValue() << endl;
-
+    */
     return 0;
 };
-*/
 
 
 PYBIND11_MODULE(MoleKing_util, m) {

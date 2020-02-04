@@ -26,9 +26,9 @@ private:
     typedef vector<ChargePoint> ChargeList;
     ChargeList chargePoint;
     typedef vector < vector <int> > VectorsInt;
-    VectorsInt bonds;
-    VectorsInt angles;
-    VectorsInt dihedrals;
+    vector < pair < vector <int>, StraightSegment > > bonds;
+    vector < pair < vector <int>, Angle > > angles;
+    vector < pair < vector <int>, Torsion > > dihedrals;
     int multiplicity, charge;
     double angleToSpinInAref(int ref, char axisName);
     void getBonds();
@@ -72,10 +72,9 @@ public:
     double torsion(int atomN1, int atomN2, int atomN3, int atomN4);
     void doIRC();
     vector <int> molecularAxis();
-    void printIRC();
-    VectorsInt getIRCBonds();
-    VectorsInt getIRCAngles();
-    VectorsInt getIRCDihedrals();
+    vector < vector <int> > getIRCBonds();
+    vector < vector <int> > getIRCAngles();
+    vector < vector <int> > getIRCDihedrals();
     Atom operator[](int index);
     iterator begin();
     iterator end();
