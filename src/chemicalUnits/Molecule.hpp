@@ -50,6 +50,7 @@ public:
     void addAtom(Atom atom);
     vector <string> getAtom(int number, bool symbol = 0);
     Atom getAtomObj(int number);
+    ChargePoint getChargePointsObj(int number);
     void setCharge(int charge);
     int getCharge();
     long getSize();
@@ -85,6 +86,7 @@ public:
     bool operator==(Molecule mol);
     bool operator!=(Molecule mol);
     void removeElement(string element);
+    Molecule copy();
 
 };
 
