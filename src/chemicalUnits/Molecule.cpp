@@ -200,6 +200,10 @@ Atom Molecule::getAtomObj(int number){
     return this->molecule[number];
 }
 
+ChargePoint Molecule::getChargePointsObj(int number){
+    return this->chargePoint[number];
+}
+
 void Molecule::setCharge(int charge){
     this->charge = charge;
 };
@@ -518,4 +522,15 @@ void Molecule::removeElement(string element){
             this->molecule.erase(this->molecule.begin() + i);
         };
     };
+};
+
+Molecule Molecule::copy(){
+    Molecule temp = Molecule();
+    for (int i = 0; i < (int) this->molecule.size(); i++){
+        temp.addAtom(this->molecule[i]);
+    };
+    for (int i = 0; i < (int) this->chargePoint.size(); i++){
+        temp.addChargePoints(this->chargePoint[i]);
+    };
+    return temp;
 };
