@@ -136,7 +136,6 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("valenceAngle", &Molecule::valenceAngle)
         .def("torsion", &Molecule::torsion)
         .def("doIRC", &Molecule::doIRC)
-        .def("printIRC", &Molecule::printIRC)
         .def("getIRCBonds", &Molecule::getIRCBonds)
         .def("getIRCAngles", &Molecule::getIRCAngles)
         .def("getIRCDihedrals", &Molecule::getIRCDihedrals)
