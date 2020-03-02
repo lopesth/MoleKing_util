@@ -1,0 +1,297 @@
+//
+//  G16Process.cpp
+//  MoleKing_util
+//
+//  Created by Thiago Lopes on 01/03/20.
+//  Copyright © 2020 Laboratório de Estrutura Eletrônica e Dinâmica Molecular. All rights reserved.
+//
+
+#include "G16Process.hpp"
+
+vector <string> splitString(string lineSTR, char splitTarget){
+    vector <string> splittedLine;
+    string temp;
+    vector<char> lineVector(lineSTR.begin(),lineSTR.end());
+    for (int i = 0; i < lineVector.size(); i++){
+        if (lineVector[i] != splitTarget){
+            temp = temp + lineVector[i];
+        } else {
+            if (temp != ""){
+                splittedLine.push_back(temp);
+                temp = "";
+            };
+        };
+    };
+    if (temp != "" || temp != " "){
+        splittedLine.push_back(temp);
+    }
+    return splittedLine;
+};
+
+/*
+----------------------- G16LOGfile -----------------------
+*/
+
+G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
+    ifstream arq;
+    bool optAsw = 0, stateAsw = 0;
+    arq.open(filePath, ifstream::in);
+    string lineSTR;
+    regex scf_re("(.*)SCF Done:(.*)");
+    regex opt_re("(.*) opt (.*)");
+    regex size_re("(.*)NAtoms=(.*)");
+    regex states_re("(.*)Excitation energies and oscillator strengths:");
+    regex omo_re("(.*)occ. eigenvalues(.*)");
+    regex umo_re("(.*)virt. eigenvalues(.*)");
+    vector <string> fileLines;
+    while(!arq.eof()){
+        getline(arq, lineSTR);
+        fileLines.push_back(lineSTR);
+        if (regex_match(lineSTR, opt_re)){
+            optAsw = 1;
+        } else if (regex_match(lineSTR, states_re)){
+            stateAsw = 1;
+        };
+    };
+    arq.close();
+    regex molecule_re1("(.*)Symbolic Z-matrix:");
+    regex molecule_re2("(.*)Standard orientation:(.*)");
+    int startMoleculeRef = 0;
+    for (int i = 0; i < fileLines.size(); i++){
+        if (regex_match(fileLines[i], scf_re)){
+            vector <string> splittedLine = splitString(fileLines[i], ' ');
+            this->energy = stod(splittedLine[4]);
+        } else if (regex_match(fileLines[i], size_re)) {
+            vector <string> splittedLine = splitString(fileLines[i], ' ');
+            this->size = stoi(splittedLine[1]);
+        } else if (regex_match(fileLines[i], omo_re)){
+            vector <string> splittedLine = splitString(fileLines[i], ' ');
+            for (int j = 4; j < splittedLine.size(); j++){
+                this->occOrb.push_back(stod(splittedLine[j]));
+            };
+        } else if (regex_match(fileLines[i], umo_re)){
+            vector <string> splittedLine = splitString(fileLines[i], ' ');
+            for (int j = 4; j < splittedLine.size(); j++){
+                this->virtOrb.push_back(stod(splittedLine[j]));
+            };
+        } else if (!optAsw){
+            if (regex_match(fileLines[i], molecule_re1)) {
+                startMoleculeRef = i+2;
+            };
+        } else if (optAsw){
+            if (regex_match(fileLines[i], molecule_re2)) {
+                startMoleculeRef = i+5;
+            };
+        };
+    };
+    int endMoleculeRef = startMoleculeRef + this->size;
+    for (int i = startMoleculeRef; i < endMoleculeRef; i++){
+        vector <string> molLine = splitString(fileLines[i], ' ');
+        this->molecule.addAtom(molLine[0], stod(molLine[1]), stod(molLine[2]), stod(molLine[3]));
+    };
+    cout << this->molecule.toStr() << endl;
+
+    if (polarAsw){
+        regex dipole_re("(.*)Electric dipole moment(.*)input orientation(.*)");
+        regex alpha_re("(.*)Dipole polarizability, Alpha(.*)input orientation(.*)");
+        regex beta_re("(.*)First dipole hyperpolarizability, Beta(.*)input orientation(.*)");
+        regex gamma_re("(.*)Second dipole hyperpolarizability, Gamma(.*)input orientation(.*)");
+        int dipole_num_start = 0, dipole_num_end = 0;
+        int alpha_num_start = 0, alpha_num_end = 0, beta_num_start = 0, beta_num_end = 0, gamma_num_start = 0, gamma_num_end = 0;
+        for (int i = 0; i < fileLines.size(); i++){
+            if (regex_match(fileLines[i], dipole_re)){
+                dipole_num_start = i+3;
+                dipole_num_end = dipole_num_start + 4;
+            } else if (regex_match(fileLines[i], alpha_re)){
+                alpha_num_start = i+2;
+            } else if (alpha_num_end == 0 && alpha_num_start != 0){
+                if (fileLines[i] == ""){
+                    alpha_num_end = i;
+                };
+            } else if (regex_match(fileLines[i], beta_re)){
+                beta_num_start = i+4;
+            } else if (beta_num_end == 0 && beta_num_start != 0){
+                if (fileLines[i] == ""){
+                    beta_num_end = i;
+                };
+            } else if (regex_match(fileLines[i], gamma_re)){
+                gamma_num_start = i+4;
+            } else if (gamma_num_end == 0 && gamma_num_start != 0){
+                if (fileLines[i] == ""){
+                    gamma_num_end = i;
+                };
+            };
+        };
+        for (int i = dipole_num_start; i < dipole_num_end; i++){
+            vector <string> dipLine = splitString(fileLines[i], ' ');
+            vector <string> sValue = splitString(dipLine[2], 'D');
+            this->polarValues.setDipole(dipLine[0], stod(sValue[0] + "e" + sValue[1]));
+        };
+        regex a_re("(.*)Alpha(.*)");
+        string a = "";
+        for (int i = alpha_num_start; i < alpha_num_end; i++){
+            if (regex_match(fileLines[i], a_re)){
+                a = fileLines[i];
+            } else if(a != ""){
+                vector <string> alpLine = splitString(fileLines[i], ' ');
+                if (alpLine[2] != "esu)"){
+                    vector <string> aValue = splitString(alpLine[2], 'D');
+                    this->polarValues.setAlpha(a, aValue[0], stod(aValue[0] + "e" + aValue[1]));
+                    cout << a << " " << alpLine[0] << " " << stod(aValue[0] + "e" + aValue[1]) << endl;
+                };
+            };
+        };
+        
+        
+    };
+    /*
+    if (stateAsw){
+        
+    };
+    */
+    
+    fileLines.clear();
+};
+
+/*
+----------------------- PolarValues -----------------------
+*/
+
+PolarValues::PolarValues(){
+};
+
+void PolarValues::setDipole(string name, double value){
+    this->dName.push_back(name);
+    this->dValue.push_back(value);
+};
+
+void PolarValues::setAlpha(string eleName, string name, double value){
+    int n = -1;
+    for (int i = 0; i < this->aName.size(); i++){
+        if (eleName == aName[i].first){
+            n = i;
+        };
+    };
+    if (n != -1){
+        vector<string> tN = this->aName.at(n).second;
+        vector<double> tV = this->aValue.at(n).second;
+        tN.push_back(name);
+        tV.push_back(value);
+        pair< string, vector<string>> tempN = {eleName, tN};
+        pair< string, vector<double>> tempV = {eleName, tV};
+        this->aName.at(n) = tempN;
+        this->aValue.at(n) = tempV;
+    } else if (n == -1){
+        pair< string, vector<string>> tempN = {eleName, vector<string>(1, name)};
+        pair< string, vector<double>> tempV = {eleName, vector<double>(1, value)};
+        this->aName.push_back(tempN);
+        this->aValue.push_back(tempV);
+    };
+};
+
+void PolarValues::setBeta(string eleName, string name, double value){
+    int n = -1;
+    for (int i = 0; i < this->bName.size(); i++){
+        if (eleName == bName[i].first){
+            n = i;
+        };
+    };
+    if (n != -1){
+        vector<string> tN = this->bName.at(n).second;
+        vector<double> tV = this->bValue.at(n).second;
+        tN.push_back(name);
+        tV.push_back(value);
+        pair< string, vector<string>> tempN = {eleName, tN};
+        pair< string, vector<double>> tempV = {eleName, tV};
+        this->bName.at(n) = tempN;
+        this->bValue.at(n) = tempV;
+    } else if (n == -1){
+        pair< string, vector<string>> tempN = {eleName, vector<string>(1, name)};
+        pair< string, vector<double>> tempV = {eleName, vector<double>(1, value)};
+        this->bName.push_back(tempN);
+        this->bValue.push_back(tempV);
+    };
+};
+
+void PolarValues::setGamma(string eleName, string name, double value){
+    int n = -1;
+    for (int i = 0; i < this->gName.size(); i++){
+        if (eleName == gName[i].first){
+            n = i;
+        };
+    };
+    if (n != -1){
+        vector<string> tN = this->gName.at(n).second;
+        vector<double> tV = this->gValue.at(n).second;
+        tN.push_back(name);
+        tV.push_back(value);
+        pair< string, vector<string>> tempN = {eleName, tN};
+        pair< string, vector<double>> tempV = {eleName, tV};
+        this->gName.at(n) = tempN;
+        this->gValue.at(n) = tempV;
+    } else if (n == -1){
+        pair< string, vector<string>> tempN = {eleName, vector<string>(1, name)};
+        pair< string, vector<double>> tempV = {eleName, vector<double>(1, value)};
+        this->gName.push_back(tempN);
+        this->gValue.push_back(tempV);
+    };
+};
+
+double PolarValues::getDipole(string name){
+    int n = 0;
+    for (int i = 0; i < this->dName.size(); i++){
+        if (this->dName[i] == name){
+            n = i;
+        };
+    };
+    return this->dValue[n];
+};
+
+double PolarValues::getAlpha(string eleName, string name){
+    int n = 0, m = 0;
+    for (int i = 0; i < this->aName.size(); i++){
+        if (this->aName[i].first == eleName){
+            n = i;
+        };
+    };
+    for (int i = 0; i < this->aName[i].second.size(); i++){
+        if (this->aName[i].second[i] == name){
+            m = i;
+        };
+    }
+    return this->aValue[n].second[m];
+};
+
+double PolarValues::getBeta(string eleName, string name){
+     int n = 0, m = 0;
+    for (int i = 0; i < this->bName.size(); i++){
+        if (this->bName[i].first == eleName){
+            n = i;
+        };
+    };
+    for (int i = 0; i < this->bName[i].second.size(); i++){
+        if (this->bName[i].second[i] == name){
+            m = i;
+        };
+    }
+    return this->bValue[n].second[m];
+};
+
+double PolarValues::getGamma(string eleName, string name){
+     int n = 0, m = 0;
+     for (int i = 0; i < this->gName.size(); i++){
+         if (this->gName[i].first == eleName){
+             n = i;
+         };
+     };
+     for (int i = 0; i < this->gName[i].second.size(); i++){
+         if (this->gName[i].second[i] == name){
+             m = i;
+         };
+     }
+     return this->gValue[n].second[m];
+};
+
+/*
+----------------------- ExcStates -----------------------
+*/

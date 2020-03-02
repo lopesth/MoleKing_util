@@ -474,11 +474,8 @@ string Molecule::toStr(){
             };
         };
     };
-    for (int j = 0; j < (int) s.size(); j++){
-        cout << s[j].first << " " << s[j].second << endl;
-    };
     for (int i = 0; i < (int) s.size(); i++){
-        result = result + s[i].first + to_string(s[i].second);
+        result = result + s[i].first + "_{"  + to_string(s[i].second) + "}";
     };
     if (this->chargePoint.size() != 0){
         result = result + " with " + to_string(this->chargePoint.size()) + " charge points";
