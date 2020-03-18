@@ -84,5 +84,10 @@ public:
     
     double scfEnergy();
     Molecule getMolecule();
+    double getDipole(string name);
+    double getAlpha(string eleName, string name);
+    double getBeta(string eleName, string name);
+    double getGamma(string eleName, string name);
+    
     
 };

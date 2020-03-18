@@ -89,7 +89,6 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
         vector <string> molLine = splitString(fileLines[i], ' ');
         this->molecule.addAtom(molLine[0], stod(molLine[1]), stod(molLine[2]), stod(molLine[3]));
     };
-    cout << this->molecule.toStr() << endl;
 
     if (polarAsw){
         regex dipole_re("(.*)Electric dipole moment(.*)input orientation(.*)");
@@ -136,21 +135,40 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
                 vector <string> alpLine = splitString(fileLines[i], ' ');
                 if (alpLine[2] != "esu)"){
                     vector <string> aValue = splitString(alpLine[2], 'D');
-                    this->polarValues.setAlpha(a, aValue[0], stod(aValue[0] + "e" + aValue[1]));
-                    cout << a << " " << alpLine[0] << " " << stod(aValue[0] + "e" + aValue[1]) << endl;
+                    this->polarValues.setAlpha(splitString(a, ':')[0].erase(0, 1), aValue[0], stod(aValue[0] + "e" + aValue[1]));
                 };
             };
         };
         
         
     };
-    /*
-    if (stateAsw){
-        
-    };
-    */
-    
+
     fileLines.clear();
+};
+
+
+double G16LOGfile::scfEnergy(){
+    return this->energy;
+};
+
+Molecule G16LOGfile::getMolecule(){
+    return this->molecule;
+};
+
+double G16LOGfile::getDipole(string name){
+    return this->polarValues.getDipole(name);
+};
+
+double G16LOGfile::getAlpha(string eleName, string name){
+    return this->polarValues.getAlpha(eleName, name);
+};
+
+double G16LOGfile::getBeta(string eleName, string name){
+    return this->polarValues.getBeta(eleName, name);
+};
+
+double G16LOGfile::getGamma(string eleName, string name){
+    return this->polarValues.getGamma(eleName, name);
 };
 
 /*
@@ -255,10 +273,10 @@ double PolarValues::getAlpha(string eleName, string name){
         };
     };
     for (int i = 0; i < this->aName[i].second.size(); i++){
-        if (this->aName[i].second[i] == name){
+        if (this->aName[n].second[i] == name){
             m = i;
         };
-    }
+    };
     return this->aValue[n].second[m];
 };
 
@@ -270,7 +288,7 @@ double PolarValues::getBeta(string eleName, string name){
         };
     };
     for (int i = 0; i < this->bName[i].second.size(); i++){
-        if (this->bName[i].second[i] == name){
+        if (this->bName[n].second[i] == name){
             m = i;
         };
     }
@@ -285,7 +303,7 @@ double PolarValues::getGamma(string eleName, string name){
          };
      };
      for (int i = 0; i < this->gName[i].second.size(); i++){
-         if (this->gName[i].second[i] == name){
+         if (this->gName[n].second[i] == name){
              m = i;
          };
      }
