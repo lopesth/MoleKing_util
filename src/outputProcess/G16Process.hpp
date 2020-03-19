@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <string>
 #include <fstream>
-#include "Vectors.hpp"
+#include "../math/Vectors.hpp"
 #include <iostream>
 #include <regex>
 #include "../chemicalUnits/Molecule.hpp"
