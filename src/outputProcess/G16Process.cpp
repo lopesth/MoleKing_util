@@ -34,28 +34,45 @@ vector <string> splitString(string lineSTR, char splitTarget){
 
 G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
     ifstream arq;
-    bool optAsw = 0, stateAsw = 0;
+    this->polarAsw = polarAsw;
     arq.open(filePath, ifstream::in);
     string lineSTR;
-    regex scf_re("(.*)SCF Done:(.*)");
-    regex opt_re("(.*) opt (.*)");
-    regex size_re("(.*)NAtoms=(.*)");
     regex states_re("(.*)Excitation energies and oscillator strengths:");
-    regex omo_re("(.*)occ. eigenvalues(.*)");
-    regex umo_re("(.*)virt. eigenvalues(.*)");
+    regex opt_re("(.*) opt (.*)");
+
     vector <string> fileLines;
     while(!arq.eof()){
         getline(arq, lineSTR);
         fileLines.push_back(lineSTR);
         if (regex_match(lineSTR, opt_re)){
-            optAsw = 1;
+            this->optAsw = 1;
         } else if (regex_match(lineSTR, states_re)){
-            stateAsw = 1;
+            this->stateAsw = 1;
         };
     };
     arq.close();
+    this->molConstructor(fileLines);
+    if (this->polarAsw){
+        this->makePolar(fileLines);
+    };
+    if (this->stateAsw) {
+        this->makeStates(fileLines);
+    };
+
+    fileLines.clear();
+};
+
+void G16LOGfile::makeStates(vector <string> fileLines){
+    cout << "none" << endl;
+}
+
+void G16LOGfile::molConstructor(vector <string> fileLines){
     regex molecule_re1("(.*)Symbolic Z-matrix:");
     regex molecule_re2("(.*)Standard orientation:(.*)");
+    regex scf_re("(.*)SCF Done:(.*)");
+    regex size_re("(.*)NAtoms=(.*)");
+    regex omo_re("(.*)occ. eigenvalues(.*)");
+    regex umo_re("(.*)virt. eigenvalues(.*)");
     int startMoleculeRef = 0;
     for (int i = 0; i < fileLines.size(); i++){
         if (regex_match(fileLines[i], scf_re)){
@@ -74,11 +91,11 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
             for (int j = 4; j < splittedLine.size(); j++){
                 this->virtOrb.push_back(stod(splittedLine[j]));
             };
-        } else if (!optAsw){
+        } else if (!this->optAsw){
             if (regex_match(fileLines[i], molecule_re1)) {
                 startMoleculeRef = i+2;
             };
-        } else if (optAsw){
+        } else if (this->optAsw){
             if (regex_match(fileLines[i], molecule_re2)) {
                 startMoleculeRef = i+5;
             };
@@ -89,91 +106,87 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
         vector <string> molLine = splitString(fileLines[i], ' ');
         this->molecule.addAtom(molLine[0], stod(molLine[1]), stod(molLine[2]), stod(molLine[3]));
     };
+}
 
-    if (polarAsw){
-        regex dipole_re("(.*)Electric dipole moment(.*)input orientation(.*)");
-        regex alpha_re("(.*)Dipole polarizability, Alpha(.*)input orientation(.*)");
-        regex beta_re("(.*)First dipole hyperpolarizability, Beta(.*)input orientation(.*)");
-        regex gamma_re("(.*)Second dipole hyperpolarizability, Gamma(.*)input orientation(.*)");
-        int dipole_num_start = 0, dipole_num_end = 0;
-        int alpha_num_start = 0, alpha_num_end = 0, beta_num_start = 0, beta_num_end = 0, gamma_num_start = 0, gamma_num_end = 0;
-        for (int i = 0; i < fileLines.size(); i++){
-            if (regex_match(fileLines[i], dipole_re)){
-                dipole_num_start = i+3;
-                dipole_num_end = dipole_num_start + 4;
-            } else if (regex_match(fileLines[i], alpha_re)){
-                alpha_num_start = i+2;
-            } else if (alpha_num_end == 0 && alpha_num_start != 0){
-                if (fileLines[i] == ""){
-                    alpha_num_end = i;
-                };
-            } else if (regex_match(fileLines[i], beta_re)){
-                beta_num_start = i+4;
-            } else if (beta_num_end == 0 && beta_num_start != 0){
-                if (fileLines[i] == ""){
-                    beta_num_end = i;
-                };
-            } else if (regex_match(fileLines[i], gamma_re)){
-                gamma_num_start = i+4;
-            } else if (gamma_num_end == 0 && gamma_num_start != 0){
-                if (fileLines[i] == ""){
-                    gamma_num_end = i;
-                };
+void G16LOGfile::makePolar(vector <string> fileLines){
+    regex dipole_re("(.*)Electric dipole moment(.*)input orientation(.*)");
+    regex alpha_re("(.*)Dipole polarizability, Alpha(.*)input orientation(.*)");
+    regex beta_re("(.*)First dipole hyperpolarizability, Beta(.*)input orientation(.*)");
+    regex gamma_re("(.*)Second dipole hyperpolarizability, Gamma(.*)input orientation(.*)");
+    int dipole_num_start = 0, dipole_num_end = 0;
+    int alpha_num_start = 0, alpha_num_end = 0, beta_num_start = 0, beta_num_end = 0, gamma_num_start = 0, gamma_num_end = 0;
+    for (int i = 0; i < fileLines.size(); i++){
+        if (regex_match(fileLines[i], dipole_re)){
+            dipole_num_start = i+3;
+            dipole_num_end = dipole_num_start + 4;
+        } else if (regex_match(fileLines[i], alpha_re)){
+            alpha_num_start = i+2;
+        } else if (alpha_num_end == 0 && alpha_num_start != 0){
+            if (fileLines[i] == ""){
+                alpha_num_end = i;
+            };
+        } else if (regex_match(fileLines[i], beta_re)){
+            beta_num_start = i+4;
+        } else if (beta_num_end == 0 && beta_num_start != 0){
+            if (fileLines[i] == ""){
+                beta_num_end = i;
+            };
+        } else if (regex_match(fileLines[i], gamma_re)){
+            gamma_num_start = i+4;
+        } else if (gamma_num_end == 0 && gamma_num_start != 0){
+            if (fileLines[i] == ""){
+                gamma_num_end = i;
             };
         };
-        for (int i = dipole_num_start; i < dipole_num_end; i++){
-            vector <string> dipLine = splitString(fileLines[i], ' ');
-            vector <string> sValue = splitString(dipLine[2], 'D');
-            this->polarValues.setDipole(dipLine[0], stod(sValue[0] + "e" + sValue[1]));
-        };
-        regex a_re("(.*)Alpha(.*)");
-        string a = "";
-        for (int i = alpha_num_start; i < alpha_num_end; i++){
-            if (regex_match(fileLines[i], a_re)){
-                a = fileLines[i];
-            } else if(a != ""){
-                vector <string> alpLine = splitString(fileLines[i], ' ');
-                if (alpLine[2] != "esu)"){
-                    vector <string> aValue = splitString(alpLine[2], 'D');
-                    this->polarValues.setAlpha(splitString(a, ':')[0].erase(0, 1), alpLine[0], stod(aValue[0] + "e" + aValue[1]));
-                };
-            };
-        };
-        regex b_re("(.*)Beta(.*)");
-        string b = "";
-        for (int i = beta_num_start; i < beta_num_end; i++){
-            if (regex_match(fileLines[i], b_re)){
-                b = fileLines[i];
-            } else if(b != ""){
-                vector <string> betaLine = splitString(fileLines[i], ' ');
-                if (betaLine[1] == "(z)"){
-                    vector <string> bValue = splitString(betaLine[3], 'D');
-                    this->polarValues.setBeta(splitString(b, ':')[0].erase(0, 1), "|| (z)", stod(bValue[0] + "e" + bValue[1]));
-                } else if (betaLine[2] != "esu)"){
-                    vector <string> bValue = splitString(betaLine[2], 'D');
-                    this->polarValues.setBeta(splitString(b, ':')[0].erase(0, 1), betaLine[0], stod(bValue[0] + "e" + bValue[1]));
-                };
-            };
-        };
-        regex g_re("(.*)Gamma(.*)");
-        string g = "";
-        for (int i = gamma_num_start; i < gamma_num_end; i++){
-            if (regex_match(fileLines[i], g_re)){
-                g = fileLines[i];
-            } else if(g != ""){
-                vector <string> gammaLine = splitString(fileLines[i], ' ');
-                if (gammaLine[2] != "esu)"){
-                    vector <string> gValue = splitString(gammaLine[2], 'D');
-                    this->polarValues.setGamma(splitString(g, ':')[0].erase(0, 1), gammaLine[0], stod(gValue[0] + "e" + gValue[1]));
-                };
-            };
-        };
-        
-        
     };
-
-    fileLines.clear();
-};
+    for (int i = dipole_num_start; i < dipole_num_end; i++){
+        vector <string> dipLine = splitString(fileLines[i], ' ');
+        vector <string> sValue = splitString(dipLine[2], 'D');
+        this->polarValues.setDipole(dipLine[0], stod(sValue[0] + "e" + sValue[1]));
+    };
+    regex a_re("(.*)Alpha(.*)");
+    string a = "";
+    for (int i = alpha_num_start; i < alpha_num_end; i++){
+        if (regex_match(fileLines[i], a_re)){
+            a = fileLines[i];
+        } else if(a != ""){
+            vector <string> alpLine = splitString(fileLines[i], ' ');
+            if (alpLine[2] != "esu)"){
+                vector <string> aValue = splitString(alpLine[2], 'D');
+                this->polarValues.setAlpha(splitString(a, ':')[0].erase(0, 1), alpLine[0], stod(aValue[0] + "e" + aValue[1]));
+            };
+        };
+    };
+    regex b_re("(.*)Beta(.*)");
+    string b = "";
+    for (int i = beta_num_start; i < beta_num_end; i++){
+        if (regex_match(fileLines[i], b_re)){
+            b = fileLines[i];
+        } else if(b != ""){
+            vector <string> betaLine = splitString(fileLines[i], ' ');
+            if (betaLine[1] == "(z)"){
+                vector <string> bValue = splitString(betaLine[3], 'D');
+                this->polarValues.setBeta(splitString(b, ':')[0].erase(0, 1), "|| (z)", stod(bValue[0] + "e" + bValue[1]));
+            } else if (betaLine[2] != "esu)"){
+                vector <string> bValue = splitString(betaLine[2], 'D');
+                this->polarValues.setBeta(splitString(b, ':')[0].erase(0, 1), betaLine[0], stod(bValue[0] + "e" + bValue[1]));
+            };
+        };
+    };
+    regex g_re("(.*)Gamma(.*)");
+    string g = "";
+    for (int i = gamma_num_start; i < gamma_num_end; i++){
+        if (regex_match(fileLines[i], g_re)){
+            g = fileLines[i];
+        } else if(g != ""){
+            vector <string> gammaLine = splitString(fileLines[i], ' ');
+            if (gammaLine[2] != "esu)"){
+                vector <string> gValue = splitString(gammaLine[2], 'D');
+                this->polarValues.setGamma(splitString(g, ':')[0].erase(0, 1), gammaLine[0], stod(gValue[0] + "e" + gValue[1]));
+            };
+        };
+    };
+}
 
 
 double G16LOGfile::scfEnergy(){
@@ -185,19 +198,35 @@ Molecule G16LOGfile::getMolecule(){
 };
 
 double G16LOGfile::getDipole(string name){
-    return this->polarValues.getDipole(name);
+    if (this->polarAsw){
+        return this->polarValues.getDipole(name);
+    } else {
+        return 0.0;
+    };
 };
 
 double G16LOGfile::getAlpha(string eleName, string name){
-    return this->polarValues.getAlpha(eleName, name);
+    if (this->polarAsw){
+        return this->polarValues.getAlpha(eleName, name);
+    } else {
+        return 0.0;
+    };
 };
 
 double G16LOGfile::getBeta(string eleName, string name){
-    return this->polarValues.getBeta(eleName, name);
+    if (this->polarAsw){
+        return this->polarValues.getBeta(eleName, name);
+    } else {
+        return 0.0;
+    };
 };
 
 double G16LOGfile::getGamma(string eleName, string name){
-    return this->polarValues.getGamma(eleName, name);
+    if (this->polarAsw){
+        return this->polarValues.getGamma(eleName, name);
+    } else {
+        return 0.0;
+    };
 };
 
 /*

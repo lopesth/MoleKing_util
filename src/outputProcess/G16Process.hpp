@@ -74,10 +74,13 @@ private:
     double energy;
     string filePath, fileType;
     int size;
-    bool polarAsw, optAsw;
+    bool polarAsw, optAsw, stateAsw;
     vector<double> occOrb, virtOrb;
     Molecule molecule;
     PolarValues polarValues;
+    void makePolar(vector <string> fileLines);
+    void makeStates(vector <string> fileLines);
+    void molConstructor(vector <string> fileLines);
     
 public:
     G16LOGfile(string filePath, bool polarAsw = 0);
