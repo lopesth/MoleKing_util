@@ -139,6 +139,22 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
                 };
             };
         };
+        regex b_re("(.*)Beta(.*)");
+        string b = "";
+        for (int i = beta_num_start; i < beta_num_end; i++){
+            if (regex_match(fileLines[i], b_re)){
+                b = fileLines[i];
+            } else if(b != ""){
+                vector <string> betaLine = splitString(fileLines[i], ' ');
+                if (betaLine[1] == "(z)"){
+                    vector <string> bValue = splitString(betaLine[3], 'D');
+                    this->polarValues.setBeta(splitString(b, ':')[0].erase(0, 1), "|| (z)", stod(bValue[0] + "e" + bValue[1]));
+                } else if (betaLine[2] != "esu)"){
+                    vector <string> bValue = splitString(betaLine[2], 'D');
+                    this->polarValues.setBeta(splitString(b, ':')[0].erase(0, 1), bValue[0], stod(bValue[0] + "e" + bValue[1]));
+                };
+            };
+        };
         
         
     };
