@@ -135,7 +135,7 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
                 vector <string> alpLine = splitString(fileLines[i], ' ');
                 if (alpLine[2] != "esu)"){
                     vector <string> aValue = splitString(alpLine[2], 'D');
-                    this->polarValues.setAlpha(splitString(a, ':')[0].erase(0, 1), aValue[0], stod(aValue[0] + "e" + aValue[1]));
+                    this->polarValues.setAlpha(splitString(a, ':')[0].erase(0, 1), alpLine[0], stod(aValue[0] + "e" + aValue[1]));
                 };
             };
         };
@@ -151,7 +151,20 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
                     this->polarValues.setBeta(splitString(b, ':')[0].erase(0, 1), "|| (z)", stod(bValue[0] + "e" + bValue[1]));
                 } else if (betaLine[2] != "esu)"){
                     vector <string> bValue = splitString(betaLine[2], 'D');
-                    this->polarValues.setBeta(splitString(b, ':')[0].erase(0, 1), bValue[0], stod(bValue[0] + "e" + bValue[1]));
+                    this->polarValues.setBeta(splitString(b, ':')[0].erase(0, 1), betaLine[0], stod(bValue[0] + "e" + bValue[1]));
+                };
+            };
+        };
+        regex g_re("(.*)Gamma(.*)");
+        string g = "";
+        for (int i = gamma_num_start; i < gamma_num_end; i++){
+            if (regex_match(fileLines[i], g_re)){
+                g = fileLines[i];
+            } else if(g != ""){
+                vector <string> gammaLine = splitString(fileLines[i], ' ');
+                if (gammaLine[2] != "esu)"){
+                    vector <string> gValue = splitString(gammaLine[2], 'D');
+                    this->polarValues.setGamma(splitString(g, ':')[0].erase(0, 1), gammaLine[0], stod(gValue[0] + "e" + gValue[1]));
                 };
             };
         };
