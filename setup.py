@@ -6,7 +6,11 @@ PyVersion = sys.version.split()[0]
 home = os.getcwd()
 
 print('Runing Setup for MoleKing_util on {} -{}- with python {}:'.format(OS, Version, PyVersion))
-pyPath = input('Type the path for Python3 SitePackages Directory: ')
+
+if sys.argv[1] == 'bin':
+    pyPath = 'bin'
+else:
+    pyPath = input('Type the path for Python3 SitePackages Directory: ')
 
 try:
     os.chdir('{}/MoleKing_util'.format(home))

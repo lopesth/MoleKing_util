@@ -68,7 +68,7 @@ int G16LOGfile::statesNum(vector <string> fileLines){
     regex regexNstates1("(.*)TD(.*)nstates(.*)=(.*)[0-9]+(.*)");
     regex regexNstates2("(.*)TD(.*)NSTATES(.*)=(.*)[0-9]+(.*)");
     regex regexNstates3("(.*)TD(.*)Nstates(.*)=(.*)[0-9]+(.*)");
-    for (int i = 0; i < fileLines.size(); i++){
+    for (int i = 0; i < (int) fileLines.size(); i++){
         if(regex_match(fileLines[i], regexNstates1) || regex_match(fileLines[i], regexNstates2) || regex_match(fileLines[i], regexNstates3)){
             if (statesNumber == 3){
                 string temp = splitString(splitString(fileLines[i], '=').back(), ')')[0];
@@ -84,7 +84,7 @@ void G16LOGfile::makeStates(vector <string> fileLines){
     bool takeLine = 0;
     int stateN = 0;
     vector <pair < pair <int, int>, double > > transitions;
-    for (int i = 0; i < fileLines.size(); i++){
+    for (int i = 0; i < (int) fileLines.size(); i++){
         if(regex_match(fileLines[i], excStatesRE) && takeLine == 0){
             transitions.clear();
             takeLine = 1;
@@ -540,7 +540,7 @@ vector <pair < pair <int, int>, double > > ExcStates::getTransition(int state){
 vector < pair <string, double> > ExcStates::getTransContribution(int state){
     vector <pair < pair <int, int>, double > > trans = this->transitions[state-1];
     vector < pair <string, double> > result;
-    for (int i = 0; i < trans.size(); i++){
+    for (int i = 0; i < (int) trans.size(); i++){
         string orbTrans;
         orbTrans = to_string(trans[i].first.first) + " -> " + to_string(trans[i].first.second);
         double contrib = 2 * pow(trans[i].second, 2);

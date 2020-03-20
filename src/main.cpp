@@ -26,9 +26,9 @@ using namespace std;
 #include <pybind11/stl.h>
 #include <pybind11/pytypes.h>
 namespace py = pybind11;
- */
+ 
 
-/*
+
 PYBIND11_MODULE(MoleKing_util, m) {
     
     py::class_<PeriodicTable>(m, "PeriodicTable", "This class creates a virtual Periodic Table.")
@@ -215,11 +215,19 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("getDipole", (double (G16LOGfile::*)(string)) &G16LOGfile::getDipole)
         .def("getAlpha", (double (G16LOGfile::*)(string, string)) &G16LOGfile::getAlpha)
         .def("getBeta", (double (G16LOGfile::*)(string, string)) &G16LOGfile::getBeta)
-        .def("getGamma", (double (G16LOGfile::*)(string, string)) &G16LOGfile::getGamma);
+        .def("getGamma", (double (G16LOGfile::*)(string, string)) &G16LOGfile::getGamma)
+        .def("getOscillatorForce", (double (G16LOGfile::*)(int)) &G16LOGfile::getOscillatorForce)
+        .def("getWavelength", (double (G16LOGfile::*)(int)) &G16LOGfile::getWavelength)
+        .def("getOscillatorForces", (vector <double> (G16LOGfile::*)()) &G16LOGfile::getOscillatorForces)
+        .def("getWavelengths", (vector <double> (G16LOGfile::*)()) &G16LOGfile::getWavelengths)
+        .def("getSymmetries", (vector <string> (G16LOGfile::*)()) &G16LOGfile::getSymmetries)
+        .def("getSymmetry", (string (G16LOGfile::*)(int)) &G16LOGfile::getSymmetry)
+        .def("getTransition", (string (G16LOGfile::*)(int)) &G16LOGfile::getTransition)
+        .def("getTransitions", (string (G16LOGfile::*)(int)) &G16LOGfile::getTransitions);
 
 };
-
 */
+
 
 int main(int argc, char **argv){
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/VSNS/ONL/pcm_done/pcm_B3LYP_0.log";//
