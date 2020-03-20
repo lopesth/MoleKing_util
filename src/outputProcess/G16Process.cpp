@@ -56,31 +56,19 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
         this->makePolar(fileLines);
     };
     if (this->stateAsw) {
-        this->makeStates(fileLines);
         this->exSates = ExcStates(this->statesNum(fileLines));
+        this->makeStates(fileLines);
     };
 
     fileLines.clear();
 };
 
 int G16LOGfile::statesNum(vector <string> fileLines){
-    regex excStatesRE(" Excited State(.*)[0-9]+:(.*)");
-    bool takeLine = 0;
     int statesNumber = 3;
+    regex regexNstates1("(.*)TD(.*)nstates(.*)=(.*)[0-9]+(.*)");
+    regex regexNstates2("(.*)TD(.*)NSTATES(.*)=(.*)[0-9]+(.*)");
+    regex regexNstates3("(.*)TD(.*)Nstates(.*)=(.*)[0-9]+(.*)");
     for (int i = 0; i < fileLines.size(); i++){
-        if(regex_match(fileLines[i], excStatesRE)){
-            takeLine = 1;
-        } else if (takeLine == 1){
-            vector <string> splitedLine = splitString(fileLines[i], ' ');
-            if (splitedLine.size() != 3){
-                takeLine = 0;
-            } else {
-                cout << fileLines[i] << endl;
-            };
-        };
-        regex regexNstates1("(.*)TD(.*)nstates(.*)=(.*)[0-9]+(.*)");
-        regex regexNstates2("(.*)TD(.*)NSTATES(.*)=(.*)[0-9]+(.*)");
-        regex regexNstates3("(.*)TD(.*)Nstates(.*)=(.*)[0-9]+(.*)");
         if(regex_match(fileLines[i], regexNstates1) || regex_match(fileLines[i], regexNstates2) || regex_match(fileLines[i], regexNstates3)){
             if (statesNumber == 3){
                 string temp = splitString(splitString(fileLines[i], '=').back(), ')')[0];
@@ -94,25 +82,31 @@ int G16LOGfile::statesNum(vector <string> fileLines){
 void G16LOGfile::makeStates(vector <string> fileLines){
     regex excStatesRE(" Excited State(.*)[0-9]+:(.*)");
     bool takeLine = 0;
-    int statesNumber = 3;
+    int stateN = 0;
+    vector <pair < pair <int, int>, double > > transitions;
     for (int i = 0; i < fileLines.size(); i++){
-        if(regex_match(fileLines[i], excStatesRE)){
+        if(regex_match(fileLines[i], excStatesRE) && takeLine == 0){
+            transitions.clear();
             takeLine = 1;
+            vector <string> sLine = splitString(fileLines[i], ' ');
+            string stateNtemp = sLine[2];
+            stateNtemp.pop_back();
+            stateN = stoi(stateNtemp);
+            string sym = splitString(sLine[3], '-')[0];
+            this->exSates.setSymmetry(stateN, sym);
+            this->exSates.setEnergy(stateN, stod(sLine[4]));
+            this->exSates.setWavelength(stateN, stod(sLine[6]));
+            this->exSates.setOscillatorForce(stateN, stod(splitString(sLine[8], '=')[1]));
         } else if (takeLine == 1){
             vector <string> splitedLine = splitString(fileLines[i], ' ');
             if (splitedLine.size() != 3){
+                this->exSates.setTransitions(stateN, transitions);
                 takeLine = 0;
             } else {
-                cout << fileLines[i] << endl;
-            };
-        };
-        regex regexNstates1("(.*)TD(.*)nstates(.*)=(.*)[0-9]+(.*)");
-        regex regexNstates2("(.*)TD(.*)NSTATES(.*)=(.*)[0-9]+(.*)");
-        regex regexNstates3("(.*)TD(.*)Nstates(.*)=(.*)[0-9]+(.*)");
-        if(regex_match(fileLines[i], regexNstates1) || regex_match(fileLines[i], regexNstates2) || regex_match(fileLines[i], regexNstates3)){
-            if (statesNumber == 3){
-                string temp = splitString(splitString(fileLines[i], '=').back(), ')')[0];
-                statesNumber = stoi(temp);
+                int trans1 = stoi(splitedLine[0]);
+                int trans2 = stoi(splitedLine[1].erase(1,1));
+                pair < pair <int, int>, double > trans = {pair <int, int> {trans1, trans2}, stod(splitedLine[2])};
+                transitions.push_back(trans);
             };
         };
     };
@@ -280,6 +274,75 @@ double G16LOGfile::getGamma(string eleName, string name){
         return 0.0;
     };
 };
+
+double G16LOGfile::getOscillatorForce(int state){
+    double result = 0.0;
+    if (this->stateAsw){
+        result =  this->exSates.getOscillatorForce(state);
+    };
+    return result;
+};
+
+double G16LOGfile::getWavelength(int state){
+    double result = 0.0;
+    if (this->stateAsw){
+        result = this->exSates.getWavelength(state);
+    };
+    return result;
+};
+
+string G16LOGfile::getSymmetry(int state){
+    string result = "";
+    if (this->stateAsw){
+        result = this->exSates.getSymmetry(state);
+    };
+    return result;
+};
+
+vector <double> G16LOGfile::getOscillatorForces(){
+    vector <double> result (1, 0.0);
+    if (this->stateAsw){
+        result.clear();
+        for (int i = 1; i < this->exSates.getstatesNumber()+1; i++){
+            result.push_back(this->exSates.getOscillatorForce(i));
+        };
+    };
+    return vector <double> (1, 0.0);
+};
+
+vector <double> G16LOGfile::getWavelengths(){
+    vector <double> result (1, 0.0);
+    if (this->stateAsw){
+        result.clear();
+        for (int i = 1; i < this->exSates.getstatesNumber()+1; i++){
+            result.push_back(this->exSates.getWavelength(i));
+        };
+    };
+    return vector <double> (1, 0.0);
+};
+
+vector <string> G16LOGfile::getSymmetries(){
+    vector <string> result (1, "");
+    if (this->stateAsw){
+        result.clear();
+        for (int i = 1; i < this->exSates.getstatesNumber()+1; i++){
+            result.push_back(this->exSates.getSymmetry(i));
+        };
+    };
+    return vector <string> (1, "");
+};
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 ----------------------- PolarValues -----------------------
@@ -470,7 +533,7 @@ double ExcStates::getOscillatorForce(int state){
     return this->oscillator[state-1];
 };
 
-vector <pair < pair <int, int>, double > > ExcStates::getTransitions(int state){
+vector <pair < pair <int, int>, double > > ExcStates::getTransition(int state){
     return this->transitions[state-1];
 };
 
@@ -484,4 +547,9 @@ vector < pair <string, double> > ExcStates::getTransContribution(int state){
         result.push_back(pair <string, double> {orbTrans, contrib});
     };
     return result;
+};
+
+
+int ExcStates::getstatesNumber(){
+    return this->statesNumber;
 };

@@ -39,11 +39,12 @@ public:
     void setTransitions(int state, vector <pair < pair <int, int>, double > > values);
     void setSymmetry(int state, string value);
     
+    int getstatesNumber();
     string getSymmetry(int state);
     double getWavelength(int state);
     double getEnergy(int state);
     double getOscillatorForce(int state);
-    vector <pair < pair <int, int>, double > > getTransitions(int state);
+    vector <pair < pair <int, int>, double > > getTransition(int state);
     vector < pair <string, double> > getTransContribution(int state);
 };
 
@@ -93,6 +94,14 @@ public:
     double getAlpha(string eleName, string name);
     double getBeta(string eleName, string name);
     double getGamma(string eleName, string name);
-    
+    string toStr();
+    double getOscillatorForce(int state);
+    double getWavelength(int state);
+    string getSymmetry(int state);
+    vector <double> getOscillatorForces();
+    vector <double> getWavelengths();
+    vector <string> getSymmetries();
+    void getTransition(int state);
+    void getTransitions();
     
 };
