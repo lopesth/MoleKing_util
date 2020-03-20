@@ -123,6 +123,7 @@ void G16LOGfile::makeStates(vector <string> fileLines){
 
 void G16LOGfile::molConstructor(vector <string> fileLines){
     regex molecule_re1("(.*)Symbolic Z-matrix:");
+    bool mol_re1_Bool = 0;
     regex molecule_re2("(.*)Standard orientation:(.*)");
     regex scf_re("(.*)SCF Done:(.*)");
     regex size_re("(.*)NAtoms=(.*)");
@@ -151,6 +152,7 @@ void G16LOGfile::molConstructor(vector <string> fileLines){
         } else if (!this->optAsw){
             if (regex_match(fileLines[i], molecule_re1)) {
                 startMoleculeRef = i+2;
+                mol_re1_Bool = 1;
             };
         } else if (this->optAsw){
             if (regex_match(fileLines[i], molecule_re2)) {
@@ -167,7 +169,11 @@ void G16LOGfile::molConstructor(vector <string> fileLines){
     int endMoleculeRef = startMoleculeRef + this->size;
     for (int i = startMoleculeRef; i < endMoleculeRef; i++){
         vector <string> molLine = splitString(fileLines[i], ' ');
-        this->molecule.addAtom(molLine[0], stod(molLine[1]), stod(molLine[2]), stod(molLine[3]));
+        if(mol_re1_Bool){
+            this->molecule.addAtom(molLine[0], stod(molLine[1]), stod(molLine[2]), stod(molLine[3]));
+        } else {
+            this->molecule.addAtom(molLine[1], stod(molLine[3]), stod(molLine[4]), stod(molLine[5]));
+        }
     };
 }
 

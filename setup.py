@@ -56,6 +56,7 @@ pyarq.write('from MoleKing_util.MoleKing_util import Vector3D\n')
 pyarq.write('from MoleKing_util.MoleKing_util import Matrix\n')
 pyarq.write('from MoleKing_util.MoleKing_util import PeriodicTable\n')
 pyarq.write('from MoleKing_util.MoleKing_util import SupraMolecule\n')
+pyarq.write('from MoleKing_util.MoleKing_util import G16LOGfile\n')
 pyarq.close()
 
 os.chdir(home)

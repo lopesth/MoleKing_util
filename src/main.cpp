@@ -21,12 +21,10 @@
 #include "outputProcess/G16Process.hpp"
 using namespace std;
 
-/*
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/pytypes.h>
 namespace py = pybind11;
- 
 
 
 PYBIND11_MODULE(MoleKing_util, m) {
@@ -223,11 +221,14 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("getSymmetries", (vector <string> (G16LOGfile::*)()) &G16LOGfile::getSymmetries)
         .def("getSymmetry", (string (G16LOGfile::*)(int)) &G16LOGfile::getSymmetry)
         .def("getTransition", (string (G16LOGfile::*)(int)) &G16LOGfile::getTransition)
-        .def("getTransitions", (string (G16LOGfile::*)(int)) &G16LOGfile::getTransitions);
+        .def("getTransitions", &G16LOGfile::getTransitions)
+        .def("getTransitionStr", (string (G16LOGfile::*)(int)) &G16LOGfile::getTransitionStr)
+        .def("getTransitionsStr", &G16LOGfile::getTransitionsStr)
+        .def("__str__", &G16LOGfile::toStr);
 
 };
-*/
 
+/*
 
 int main(int argc, char **argv){
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/VSNS/ONL/pcm_done/pcm_B3LYP_0.log";//
@@ -238,3 +239,4 @@ int main(int argc, char **argv){
     
     return 0;
 };
+*/
