@@ -17,6 +17,7 @@
 #include <regex>
 #include "../chemicalUnits/Molecule.hpp"
 #include <stdexcept>
+#include <map>
 
 using namespace std;
 #endif /* G16Process_hpp */
@@ -85,6 +86,7 @@ private:
     void molConstructor(vector <string> fileLines);
     int statesNum(vector <string> fileLines);
     ExcStates exSates;
+    vector <string>  getTransition(int state);
     
 public:
     G16LOGfile(string filePath, bool polarAsw = 0);
@@ -102,8 +104,7 @@ public:
     vector <double> getOscillatorForces();
     vector <double> getWavelengths();
     vector <string> getSymmetries();
-    vector <pair < pair <int, int>, double > > getTransition(int state);
-    vector <vector <pair < pair <int, int>, double > > > getTransitions();
-    string getTransitionStr(int state);
+    vector <vector <string> > getTransitions();
     vector <string> getTransitionsStr();
+    vector <vector <string>> getTransContributions();
 };

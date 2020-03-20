@@ -220,10 +220,9 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("getWavelengths", (vector <double> (G16LOGfile::*)()) &G16LOGfile::getWavelengths)
         .def("getSymmetries", (vector <string> (G16LOGfile::*)()) &G16LOGfile::getSymmetries)
         .def("getSymmetry", (string (G16LOGfile::*)(int)) &G16LOGfile::getSymmetry)
-        .def("getTransition", (string (G16LOGfile::*)(int)) &G16LOGfile::getTransition)
         .def("getTransitions", &G16LOGfile::getTransitions)
-        .def("getTransitionStr", (string (G16LOGfile::*)(int)) &G16LOGfile::getTransitionStr)
         .def("getTransitionsStr", &G16LOGfile::getTransitionsStr)
+        .def("getTransContributions", &G16LOGfile::getTransContributions)
         .def("__str__", &G16LOGfile::toStr);
 
 };

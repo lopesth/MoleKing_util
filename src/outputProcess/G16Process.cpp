@@ -355,47 +355,30 @@ vector <string> G16LOGfile::getSymmetries(){
     return result;
 };
 
-vector <pair < pair <int, int>, double > > G16LOGfile::getTransition(int state){
-    vector <pair < pair <int, int>, double > > result (1);
+vector <string> G16LOGfile::getTransition(int state){
+    vector <string> result(1, "");
     if (this->stateAsw){
         result.clear();
-        result = this->exSates.getTransition(state);
+        vector <pair < pair <int, int>, double > > temp = this->exSates.getTransition(state);
+        for (int i = 0; i< temp.size(); i++){
+            string temp1 = to_string(temp[i].first.first) + " -> " + to_string(temp[i].first.second) + "   " + to_string(temp[i].second);
+            result.push_back(temp1);
+        };
     };
     return result;
 };
 
-
-vector <vector <pair < pair <int, int>, double > > > G16LOGfile::getTransitions(){
-    vector < vector <pair < pair <int, int>, double > > > result (1);
+vector < vector <string>> G16LOGfile::getTransitions(){
+    vector < vector <string>> result (1);
     if (this->stateAsw){
         result.clear();
         for (int i = 1; i < this->exSates.getstatesNumber()+1; i++){
-            vector <pair < pair <int, int>, double > > temp = this->exSates.getTransition(i);
+            vector <string> temp = this->getTransition(i);
             result.push_back(temp);
         };
     };
     return result;
 };
-
-string G16LOGfile::getTransitionStr(int state){
-    string result = "";
-    if (this->stateAsw){
-        vector <pair < pair <int, int>, double > > temp = this->exSates.getTransition(state);
-        for (int i = 0; i < temp.size(); i++){
-            int firstOrb = temp[i].first.first;
-            int secondOrb = temp[i].first.second;
-            double coef = temp[i].second;
-            string t =  "Orb. " + to_string(firstOrb) + " to Orb. " + to_string(secondOrb) + ", L.C. coef.: " + to_string(coef);
-            if (result.size() == 0){
-                result = t;
-            } else {
-                result = result + "\n" + t;
-            };
-        };
-    };
-    return result;
-};
-
 
 vector <string> G16LOGfile::getTransitionsStr(){
     vector <string> results (1, "");
@@ -428,7 +411,24 @@ string G16LOGfile::toStr(){
     return result;
 };
 
-
+vector <vector <string>> G16LOGfile::getTransContributions(){
+    vector <vector <string>> results (1);
+    if (this->stateAsw){
+        results.clear();
+        vector <string> result;
+        for (int j = 1; j < this->exSates.getstatesNumber() + 1; j++){
+            vector < pair <string, double> > temp = this->exSates.getTransContribution(j);
+            for (int i = 0; i < temp.size(); i++){
+                string orbs = temp[i].first;
+                double cont = temp[i].second;
+                string t =  orbs + ", Contrib.: " + to_string(cont);
+                result.push_back(t);
+            };
+            results.push_back(result);
+        }
+    };
+    return results;
+};
 
 
 /*
