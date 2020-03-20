@@ -234,7 +234,7 @@ int main(int argc, char **argv){
     string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/OldResearch/arsenio_epinefrina/Water/TD_Epinefrina_LC-wPBE_4000.log";
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/OldResearch/chalc_guilherme/chalcona_GM7.log";
     G16LOGfile g16 = G16LOGfile(fileN, 0);
-    cout << g16.getMolecule().toStr() << endl;
-    cout << g16.getAlpha("Alpha(-w;w) w=  632.8nm", "xx");
+    cout << g16.toStr() << endl;
+    
     return 0;
 };

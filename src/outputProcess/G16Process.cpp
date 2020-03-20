@@ -38,7 +38,9 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
     arq.open(filePath, ifstream::in);
     string lineSTR;
     regex states_re("(.*)Excitation energies and oscillator strengths:");
+    regex done_re(" Normal termination of (.*)");
     regex opt_re("(.*) opt (.*)");
+    this->calcDone = 0;
 
     vector <string> fileLines;
     while(!arq.eof()){
@@ -48,6 +50,10 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
             this->optAsw = 1;
         } else if (regex_match(lineSTR, states_re)){
             this->stateAsw = 1;
+        } else if (regex_match(lineSTR, done_re)){
+            this->calcDone = 1;
+            vector <string> temp = splitString(lineSTR, ' ');
+            this->date =  temp[6] + " " + temp[7] + " " + temp[8] + " " + temp[9] + " " + temp[10];
         };
     };
     arq.close();
@@ -61,6 +67,9 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
     };
 
     fileLines.clear();
+    if (!this->calcDone){
+        throw invalid_argument("The calculation, in this file " + filePath + ", has not been completed\n");
+    }
 };
 
 int G16LOGfile::statesNum(vector <string> fileLines){
@@ -104,7 +113,7 @@ void G16LOGfile::makeStates(vector <string> fileLines){
                 takeLine = 0;
             } else {
                 int trans1 = stoi(splitedLine[0]);
-                int trans2 = stoi(splitedLine[1].erase(1,1));
+                int trans2 = stoi(splitString(splitedLine[1], '>')[1]);
                 pair < pair <int, int>, double > trans = {pair <int, int> {trans1, trans2}, stod(splitedLine[2])};
                 transitions.push_back(trans);
             };
@@ -119,11 +128,13 @@ void G16LOGfile::molConstructor(vector <string> fileLines){
     regex size_re("(.*)NAtoms=(.*)");
     regex omo_re("(.*)occ. eigenvalues(.*)");
     regex umo_re("(.*)virt. eigenvalues(.*)");
+    regex basis_re(" Standard basis:(.*)");
     int startMoleculeRef = 0;
     for (int i = 0; i < (int) fileLines.size(); i++){
         if (regex_match(fileLines[i], scf_re)){
             vector <string> splittedLine = splitString(fileLines[i], ' ');
             this->energy = stod(splittedLine[4]);
+            this->levelTheory = splitString(splitString(splittedLine[2], '(')[1], ')')[0];
         } else if (regex_match(fileLines[i], size_re)) {
             vector <string> splittedLine = splitString(fileLines[i], ' ');
             this->size = stoi(splittedLine[1]);
@@ -146,6 +157,12 @@ void G16LOGfile::molConstructor(vector <string> fileLines){
                 startMoleculeRef = i+5;
             };
         };
+        if (this->basis.size() == 0){
+            if (regex_match(fileLines[i], basis_re)){
+                this->basis = splitString(fileLines[i], ' ')[2];
+            };
+        };
+        
     };
     int endMoleculeRef = startMoleculeRef + this->size;
     for (int i = startMoleculeRef; i < endMoleculeRef; i++){
@@ -307,7 +324,7 @@ vector <double> G16LOGfile::getOscillatorForces(){
             result.push_back(this->exSates.getOscillatorForce(i));
         };
     };
-    return vector <double> (1, 0.0);
+    return result;
 };
 
 vector <double> G16LOGfile::getWavelengths(){
@@ -318,7 +335,7 @@ vector <double> G16LOGfile::getWavelengths(){
             result.push_back(this->exSates.getWavelength(i));
         };
     };
-    return vector <double> (1, 0.0);
+    return result;
 };
 
 vector <string> G16LOGfile::getSymmetries(){
@@ -329,17 +346,81 @@ vector <string> G16LOGfile::getSymmetries(){
             result.push_back(this->exSates.getSymmetry(i));
         };
     };
-    return vector <string> (1, "");
+    return result;
+};
+
+vector <pair < pair <int, int>, double > > G16LOGfile::getTransition(int state){
+    vector <pair < pair <int, int>, double > > result (1);
+    if (this->stateAsw){
+        result.clear();
+        result = this->exSates.getTransition(state);
+    };
+    return result;
 };
 
 
+vector <vector <pair < pair <int, int>, double > > > G16LOGfile::getTransitions(){
+    vector < vector <pair < pair <int, int>, double > > > result (1);
+    if (this->stateAsw){
+        result.clear();
+        for (int i = 1; i < this->exSates.getstatesNumber()+1; i++){
+            vector <pair < pair <int, int>, double > > temp = this->exSates.getTransition(i);
+            result.push_back(temp);
+        };
+    };
+    return result;
+};
+
+string G16LOGfile::getTransitionStr(int state){
+    string result = "";
+    if (this->stateAsw){
+        vector <pair < pair <int, int>, double > > temp = this->exSates.getTransition(state);
+        for (int i = 0; i < temp.size(); i++){
+            int firstOrb = temp[i].first.first;
+            int secondOrb = temp[i].first.second;
+            double coef = temp[i].second;
+            string t =  "Orb. " + to_string(firstOrb) + " to Orb. " + to_string(secondOrb) + ", L.C. coef.: " + to_string(coef);
+            if (result.size() == 0){
+                result = t;
+            } else {
+                result = result + "\n" + t;
+            };
+        };
+    };
+    return result;
+};
 
 
+vector <string> G16LOGfile::getTransitionsStr(){
+    vector <string> results (1, "");
+    if (this->stateAsw){
+        results.clear();
+        string result = "";
+        for (int j = 1; j < this->exSates.getstatesNumber() + 1; j++){
+            vector <pair < pair <int, int>, double > > temp = this->exSates.getTransition(j);
+            for (int i = 0; i < temp.size(); i++){
+                int firstOrb = temp[i].first.first;
+                int secondOrb = temp[i].first.second;
+                double coef = temp[i].second;
+                string t =  "Orb. " + to_string(firstOrb) + " to Orb. " + to_string(secondOrb) + ", L.C. coef.: " + to_string(coef);
+                if (result.size() == 0){
+                    result = t;
+                } else {
+                    result = result + "\n" + t;
+                };
+            };
+            results.push_back(result);
+        }
+    };
+    return results;
+};
 
-
-
-
-
+string G16LOGfile::toStr(){
+    string result = this->molecule.toStr();
+    result = result + "\nEnergy: " + to_string(this->energy) + " hartree";
+    result = result + "\nCalculation done in " + this->date + " Level fo Theory: " + this->levelTheory + "/" + this->basis;
+    return result;
+};
 
 
 
@@ -548,7 +629,6 @@ vector < pair <string, double> > ExcStates::getTransContribution(int state){
     };
     return result;
 };
-
 
 int ExcStates::getstatesNumber(){
     return this->statesNumber;

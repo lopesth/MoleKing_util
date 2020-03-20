@@ -16,6 +16,7 @@
 #include <iostream>
 #include <regex>
 #include "../chemicalUnits/Molecule.hpp"
+#include <stdexcept>
 
 using namespace std;
 #endif /* G16Process_hpp */
@@ -73,9 +74,9 @@ public:
 class G16LOGfile{
 private:
     double energy;
-    string filePath, fileType;
+    string filePath, fileType, levelTheory, basis, date;
     int size;
-    bool polarAsw, optAsw, stateAsw;
+    bool polarAsw, optAsw, stateAsw, calcDone;
     vector<double> occOrb, virtOrb;
     Molecule molecule;
     PolarValues polarValues;
@@ -101,7 +102,8 @@ public:
     vector <double> getOscillatorForces();
     vector <double> getWavelengths();
     vector <string> getSymmetries();
-    void getTransition(int state);
-    void getTransitions();
-    
+    vector <pair < pair <int, int>, double > > getTransition(int state);
+    vector <vector <pair < pair <int, int>, double > > > getTransitions();
+    string getTransitionStr(int state);
+    vector <string> getTransitionsStr();
 };
