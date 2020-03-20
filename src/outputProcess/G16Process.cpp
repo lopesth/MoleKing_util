@@ -57,14 +57,66 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
     };
     if (this->stateAsw) {
         this->makeStates(fileLines);
+        this->exSates = ExcStates(this->statesNum(fileLines));
     };
 
     fileLines.clear();
 };
 
+int G16LOGfile::statesNum(vector <string> fileLines){
+    regex excStatesRE(" Excited State(.*)[0-9]+:(.*)");
+    bool takeLine = 0;
+    int statesNumber = 3;
+    for (int i = 0; i < fileLines.size(); i++){
+        if(regex_match(fileLines[i], excStatesRE)){
+            takeLine = 1;
+        } else if (takeLine == 1){
+            vector <string> splitedLine = splitString(fileLines[i], ' ');
+            if (splitedLine.size() != 3){
+                takeLine = 0;
+            } else {
+                cout << fileLines[i] << endl;
+            };
+        };
+        regex regexNstates1("(.*)TD(.*)nstates(.*)=(.*)[0-9]+(.*)");
+        regex regexNstates2("(.*)TD(.*)NSTATES(.*)=(.*)[0-9]+(.*)");
+        regex regexNstates3("(.*)TD(.*)Nstates(.*)=(.*)[0-9]+(.*)");
+        if(regex_match(fileLines[i], regexNstates1) || regex_match(fileLines[i], regexNstates2) || regex_match(fileLines[i], regexNstates3)){
+            if (statesNumber == 3){
+                string temp = splitString(splitString(fileLines[i], '=').back(), ')')[0];
+                statesNumber = stoi(temp);
+            };
+        };
+    };
+    return statesNumber;
+};
+
 void G16LOGfile::makeStates(vector <string> fileLines){
-    cout << "none" << endl;
-}
+    regex excStatesRE(" Excited State(.*)[0-9]+:(.*)");
+    bool takeLine = 0;
+    int statesNumber = 3;
+    for (int i = 0; i < fileLines.size(); i++){
+        if(regex_match(fileLines[i], excStatesRE)){
+            takeLine = 1;
+        } else if (takeLine == 1){
+            vector <string> splitedLine = splitString(fileLines[i], ' ');
+            if (splitedLine.size() != 3){
+                takeLine = 0;
+            } else {
+                cout << fileLines[i] << endl;
+            };
+        };
+        regex regexNstates1("(.*)TD(.*)nstates(.*)=(.*)[0-9]+(.*)");
+        regex regexNstates2("(.*)TD(.*)NSTATES(.*)=(.*)[0-9]+(.*)");
+        regex regexNstates3("(.*)TD(.*)Nstates(.*)=(.*)[0-9]+(.*)");
+        if(regex_match(fileLines[i], regexNstates1) || regex_match(fileLines[i], regexNstates2) || regex_match(fileLines[i], regexNstates3)){
+            if (statesNumber == 3){
+                string temp = splitString(splitString(fileLines[i], '=').back(), ')')[0];
+                statesNumber = stoi(temp);
+            };
+        };
+    };
+};
 
 void G16LOGfile::molConstructor(vector <string> fileLines){
     regex molecule_re1("(.*)Symbolic Z-matrix:");
@@ -371,3 +423,13 @@ double PolarValues::getGamma(string eleName, string name){
 /*
 ----------------------- ExcStates -----------------------
 */
+ExcStates::ExcStates(){
+    this->statesNumber = 0;
+};
+
+ExcStates::ExcStates(int statesNumber){
+    this->statesNumber = statesNumber;
+    cout << this->statesNumber <<  endl;
+};
+
+

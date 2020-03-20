@@ -24,13 +24,15 @@ class ExcStates{
 private:
     vector<int> state;
     vector<double> wlValues;
+    int statesNumber;
     vector <double> energies;
     vector <double> oscillator;
     vector <string> symmetries;
-    vector <vector <pair < vector <int, int>, double > > > transitions;
+    vector <vector <pair < vector <int>, double > > > transitions;
     
 public:
     ExcStates(int statesNumber);
+    ExcStates();
     
     void setWavelength(int state, double value);
     void setEnergy(int state, double value);
@@ -81,6 +83,8 @@ private:
     void makePolar(vector <string> fileLines);
     void makeStates(vector <string> fileLines);
     void molConstructor(vector <string> fileLines);
+    int statesNum(vector <string> fileLines);
+    ExcStates exSates;
     
 public:
     G16LOGfile(string filePath, bool polarAsw = 0);
