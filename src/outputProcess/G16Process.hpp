@@ -22,13 +22,12 @@ using namespace std;
 
 class ExcStates{
 private:
-    vector<int> state;
-    vector<double> wlValues;
     int statesNumber;
+    vector<double> wlValues;
     vector <double> energies;
     vector <double> oscillator;
     vector <string> symmetries;
-    vector <vector <pair < vector <int>, double > > > transitions;
+    vector <vector <pair < pair <int, int>, double > > > transitions;
     
 public:
     ExcStates(int statesNumber);
@@ -37,16 +36,15 @@ public:
     void setWavelength(int state, double value);
     void setEnergy(int state, double value);
     void setOscillatorForce(int state, double value);
-    void setTransitions(int state, vector <pair < vector <int, int>, double > >);
-    void setSymmetry(string);
+    void setTransitions(int state, vector <pair < pair <int, int>, double > > values);
+    void setSymmetry(int state, string value);
     
+    string getSymmetry(int state);
     double getWavelength(int state);
     double getEnergy(int state);
     double getOscillatorForce(int state);
-    vector <pair < vector <int, int>, double > > getTransitions(int state);
-    string getContTransition(int state);
-    string getSymmetry(int state);
-    
+    vector <pair < pair <int, int>, double > > getTransitions(int state);
+    vector < pair <string, double> > getTransContribution(int state);
 };
 
 class PolarValues{

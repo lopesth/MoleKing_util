@@ -429,7 +429,59 @@ ExcStates::ExcStates(){
 
 ExcStates::ExcStates(int statesNumber){
     this->statesNumber = statesNumber;
-    cout << this->statesNumber <<  endl;
+    this->wlValues.resize(this->statesNumber);
+    this->energies.resize(this->statesNumber);
+    this->oscillator.resize(this->statesNumber);
+    this->symmetries.resize(this->statesNumber);
+    this->transitions.resize(this->statesNumber);
 };
 
+void ExcStates::setWavelength(int state, double value){
+    this->wlValues.at(state-1) = value;
+};
 
+void ExcStates::setEnergy(int state, double value){
+    this->energies.at(state-1) = value;
+};
+
+void ExcStates::setOscillatorForce(int state, double value){
+    this->oscillator.at(state-1) = value;
+};
+
+void ExcStates::setSymmetry(int state, string value){
+    this->symmetries.at(state-1) = value;
+};
+
+void ExcStates::setTransitions(int state, vector <pair < pair <int, int>, double > > values){
+    this->transitions.at(state-1) = values;
+};
+
+string ExcStates::getSymmetry(int state){
+    return this->symmetries[state-1];
+};
+
+double ExcStates::getWavelength(int state){
+    return this->wlValues[state-1];
+};
+double ExcStates::getEnergy(int state){
+    return this->energies[state-1];
+};
+double ExcStates::getOscillatorForce(int state){
+    return this->oscillator[state-1];
+};
+
+vector <pair < pair <int, int>, double > > ExcStates::getTransitions(int state){
+    return this->transitions[state-1];
+};
+
+vector < pair <string, double> > ExcStates::getTransContribution(int state){
+    vector <pair < pair <int, int>, double > > trans = this->transitions[state-1];
+    vector < pair <string, double> > result;
+    for (int i = 0; i < trans.size(); i++){
+        string orbTrans;
+        orbTrans = to_string(trans[i].first.first) + " -> " + to_string(trans[i].first.second);
+        double contrib = 2 * pow(trans[i].second, 2);
+        result.push_back(pair <string, double> {orbTrans, contrib});
+    };
+    return result;
+};
