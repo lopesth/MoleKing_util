@@ -21,27 +21,14 @@
 #include "outputProcess/G16Process.hpp"
 
 
-/*
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/pytypes.h>
 namespace py = pybind11;
-*/
  
 using namespace std;
 
-
-int main(int argc, char **argv){
-    //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/VSNS/ONL/pcm_done/pcm_B3LYP_0.log";//
-    string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/OldResearch/arsenio_epinefrina/Water/TD_Epinefrina_LC-wPBE_4000.log";
-    //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/OldResearch/chalc_guilherme/chalcona_GM7.log";
-    G16LOGfile g16 = G16LOGfile(fileN, 0);
-    cout << g16.getMolecule().toStr() << endl;
-    cout << g16.getAlpha("Alpha(-w;w) w=  632.8nm", "xx");
-    return 0;
-};
-
-/*
 PYBIND11_MODULE(MoleKing_util, m) {
     
     py::class_<PeriodicTable>(m, "PeriodicTable", "This class creates a virtual Periodic Table.")
@@ -220,7 +207,17 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("elem", &Matrix::element)
         .def("show", &Matrix::print)
         .def("__str__", &Matrix::toStr);
+
+    py::class_<G16LOGfile>(m, "G16LOGfile", "This class extract significant properties from Gaussian 16 .log or .out output files.")
+        .def(py::init< string, bool>(), py::arg("filePath"), py::arg("polarAsw") = 0)
+        .def("scfEnergy", &G16LOGfile::scfEnergy)
+        .def("getMolecule", &G16LOGfile::getMolecule)
+        .def("getDipole", (double (G16LOGfile::*)(string)) &G16LOGfile::getDipole)
+        .def("getAlpha", (double (G16LOGfile::*)(string, string)) &G16LOGfile::getAlpha)
+        .def("getBeta", (double (G16LOGfile::*)(string, string)) &G16LOGfile::getBeta)
+        .def("getGamma", (double (G16LOGfile::*)(string, string)) &G16LOGfile::getGamma);
+
 };
 
-*/
+
 

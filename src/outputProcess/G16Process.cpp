@@ -12,7 +12,7 @@ vector <string> splitString(string lineSTR, char splitTarget){
     vector <string> splittedLine;
     string temp;
     vector<char> lineVector(lineSTR.begin(),lineSTR.end());
-    for (int i = 0; i < lineVector.size(); i++){
+    for (int i = 0; i < (int) lineVector.size(); i++){
         if (lineVector[i] != splitTarget){
             temp = temp + lineVector[i];
         } else {
@@ -126,7 +126,7 @@ void G16LOGfile::molConstructor(vector <string> fileLines){
     regex omo_re("(.*)occ. eigenvalues(.*)");
     regex umo_re("(.*)virt. eigenvalues(.*)");
     int startMoleculeRef = 0;
-    for (int i = 0; i < fileLines.size(); i++){
+    for (int i = 0; i < (int) fileLines.size(); i++){
         if (regex_match(fileLines[i], scf_re)){
             vector <string> splittedLine = splitString(fileLines[i], ' ');
             this->energy = stod(splittedLine[4]);
@@ -135,12 +135,12 @@ void G16LOGfile::molConstructor(vector <string> fileLines){
             this->size = stoi(splittedLine[1]);
         } else if (regex_match(fileLines[i], omo_re)){
             vector <string> splittedLine = splitString(fileLines[i], ' ');
-            for (int j = 4; j < splittedLine.size(); j++){
+            for (int j = 4; j < (int) splittedLine.size(); j++){
                 this->occOrb.push_back(stod(splittedLine[j]));
             };
         } else if (regex_match(fileLines[i], umo_re)){
             vector <string> splittedLine = splitString(fileLines[i], ' ');
-            for (int j = 4; j < splittedLine.size(); j++){
+            for (int j = 4; j < (int) splittedLine.size(); j++){
                 this->virtOrb.push_back(stod(splittedLine[j]));
             };
         } else if (!this->optAsw){
@@ -167,7 +167,7 @@ void G16LOGfile::makePolar(vector <string> fileLines){
     regex gamma_re("(.*)Second dipole hyperpolarizability, Gamma(.*)input orientation(.*)");
     int dipole_num_start = 0, dipole_num_end = 0;
     int alpha_num_start = 0, alpha_num_end = 0, beta_num_start = 0, beta_num_end = 0, gamma_num_start = 0, gamma_num_end = 0;
-    for (int i = 0; i < fileLines.size(); i++){
+    for (int i = 0; i < (int) fileLines.size(); i++){
         if (regex_match(fileLines[i], dipole_re)){
             dipole_num_start = i+3;
             dipole_num_end = dipole_num_start + 4;
@@ -295,7 +295,7 @@ void PolarValues::setDipole(string name, double value){
 
 void PolarValues::setAlpha(string eleName, string name, double value){
     int n = -1;
-    for (int i = 0; i < this->aName.size(); i++){
+    for (int i = 0; i < (int) this->aName.size(); i++){
         if (eleName == aName[i].first){
             n = i;
         };
@@ -319,7 +319,7 @@ void PolarValues::setAlpha(string eleName, string name, double value){
 
 void PolarValues::setBeta(string eleName, string name, double value){
     int n = -1;
-    for (int i = 0; i < this->bName.size(); i++){
+    for (int i = 0; i < (int) this->bName.size(); i++){
         if (eleName == bName[i].first){
             n = i;
         };
@@ -343,7 +343,7 @@ void PolarValues::setBeta(string eleName, string name, double value){
 
 void PolarValues::setGamma(string eleName, string name, double value){
     int n = -1;
-    for (int i = 0; i < this->gName.size(); i++){
+    for (int i = 0; i < (int) this->gName.size(); i++){
         if (eleName == gName[i].first){
             n = i;
         };
@@ -367,7 +367,7 @@ void PolarValues::setGamma(string eleName, string name, double value){
 
 double PolarValues::getDipole(string name){
     int n = 0;
-    for (int i = 0; i < this->dName.size(); i++){
+    for (int i = 0; i < (int) this->dName.size(); i++){
         if (this->dName[i] == name){
             n = i;
         };
@@ -377,12 +377,12 @@ double PolarValues::getDipole(string name){
 
 double PolarValues::getAlpha(string eleName, string name){
     int n = 0, m = 0;
-    for (int i = 0; i < this->aName.size(); i++){
+    for (int i = 0; i < (int) this->aName.size(); i++){
         if (this->aName[i].first == eleName){
             n = i;
         };
     };
-    for (int i = 0; i < this->aName[i].second.size(); i++){
+    for (int i = 0; i < (int) this->aName[i].second.size(); i++){
         if (this->aName[n].second[i] == name){
             m = i;
         };
@@ -392,12 +392,12 @@ double PolarValues::getAlpha(string eleName, string name){
 
 double PolarValues::getBeta(string eleName, string name){
      int n = 0, m = 0;
-    for (int i = 0; i < this->bName.size(); i++){
+    for (int i = 0; i < (int) this->bName.size(); i++){
         if (this->bName[i].first == eleName){
             n = i;
         };
     };
-    for (int i = 0; i < this->bName[i].second.size(); i++){
+    for (int i = 0; i < (int) this->bName[i].second.size(); i++){
         if (this->bName[n].second[i] == name){
             m = i;
         };
@@ -407,12 +407,12 @@ double PolarValues::getBeta(string eleName, string name){
 
 double PolarValues::getGamma(string eleName, string name){
      int n = 0, m = 0;
-     for (int i = 0; i < this->gName.size(); i++){
+     for (int i = 0; i < (int) this->gName.size(); i++){
          if (this->gName[i].first == eleName){
              n = i;
          };
      };
-     for (int i = 0; i < this->gName[i].second.size(); i++){
+     for (int i = 0; i < (int) this->gName[i].second.size(); i++){
          if (this->gName[n].second[i] == name){
              m = i;
          };
