@@ -424,7 +424,7 @@ vector <string> G16LOGfile::getTransitionsStr(){
 string G16LOGfile::toStr(){
     string result = this->molecule.toStr();
     result = result + "\nEnergy: " + to_string(this->energy) + " hartree";
-    result = result + "\nCalculation done in " + this->date + " Level fo Theory: " + this->levelTheory + "/" + this->basis;
+    result = result + "\nCalculation done in " + this->date + " Level of Theory: " + this->levelTheory + "/" + this->basis;
     return result;
 };
 
