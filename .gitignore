@@ -30,7 +30,7 @@
 *.exe
 *.out
 *.app
-
+*MoleKing_util/
 *.DS_Store
 *teste*
 *Teste*
