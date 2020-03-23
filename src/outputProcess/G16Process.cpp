@@ -360,7 +360,7 @@ vector <string> G16LOGfile::getTransition(int state){
     if (this->stateAsw){
         result.clear();
         vector <pair < pair <int, int>, double > > temp = this->exSates.getTransition(state);
-        for (int i = 0; i< temp.size(); i++){
+        for (int i = 0; i< (int) temp.size(); i++){
             string temp1 = to_string(temp[i].first.first) + " -> " + to_string(temp[i].first.second) + "   " + to_string(temp[i].second);
             result.push_back(temp1);
         };
@@ -387,7 +387,7 @@ vector <string> G16LOGfile::getTransitionsStr(){
         string result = "";
         for (int j = 1; j < this->exSates.getstatesNumber() + 1; j++){
             vector <pair < pair <int, int>, double > > temp = this->exSates.getTransition(j);
-            for (int i = 0; i < temp.size(); i++){
+            for (int i = 0; i < (int) temp.size(); i++){
                 int firstOrb = temp[i].first.first;
                 int secondOrb = temp[i].first.second;
                 double coef = temp[i].second;
@@ -418,7 +418,7 @@ vector <vector <string>> G16LOGfile::getTransContributions(){
         vector <string> result;
         for (int j = 1; j < this->exSates.getstatesNumber() + 1; j++){
             vector < pair <string, double> > temp = this->exSates.getTransContribution(j);
-            for (int i = 0; i < temp.size(); i++){
+            for (int i = 0; i < (int) temp.size(); i++){
                 string orbs = temp[i].first;
                 double cont = temp[i].second;
                 string t =  orbs + ", Contrib.: " + to_string(cont);

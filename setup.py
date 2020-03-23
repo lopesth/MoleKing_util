@@ -12,14 +12,12 @@ if sys.argv[1] == 'bin':
 else:
     pyPath = input('Type the path for Python3 SitePackages Directory: ')
 
+os.chdir(pyPath)
 try:
-    os.chdir('{}/MoleKing_util'.format(home))
-    for arq in os.listdir():
-        os.remove(arq)
-    os.chdir(home)
-    os.removedirs('MoleKing_util')
+    shutil.rmtree('MoleKing_util')
 except:
     pass
+os.chdir(home)
 
 d = '{}/src'.format(home)
 CList = ['{}/main.cpp'.format(d)]
