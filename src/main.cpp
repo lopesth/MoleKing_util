@@ -225,17 +225,26 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("getTransContributions", &G16LOGfile::getTransContributions)
         .def("__str__", &G16LOGfile::toStr);
 
+    py::class_<G16FCHKfile>(m, "G16FCHKfile", "This class extract significant properties from Gaussian 16 .fchk output file.")
+        .def(py::init< string>(), py::arg("filePath"))
+        .def("getCartesianGradient", (Matrix (G16FCHKfile::*)()) &G16FCHKfile::getCartesianGradient);
+
 };
 
-/*
 
+/*
 int main(int argc, char **argv){
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/VSNS/ONL/pcm_done/pcm_B3LYP_0.log";//
-    string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/OldResearch/arsenio_epinefrina/Water/TD_Epinefrina_LC-wPBE_4000.log";
+    string fileN = "/media/mateus/Data/Teste_DicePlayer/OPT/default/moh_opt.fchk";
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/OldResearch/chalc_guilherme/chalcona_GM7.log";
-    G16LOGfile g16 = G16LOGfile(fileN, 0);
-    cout << g16.toStr() << endl;
+    G16FCHKfile g16 = G16FCHKfile(fileN);
+    Matrix Grad = g16.getCartesianGradient();
+    cout << Grad.toStr() << endl;
     
     return 0;
 };
+*/
+
+/*
+c++ main.cpp chemicalUnits/AtomicScale.cpp chemicalUnits/PeriodicTable.cpp chemicalUnits/Molecule.cpp chemicalUnits/SupraMolecule.cpp berny/Hessian.cpp math/Geometry.cpp math/MassCenter.cpp math/Matrix.cpp math/Vectors.cpp outputProcess/G16Process.cpp 
 */

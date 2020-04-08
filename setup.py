@@ -9,6 +9,7 @@ print('Runing Setup for MoleKing_util on {} -{}- with python {}:'.format(OS, Ver
 
 if sys.argv[1] == 'bin':
     pyPath = 'bin'
+    os.system('mkdir bin')
 else:
     pyPath = input('Type the path for Python3 SitePackages Directory: ')
 
@@ -55,6 +56,7 @@ pyarq.write('from MoleKing_util.MoleKing_util import Matrix\n')
 pyarq.write('from MoleKing_util.MoleKing_util import PeriodicTable\n')
 pyarq.write('from MoleKing_util.MoleKing_util import SupraMolecule\n')
 pyarq.write('from MoleKing_util.MoleKing_util import G16LOGfile\n')
+pyarq.write('from MoleKing_util.MoleKing_util import G16FCHKfile\n')
 pyarq.close()
 
 os.chdir(home)

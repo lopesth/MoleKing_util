@@ -13,6 +13,7 @@
 #include <string>
 #include <fstream>
 #include "../math/Vectors.hpp"
+#include "../math/Matrix.hpp"
 #include <iostream>
 #include <regex>
 #include "../chemicalUnits/Molecule.hpp"
@@ -108,3 +109,27 @@ public:
     vector <string> getTransitionsStr();
     vector <vector <string>> getTransContributions();
 };
+
+class GradientValues{
+private:
+    Matrix cartesianGradient;
+public:
+    GradientValues(); 
+
+    void setGradient(Matrix gradient);
+    Matrix getGradient();
+};
+
+class G16FCHKfile{
+private:
+    Matrix cartesianGradient, quadrupoleMoment;
+    string filePath;
+    GradientValues gradientValues;
+    void makeGradient(vector <string> fileLines);
+
+public:
+    G16FCHKfile(string filePath);
+
+    Matrix getCartesianGradient();
+};
+

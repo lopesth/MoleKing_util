@@ -430,6 +430,71 @@ vector <vector <string>> G16LOGfile::getTransContributions(){
     return results;
 };
 
+/*
+----------------------- G16FCHKfile -----------------------
+*/
+
+G16FCHKfile::G16FCHKfile(string filePath){
+    ifstream arq;
+    arq.open(filePath, ifstream::in);
+    string lineSTR;
+
+    vector <string> fileLines;
+    while(!arq.eof()){
+        getline(arq, lineSTR);
+        fileLines.push_back(lineSTR);
+    };
+    arq.close();
+    this->makeGradient(fileLines);
+};
+
+void G16FCHKfile::makeGradient(vector <string> fileLines){
+    regex start_gradient_re("Cartesian Gradient (.*)");
+    regex end_gradient_re("Nonadiabatic coupling (.*)");
+    int start = 0, end = 0;
+    for (int i = 0; i < (int) fileLines.size(); i++){
+        if (regex_match(fileLines[i], start_gradient_re)){
+            start = i+1;
+        } else if (regex_match(fileLines[i], end_gradient_re)){
+            end = i;
+        };
+    };
+    vector <string> gradLine; 
+    vector < vector <double> > outsideVector;
+    for (int i = start; i < (int) end; i++){
+        for (int j = 0; j < (int) splitString(fileLines[i], ' ').size(); j++){
+            gradLine.push_back(splitString(fileLines[i], ' ')[j]);
+        };
+    };
+    for (int i = 0; i < (int) gradLine.size(); i+=3){
+        vector <double> tempGrad(3, 0); 
+        tempGrad.at(0) = stod(gradLine[i]);
+        tempGrad.at(1) = stod(gradLine[i+1]);
+        tempGrad.at(2) = stod(gradLine[i+2]);
+        outsideVector.push_back(tempGrad); 
+    };
+    Matrix cGradient = Matrix(outsideVector);
+    this->gradientValues.setGradient(cGradient);
+};
+
+Matrix G16FCHKfile::getCartesianGradient(){
+    return this->gradientValues.getGradient();
+};
+
+/*
+----------------------- GradientValues -----------------------
+*/
+
+GradientValues::GradientValues(){
+};
+
+void GradientValues::setGradient(Matrix gradient){
+    this->cartesianGradient = gradient;
+};
+
+Matrix GradientValues::getGradient(){
+    return this->cartesianGradient;
+};
 
 /*
 ----------------------- PolarValues -----------------------
