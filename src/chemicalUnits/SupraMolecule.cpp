@@ -219,3 +219,11 @@ void SupraMolecule::removeMolecule(Molecule molecule){
         };
     };
 };
+
+double SupraMolecule::getSupraMolecularMass(){
+    double supraMolecularMass = 0;
+    for (int i = 0; i < this->supraMolecule.size(); i++){
+        supraMolecularMass = supraMolecularMass + supraMolecule[i].getMolecularMass();
+    };
+    return supraMolecularMass;
+};

@@ -56,6 +56,7 @@ public:
     void removeElement(string element);
     void removeMolecule(int molNumber);
     void removeMolecule(Molecule molecule);
+    double getSupraMolecularMass();
 };
 
 

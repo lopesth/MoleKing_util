@@ -87,6 +87,7 @@ public:
     bool operator!=(Molecule mol);
     void removeElement(string element);
     Molecule copy();
+    double getMolecularMass();
 
 };
 

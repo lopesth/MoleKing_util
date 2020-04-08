@@ -124,7 +124,8 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("getIRCBonds", &Molecule::getIRCBonds)
         .def("getIRCAngles", &Molecule::getIRCAngles)
         .def("getIRCDihedrals", &Molecule::getIRCDihedrals)
-        .def("removeElement", &Molecule::removeElement);
+        .def("removeElement", &Molecule::removeElement)
+        .def("getMM", &Molecule::getMolecularMass);
 
     
     py::class_<SupraMolecule>(m, "SupraMolecule", "This class creates a set of molecules variable type allowing for the usage in python like a primitive type.")
@@ -153,7 +154,8 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("removeElement", (void (SupraMolecule::*)(int, string)) &SupraMolecule::removeElement)
         .def("removeElement", (void (SupraMolecule::*)(string)) &SupraMolecule::removeElement)
         .def("removeMolecule", (void (SupraMolecule::*)(int)) &SupraMolecule::removeMolecule)
-        .def("removeMolecule", (void (SupraMolecule::*)(Molecule)) &SupraMolecule::removeMolecule);
+        .def("removeMolecule", (void (SupraMolecule::*)(Molecule)) &SupraMolecule::removeMolecule)
+        .def("getSupraMM", &SupraMolecule::getSupraMolecularMass);;
 
     
     py::class_<Point>(m, "Point", "This class creates a point variable type allowing for the usage in python like a primitive type.")

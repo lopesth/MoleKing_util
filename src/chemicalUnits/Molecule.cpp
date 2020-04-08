@@ -531,3 +531,11 @@ Molecule Molecule::copy(){
     };
     return temp;
 };
+
+double Molecule::getMolecularMass(){
+    double molMass = 0;
+    for (int i = 0; i < this->molecule.size(); i++) {
+        molMass = molMass + this->molecule[i].getAtomicMass();
+    }
+    return molMass;
+};
