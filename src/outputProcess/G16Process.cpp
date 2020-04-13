@@ -39,14 +39,21 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
     string lineSTR;
     regex states_re("(.*)Excitation energies and oscillator strengths:");
     regex done_re(" Normal termination of (.*)");
-    regex opt_re("(.*) opt (.*)");
+    regex opt_re("(.*) opt(.*)");
+    regex opt_upper_re("(.*)OPT(.*)");
+    regex opt_ASEC_re("(.*)maxcyc=1,maxstep=15(.*)");
     this->calcDone = 0;
+    this->not_stop = 0;
 
     vector <string> fileLines;
     while(!arq.eof()){
         getline(arq, lineSTR);
         fileLines.push_back(lineSTR);
         if (regex_match(lineSTR, opt_re)){
+            this->optAsw = 1;
+        } else if (regex_match(lineSTR, opt_ASEC_re)){
+            this->not_stop = 1;
+        } else if (regex_match(lineSTR, opt_upper_re)){
             this->optAsw = 1;
         } else if (regex_match(lineSTR, states_re)){
             this->stateAsw = 1;
@@ -57,19 +64,24 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
         };
     };
     arq.close();
-    this->molConstructor(fileLines);
-    if (this->polarAsw){
-        this->makePolar(fileLines);
+    if (!this->not_stop){
+        this->molConstructor(fileLines);
+        if (this->polarAsw){
+            this->makePolar(fileLines);
+        };
+        if (this->stateAsw) {
+            this->exSates = ExcStates(this->statesNum(fileLines));
+            this->makeStates(fileLines);
+        };
+    } else{
+        this->makeGradient(fileLines);
     };
-    if (this->stateAsw) {
-        this->exSates = ExcStates(this->statesNum(fileLines));
-        this->makeStates(fileLines);
-    };
-
     fileLines.clear();
-    if (!this->calcDone){
-        throw invalid_argument("The calculation, in this file " + filePath + ", has not been completed\n");
-    }
+    if (!this->not_stop){
+        if (!this->calcDone){
+            throw invalid_argument("The calculation, in this file " + filePath + ", has not been completed\n");
+        };
+    };
 };
 
 int G16LOGfile::statesNum(vector <string> fileLines){
@@ -257,7 +269,39 @@ void G16LOGfile::makePolar(vector <string> fileLines){
     };
 }
 
+void G16LOGfile::makeGradient(vector <string> fileLines){
+    regex grad_re("(.*)Forces \\(Hartrees/Bohr\\)(.*)");
+    regex grad_re_end(" Cartesian Forces:  (.*)");
+    int grad_num_start =0, grad_num_end = 0;
+        for (int i = 0; i < (int) fileLines.size(); i++){
+            if (regex_match(fileLines[i], grad_re)){
+                grad_num_start = i+3;
+            } else if (regex_match(fileLines[i], grad_re_end)){
+                grad_num_end = i-1;
+            };
+        };
+    vector <string> gradLine;
+    vector < vector <double> > outsideVector;
+    for (int i = grad_num_start; i < (int) grad_num_end; i++){
+        gradLine.push_back(splitString(fileLines[i], ' ')[2]);
+        gradLine.push_back(splitString(fileLines[i], ' ')[3]);
+        gradLine.push_back(splitString(fileLines[i], ' ')[4]);
+    };
+    for (int i = 0; i < (int)gradLine.size(); i+=3){
+        vector <double> tempGrad(3, 0);
+        tempGrad.at(0) = stod(gradLine[i]);
+        tempGrad.at(1) = stod(gradLine[i+1]);
+        tempGrad.at(2) = stod(gradLine[i+2]);
+        outsideVector.push_back(tempGrad); 
+    };
+    Matrix cGradient = Matrix(outsideVector);
+    this->gradientValues.setGradient(cGradient);
+};
 
+Matrix G16LOGfile::getGradient(){
+    return this->gradientValues.getGradient();
+
+};
 double G16LOGfile::scfEnergy(){
     return this->energy;
 };
@@ -429,6 +473,10 @@ vector <vector <string>> G16LOGfile::getTransContributions(){
     };
     return results;
 };
+
+
+
+
 
 /*
 ----------------------- G16FCHKfile -----------------------

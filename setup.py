@@ -9,6 +9,11 @@ print('Runing Setup for MoleKing_util on {} -{}- with python {}:'.format(OS, Ver
 
 if sys.argv[1] == 'bin':
     pyPath = 'bin'
+    try:
+        shutil.rmtree('bin')
+    except:
+        pass
+    os.makedirs('bin')
 else:
     pyPath = input('Type the path for Python3 SitePackages Directory: ')
 

@@ -73,18 +73,30 @@ public:
     
 };
 
+class GradientValues{
+private:
+    Matrix cartesianGradient;
+public:
+    GradientValues(); 
+
+    void setGradient(Matrix gradient);
+    Matrix getGradient();
+};
+
 class G16LOGfile{
 private:
     double energy;
     string filePath, fileType, levelTheory, basis, date;
     int size;
-    bool polarAsw, optAsw, stateAsw, calcDone;
+    bool polarAsw, optAsw, stateAsw, calcDone, not_stop;
     vector<double> occOrb, virtOrb;
     Molecule molecule;
     PolarValues polarValues;
+    GradientValues gradientValues;
     void makePolar(vector <string> fileLines);
     void makeStates(vector <string> fileLines);
     void molConstructor(vector <string> fileLines);
+    void makeGradient(vector <string> fileLines);
     int statesNum(vector <string> fileLines);
     ExcStates exSates;
     vector <string>  getTransition(int state);
@@ -108,15 +120,6 @@ public:
     vector <vector <string> > getTransitions();
     vector <string> getTransitionsStr();
     vector <vector <string>> getTransContributions();
-};
-
-class GradientValues{
-private:
-    Matrix cartesianGradient;
-public:
-    GradientValues(); 
-
-    void setGradient(Matrix gradient);
     Matrix getGradient();
 };
 

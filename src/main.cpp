@@ -225,6 +225,7 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("getTransitions", &G16LOGfile::getTransitions)
         .def("getTransitionsStr", &G16LOGfile::getTransitionsStr)
         .def("getTransContributions", &G16LOGfile::getTransContributions)
+        .def("getGradient", &G16LOGfile::getGradient)
         .def("__str__", &G16LOGfile::toStr);
 
     py::class_<G16FCHKfile>(m, "G16FCHKfile", "This class extract significant properties from Gaussian 16 .fchk output file.")
@@ -237,11 +238,13 @@ PYBIND11_MODULE(MoleKing_util, m) {
 /*
 int main(int argc, char **argv){
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/VSNS/ONL/pcm_done/pcm_B3LYP_0.log";//
-    string fileN = "/media/mateus/Data/Teste_DicePlayer/OPT/default/moh_opt.fchk";
+    string fileN = "/media/mateus/Data/Teste_DicePlayer/OPT/default/moh_gpc.log";
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/OldResearch/chalc_guilherme/chalcona_GM7.log";
-    G16FCHKfile g16 = G16FCHKfile(fileN);
-    Matrix Grad = g16.getCartesianGradient();
-    cout << Grad.toStr() << endl;
+    G16LOGfile g16 = G16LOGfile(fileN);
+    //Matrix Grad = g16.getCartesianGradient();
+    Molecule mol = g16.getMolecule();
+    string teste = "ola mundo\n";
+    cout << teste << mol.toStr() << endl;
     
     return 0;
 };
