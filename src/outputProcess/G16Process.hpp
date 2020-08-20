@@ -125,14 +125,20 @@ public:
 
 class G16FCHKfile{
 private:
+    double energy;
+    string filePath, fileType, levelTheory, basis, date;
+    int size, electronNumber;
+    bool  optAsw, calcDone;
     Matrix cartesianGradient, quadrupoleMoment;
-    string filePath;
+    vector<double> occOrb, virtOrb;
     GradientValues gradientValues;
+    Molecule molecule;
+    void molConstructor(vector <string> fileLines);
     void makeGradient(vector <string> fileLines);
 
 public:
     G16FCHKfile(string filePath);
-
+    Molecule getMolecule();
     Matrix getCartesianGradient();
 };
 

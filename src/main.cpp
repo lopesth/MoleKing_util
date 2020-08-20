@@ -21,6 +21,7 @@
 #include "outputProcess/G16Process.hpp"
 using namespace std;
 
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/pytypes.h>
@@ -190,7 +191,8 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("crossProduct", &Vector3D::crossProduct)
         .def("dotProduct", &Vector3D::dotProduct)
         .def("angle", &Vector3D::angle, py::arg("vectorB"), py::arg("unit") = 'd')
-        .def("unitVectorValue", &Vector3D::axisValue);
+        .def("unitVectorValue", &Vector3D::axisValue)
+        .def("magnitude", &Vector3D::magnitude);
 
     
     py::class_<Matrix>(m, "Matrix", "This class creates a Matrix variable type allowing for the usage in python like a primitive type.")
@@ -230,7 +232,8 @@ PYBIND11_MODULE(MoleKing_util, m) {
 
     py::class_<G16FCHKfile>(m, "G16FCHKfile", "This class extract significant properties from Gaussian 16 .fchk output file.")
         .def(py::init< string>(), py::arg("filePath"))
-        .def("getCartesianGradient", (Matrix (G16FCHKfile::*)()) &G16FCHKfile::getCartesianGradient);
+        .def("getCartesianGradient", (Matrix (G16FCHKfile::*)()) &G16FCHKfile::getCartesianGradient)
+        .def("getMolecule", &G16FCHKfile::getMolecule);
 
 };
 
@@ -238,13 +241,12 @@ PYBIND11_MODULE(MoleKing_util, m) {
 /*
 int main(int argc, char **argv){
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/VSNS/ONL/pcm_done/pcm_B3LYP_0.log";//
-    string fileN = "/media/mateus/Data/Teste_DicePlayer/OPT/default/moh_gpc.log";
+    string fileN = "/media/mateus/Data/Teste_DicePlayer/OPT/Metanol/metanol.fchk";
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/OldResearch/chalc_guilherme/chalcona_GM7.log";
-    G16LOGfile g16 = G16LOGfile(fileN);
+    G16FCHKfile g16 = G16FCHKfile(fileN);
     //Matrix Grad = g16.getCartesianGradient();
     Molecule mol = g16.getMolecule();
-    string teste = "ola mundo\n";
-    cout << teste << mol.toStr() << endl;
+    cout << mol.toStr() << endl;
     
     return 0;
 };

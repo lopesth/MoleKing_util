@@ -493,7 +493,74 @@ G16FCHKfile::G16FCHKfile(string filePath){
         fileLines.push_back(lineSTR);
     };
     arq.close();
+    this->molConstructor(fileLines);
     this->makeGradient(fileLines);
+};
+
+void G16FCHKfile::molConstructor(vector <string> fileLines){
+    
+    regex molecule_atoms_re("(.*)Atomic numbers(.*)");
+    regex molecule_atoms_re_end("(.*)Nuclear charges(.*)");
+    regex molecule_re("(.*)Current cartesian coordinates(.*)");
+    regex molecule_re_end("(.*)Number of symbols in(.*)");
+    regex scf_re("(.*)SCF Energy(.*)");
+    regex size_re("(.*)Number of atoms(.*)");
+    //regex omo_re("(.*)occ. eigenvalues(.*)");
+    regex ele_re("(.*)Number of electrons(.*)");
+    //regex umo_re("(.*)virt. eigenvalues(.*)");
+    //regex basis_re(" Standard basis:(.*)");
+    int startMoleculeRef = 0;
+    int endMoleculeRef = 0;
+    int startAtomsRef = 0;
+    int endAtomsRef = 0;
+    
+    for (int i = 0; i < (int) fileLines.size(); i++){
+        if (regex_match(fileLines[i], scf_re)){
+            vector <string> splittedLine = splitString(fileLines[i], ' ');
+            this->energy = stod(splittedLine[3]);
+            //this->levelTheory = splitString(splitString(splittedLine[2], '(')[1], ')')[0];
+        } else if (regex_match(fileLines[i], ele_re)) {
+            vector <string> splittedLine = splitString(fileLines[i], ' ');
+            this->electronNumber = stoi(splittedLine[4]);
+        } else if (regex_match(fileLines[i], size_re)) {
+            vector <string> splittedLine = splitString(fileLines[i], ' ');
+            this->size = stoi(splittedLine[4]);
+        } else if (regex_match(fileLines[i], molecule_atoms_re)) {
+                startAtomsRef = i+1;
+        } else if (regex_match(fileLines[i], molecule_atoms_re_end)) {
+                endAtomsRef = i;
+        } else if (regex_match(fileLines[i], molecule_re)) {
+                startMoleculeRef = i + 1;
+        } else if (regex_match(fileLines[i], molecule_re_end)) {
+                endMoleculeRef = i;
+        };
+        
+    };
+    //int endMoleculeRef = startMoleculeRef + this->size;
+    vector <double> atomsVector;
+    for (int i = startAtomsRef; i < endAtomsRef; i++){
+        for (int j = 0; j < (int) splitString(fileLines[i], ' ').size(); j++){
+            atomsVector.push_back(stoi(splitString(fileLines[i], ' ')[j]));
+        };
+    };
+    vector <double> molLine; 
+    vector < vector <double> > molVector;
+    for (int i = startMoleculeRef; i < (int) endMoleculeRef; i++){
+        for (int j = 0; j < (int) splitString(fileLines[i], ' ').size(); j++){
+            molLine.push_back(stod(splitString(fileLines[i], ' ')[j]));
+        };
+    };
+    for (int i = 0; i < (int) molLine.size(); i+=3){
+        vector <double> tempGrad(3, 0); 
+        tempGrad.at(0) = molLine[i];
+        tempGrad.at(1) = molLine[i+1];
+        tempGrad.at(2) = molLine[i+2];
+        molVector.push_back(tempGrad); 
+    };
+    for (int i = 0; i < (int) atomsVector.size(); i++){
+        this->molecule.addAtom(atomsVector[i], molVector[i][0], molVector[i][1], molVector[i][2]);
+    };
+    
 };
 
 void G16FCHKfile::makeGradient(vector <string> fileLines){
@@ -523,6 +590,10 @@ void G16FCHKfile::makeGradient(vector <string> fileLines){
     };
     Matrix cGradient = Matrix(outsideVector);
     this->gradientValues.setGradient(cGradient);
+};
+
+Molecule G16FCHKfile::getMolecule(){
+    return this->molecule;
 };
 
 Matrix G16FCHKfile::getCartesianGradient(){
