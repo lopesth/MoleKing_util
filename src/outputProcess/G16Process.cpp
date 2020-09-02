@@ -487,14 +487,16 @@ G16FCHKfile::G16FCHKfile(string filePath){
     arq.open(filePath, ifstream::in);
     string lineSTR;
 
+
     vector <string> fileLines;
     while(!arq.eof()){
         getline(arq, lineSTR);
         fileLines.push_back(lineSTR);
     };
     arq.close();
+
     this->molConstructor(fileLines);
-    this->makeGradient(fileLines);
+    //this->makeGradient(fileLines);
 };
 
 void G16FCHKfile::molConstructor(vector <string> fileLines){
@@ -503,6 +505,9 @@ void G16FCHKfile::molConstructor(vector <string> fileLines){
     regex molecule_atoms_re_end("(.*)Nuclear charges(.*)");
     regex molecule_re("(.*)Current cartesian coordinates(.*)");
     regex molecule_re_end("(.*)Number of symbols in(.*)");
+    regex charge_type("(.*)chelpg(.*)");
+    regex save_charges("(.*)saveESP(.*)");
+    regex molecule_charge("(.*)Mulliken Charges(.*)");
     regex scf_re("(.*)SCF Energy(.*)");
     regex size_re("(.*)Number of atoms(.*)");
     //regex omo_re("(.*)occ. eigenvalues(.*)");
@@ -513,7 +518,18 @@ void G16FCHKfile::molConstructor(vector <string> fileLines){
     int endMoleculeRef = 0;
     int startAtomsRef = 0;
     int endAtomsRef = 0;
+    int startCharges = 0;
+    int endCharge = 0;
     
+    for (int i = 0; i < (int) fileLines.size(); i++){
+        if (regex_match(fileLines[i], charge_type)) {
+            if (regex_match(fileLines[i], save_charges)) {
+                regex molecule_charge("(.*)MM charges(.*)");
+            } else {
+                regex molecule_charge("(.*)ESP Charges(.*)");
+            };
+        };
+    };
     for (int i = 0; i < (int) fileLines.size(); i++){
         if (regex_match(fileLines[i], scf_re)){
             vector <string> splittedLine = splitString(fileLines[i], ' ');
@@ -533,6 +549,8 @@ void G16FCHKfile::molConstructor(vector <string> fileLines){
                 startMoleculeRef = i + 1;
         } else if (regex_match(fileLines[i], molecule_re_end)) {
                 endMoleculeRef = i;
+        } else if (regex_match(fileLines[i], molecule_charge)) {
+                startCharges = i + 1;
         };
         
     };
@@ -541,6 +559,20 @@ void G16FCHKfile::molConstructor(vector <string> fileLines){
     for (int i = startAtomsRef; i < endAtomsRef; i++){
         for (int j = 0; j < (int) splitString(fileLines[i], ' ').size(); j++){
             atomsVector.push_back(stoi(splitString(fileLines[i], ' ')[j]));
+        };
+    };
+    if (atomsVector.size() % 5 == 0){
+        endCharge = startCharges + atomsVector.size()/5; 
+    } else {
+                endCharge = startCharges + (atomsVector.size()/5)+1; 
+
+    };
+    vector <double> atomsCharge(atomsVector.size(), 0.0);
+    int c = 0;
+    for (int i = startCharges; i < endCharge; i++){
+        for (int j = 0; j < (int) splitString(fileLines[i], ' ').size(); j++){
+            atomsCharge.at(c) = (stod(splitString(fileLines[i], ' ')[j]));
+            c++;
         };
     };
     vector <double> molLine; 
@@ -558,7 +590,10 @@ void G16FCHKfile::molConstructor(vector <string> fileLines){
         molVector.push_back(tempGrad); 
     };
     for (int i = 0; i < (int) atomsVector.size(); i++){
-        this->molecule.addAtom(atomsVector[i], molVector[i][0], molVector[i][1], molVector[i][2]);
+        //Atom A = Atom(atomsVector[i], molVector[i][0], molVector[i][1], molVector[i][2], atomsCharge[i]);
+        this->molecule.addAtom(atomsVector[i], molVector[i][0], molVector[i][1], molVector[i][2], atomsCharge[i]);
+        //cout << A.toStr() << endl;
+        //printf("%f\n", atomsCharge[i]);
     };
     
 };

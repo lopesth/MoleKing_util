@@ -143,22 +143,24 @@ string ChargePoint::toStr(){
 
 /* #########    Atom Class    ######### */
 
-Atom::Atom(int atomicNumber, double x, double y, double z, bool freezeCode_){
+Atom::Atom(int atomicNumber, double x, double y, double z, double charge, bool freezeCode_){
     PeriodicTable temp;
     this->atomicNumber = atomicNumber;
     this->atomicSymbol = temp.getSymbol(this->atomicNumber);
     this->point = Point(x, y, z, 'c');
+    this->charge = charge;
     this->freezeCode = freezeCode_;
     this->atomicMass = temp.getAtomicMass(this->atomicSymbol);
     this->atomicRadio = PeriodicTable().getCovalentRadii(this->atomicSymbol);
 };
 
-Atom::Atom(string atomicSymbol, double x, double y, double z, bool freezeCode_){
+Atom::Atom(string atomicSymbol, double x, double y, double z, double charge, bool freezeCode_){
     PeriodicTable temp;
     string symbol(atomicSymbol);
     this->atomicSymbol = symbol;
     this->atomicNumber = temp.getAtomicNumber(atomicSymbol);
     this->point = Point(x, y, z, 'c');
+    this->charge = charge;
     this->freezeCode = freezeCode_;
     this->atomicMass = temp.getAtomicMass(this->atomicSymbol);
     this->atomicRadio = PeriodicTable().getCovalentRadii(this->atomicSymbol);
@@ -196,6 +198,10 @@ double Atom::getZ(){
     return this->point.getCoords('c')[2];
 };
 
+double Atom::getAtomicCharge(){
+    return this->charge;
+};
+
 void Atom::setX(double newX){
     this->point.setCoord('x', newX);
 };
@@ -210,6 +216,10 @@ void Atom::setZ(double newZ){
 
 void Atom::setNewPos(double newX, double newY, double newZ){
     this->point.setCoords(vector <double> {newX, newY, newZ}, 'c');
+};
+
+void Atom::setCharge(double newCharge){
+    this->charge = newCharge;
 };
 
 void Atom::translation(Vector3D traslationVector){
@@ -303,5 +313,6 @@ int Atom::comp(Atom atom){
 string Atom::toStr(){
     string temp = "Element " + this->getAtomicSymbol() + " (Z = " + to_string(this->atomicNumber) +")";
     temp = temp + " Cartesian pos: (" + to_string(this->getX()) + ", " + to_string(this->getY()) + ", " + to_string(this->getZ()) + ")";
+    temp = temp + " Charge: "+to_string(this->getAtomicCharge());
     return temp;
 }

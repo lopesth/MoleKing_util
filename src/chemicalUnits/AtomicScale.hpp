@@ -21,10 +21,11 @@ class Atom{
     Point point;
     bool freezeCode;
     double atomicRadio;
+    double charge;
 
     public:
-    Atom(int atomicNumber, double x, double y, double z, bool freezeCode_ = '0');
-    Atom(string atomicSymbol, double x, double y, double z, bool freezeCode_ = '0');
+    Atom(int atomicNumber, double x, double y, double z, double charge = 0.0, bool freezeCode_ = '0');
+    Atom(string atomicSymbol, double x, double y, double z, double charge = 0.0, bool freezeCode_ = '0');
     double getAtomicMass();
     string getAtomicSymbol();
     int getAtomicNumber();
@@ -33,9 +34,11 @@ class Atom{
     void setX(double newX);
     void setY(double newY);
     void setZ(double newZ);
+    void setCharge(double newCharge);
     double getX();
     double getY();
     double getZ();
+    double getAtomicCharge();
     double getAtomicRadio();
     void setNewPos(double newX, double newY, double newZ);
     void translation(Vector3D traslationVector);

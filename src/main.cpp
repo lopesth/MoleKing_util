@@ -48,9 +48,11 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("getX", &Atom::getX)
         .def("getY", &Atom::getY)
         .def("getZ", &Atom::getZ)
+        .def("getCharge", &Atom::getAtomicCharge)
         .def("setX", &Atom::setX)
         .def("setY", &Atom::setY)
         .def("setZ", &Atom::setZ)
+        .def("setCharge", &Atom::setCharge)
         .def("__eq__", &Atom::operator==)
         .def("__ne__", &Atom::operator==)
         .def("__lt__", &Atom::operator<)
@@ -91,8 +93,8 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def(py::init())
         .def("addChargePoints", (void (Molecule::*)(double, double, double, double)) &Molecule::addChargePoints, "This method add a charge point in a existent molecule.")
         .def("addChargePoints", (void (Molecule::*)(ChargePoint)) &Molecule::addChargePoints, "This method add a charge point in a existent molecule.")
-        .def("addAtom", (void (Molecule::*)(string, double, double, double, bool)) &Molecule::addAtom, py::arg("atomSymbol"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_")=0)
-        .def("addAtom", (void (Molecule::*)(int, double, double, double, bool)) &Molecule::addAtom, py::arg("atomNumber"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("freezeCode_")=0)
+        .def("addAtom", (void (Molecule::*)(string, double, double, double, double, bool)) &Molecule::addAtom, py::arg("atomSymbol"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"),py::arg("atomicCharge")=0.0, py::arg("freezeCode_")=0)
+        .def("addAtom", (void (Molecule::*)(int, double, double, double, double, bool)) &Molecule::addAtom, py::arg("atomNumber"), py::arg("xPos"), py::arg("yPos"), py::arg("zPos"), py::arg("atomicCharge")=0.0, py::arg("freezeCode_")=0)
         .def("addAtom", (void (Molecule::*)(Atom)) &Molecule::addAtom)
         .def("removeAtom", (void (Molecule::*)(int)) &Molecule::removeAtom)
         .def("removeAtom", (void (Molecule::*)(Atom)) &Molecule::removeAtom)
@@ -241,17 +243,27 @@ PYBIND11_MODULE(MoleKing_util, m) {
 /*
 int main(int argc, char **argv){
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/VSNS/ONL/pcm_done/pcm_B3LYP_0.log";//
+    //string fileN = "/media/mateus/Data/Teste_DicePlayer/OPT/Metanol/metanol.fchk";
+    //string fileN = "/home/mateus/Desktop/teste.fchk";
     string fileN = "/media/mateus/Data/Teste_DicePlayer/OPT/Metanol/metanol.fchk";
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/OldResearch/chalc_guilherme/chalcona_GM7.log";
     G16FCHKfile g16 = G16FCHKfile(fileN);
     //Matrix Grad = g16.getCartesianGradient();
     Molecule mol = g16.getMolecule();
-    cout << mol.toStr() << endl;
+    int N = mol.getSize();
+    for (int i = 0; i < N; i++){
+        Atom A =  mol.getAtomObj(i);
+        cout << A.toStr() << endl;
+        //cout << A.getAtomicCharge() << std::setprecision(8) << endl;
+        //printf("%f\n", A.getAtomicCharge()); 
+
+    };
+    //cout << N << endl;
     
     return 0;
 };
-*/
 
+*/
 /*
 c++ main.cpp chemicalUnits/AtomicScale.cpp chemicalUnits/PeriodicTable.cpp chemicalUnits/Molecule.cpp chemicalUnits/SupraMolecule.cpp berny/Hessian.cpp math/Geometry.cpp math/MassCenter.cpp math/Matrix.cpp math/Vectors.cpp outputProcess/G16Process.cpp 
 */
