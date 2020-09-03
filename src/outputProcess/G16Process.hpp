@@ -88,7 +88,7 @@ private:
     double energy;
     string filePath, fileType, levelTheory, basis, date;
     int size;
-    bool polarAsw, optAsw, stateAsw, calcDone, not_stop;
+    bool polarAsw, optAsw, stateAsw, calcDone, not_stop, chelpg;
     vector<double> occOrb, virtOrb;
     Molecule molecule;
     PolarValues polarValues;

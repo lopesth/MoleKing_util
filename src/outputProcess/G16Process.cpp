@@ -42,8 +42,10 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
     regex opt_re("(.*) opt(.*)");
     regex opt_upper_re("(.*)OPT(.*)");
     regex opt_ASEC_re("(.*)maxcyc=1,maxstep=15(.*)");
+    regex espCharges("(.*)chelpg(.*)", regex_constants::icase);
     this->calcDone = 0;
     this->not_stop = 0;
+    this->chelpg = 0;
 
     vector <string> fileLines;
     while(!arq.eof()){
@@ -61,6 +63,8 @@ G16LOGfile::G16LOGfile(string filePath, bool polarAsw){
             this->calcDone = 1;
             vector <string> temp = splitString(lineSTR, ' ');
             this->date =  temp[6] + " " + temp[7] + " " + temp[8] + " " + temp[9] + " " + temp[10];
+        } else if (regex_match(lineSTR, espCharges)){
+            this->chelpg = 1;
         };
     };
     arq.close();
@@ -142,7 +146,17 @@ void G16LOGfile::molConstructor(vector <string> fileLines){
     regex omo_re("(.*)occ. eigenvalues(.*)");
     regex umo_re("(.*)virt. eigenvalues(.*)");
     regex basis_re(" Standard basis:(.*)");
+    regex startCharge [1];
     int startMoleculeRef = 0;
+    int chargeLine = 0;
+
+    if (this->chelpg){
+        regex chargeType("(.*)ESP charges:(.*)", regex_constants::icase);
+        startCharge[0] = chargeType;
+    } else {
+        regex chargeType("(.*)Mulliken charges:(.*)", regex_constants::icase);
+        startCharge[0] = chargeType;
+    };
     for (int i = 0; i < (int) fileLines.size(); i++){
         if (regex_match(fileLines[i], scf_re)){
             vector <string> splittedLine = splitString(fileLines[i], ' ');
@@ -175,19 +189,32 @@ void G16LOGfile::molConstructor(vector <string> fileLines){
             if (regex_match(fileLines[i], basis_re)){
                 this->basis = splitString(fileLines[i], ' ')[2];
             };
+        } else if (regex_match(fileLines[i], startCharge[0])){
+            chargeLine = i + 2;
         };
         
     };
+    int endCharge = chargeLine + this->size;
+    vector <double> atomicCharges(this->size, 0.0);
+    int count = 0;
+    for (int i = chargeLine; i < endCharge; i++){
+        vector <string> charString = splitString(fileLines[i], ' ');
+        atomicCharges.at(count) = stod(charString.at(2));
+        count ++;
+    };
+
     int endMoleculeRef = startMoleculeRef + this->size;
+    count = 0;
     for (int i = startMoleculeRef; i < endMoleculeRef; i++){
         vector <string> molLine = splitString(fileLines[i], ' ');
         if(mol_re1_Bool){
-            this->molecule.addAtom(molLine[0], stod(molLine[1]), stod(molLine[2]), stod(molLine[3]));
+            this->molecule.addAtom(molLine[0], stod(molLine[1]), stod(molLine[2]), stod(molLine[3]), atomicCharges.at(count));
         } else {
-            this->molecule.addAtom(molLine[1], stod(molLine[3]), stod(molLine[4]), stod(molLine[5]));
+            this->molecule.addAtom(molLine[1], stod(molLine[3]), stod(molLine[4]), stod(molLine[5]), atomicCharges.at(count));
         }
+        count ++;
     };
-}
+};
 
 void G16LOGfile::makePolar(vector <string> fileLines){
     regex dipole_re("(.*)Electric dipole moment(.*)input orientation(.*)");
