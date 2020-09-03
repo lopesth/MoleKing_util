@@ -21,7 +21,7 @@
 #include "outputProcess/G16Process.hpp"
 using namespace std;
 
-
+/*
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/pytypes.h>
@@ -238,14 +238,14 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("getMolecule", &G16FCHKfile::getMolecule);
 
 };
+*/
 
 
-/*
 int main(int argc, char **argv){
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/VSNS/ONL/pcm_done/pcm_B3LYP_0.log";//
     //string fileN = "/media/mateus/Data/Teste_DicePlayer/OPT/Metanol/metanol.fchk";
     //string fileN = "/home/mateus/Desktop/teste.fchk";
-    string fileN = "/media/mateus/Data/Teste_DicePlayer/OPT/Metanol/metanol.fchk";
+    string fileN = "Gau-24967.EFC";
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/OldResearch/chalc_guilherme/chalcona_GM7.log";
     G16FCHKfile g16 = G16FCHKfile(fileN);
     //Matrix Grad = g16.getCartesianGradient();
@@ -263,7 +263,6 @@ int main(int argc, char **argv){
     return 0;
 };
 
-*/
 /*
 c++ main.cpp chemicalUnits/AtomicScale.cpp chemicalUnits/PeriodicTable.cpp chemicalUnits/Molecule.cpp chemicalUnits/SupraMolecule.cpp berny/Hessian.cpp math/Geometry.cpp math/MassCenter.cpp math/Matrix.cpp math/Vectors.cpp outputProcess/G16Process.cpp 
 */
