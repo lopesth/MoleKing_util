@@ -550,7 +550,6 @@ void G16FCHKfile::molConstructor(vector <string> fileLines){
     
     for (int i = 0; i < (int) fileLines.size(); i++){
         if (regex_match(fileLines[i], charge_type)) {
-            //cout << 'A' << endl;
             if (regex_match(fileLines[i], save_charges)) {
                 regex chargeString("(.*)MM charges(.*)", regex_constants::icase);
                 molecule_charge[0] = chargeString;
@@ -561,9 +560,6 @@ void G16FCHKfile::molConstructor(vector <string> fileLines){
             };
         };
     };
-    cout << "M" << regex_match("mm charges", molecule_charge[0]) << endl;
-    cout << "E" << regex_match("ESP Charges", molecule_charge[0]) << endl;
-    cout << "C" << regex_match("Mulliken Charges", molecule_charge[0]) << endl;
     for (int i = 0; i < (int) fileLines.size(); i++){
         if (regex_match(fileLines[i], scf_re)){
             vector <string> splittedLine = splitString(fileLines[i], ' ');
@@ -602,7 +598,6 @@ void G16FCHKfile::molConstructor(vector <string> fileLines){
     };
     vector <double> atomsCharge(atomsVector.size(), 0.0);
     int c = 0;
-    cout << startCharges << ' ' << endCharge << endl;
     for (int i = startCharges; i < endCharge; i++){
         for (int j = 0; j < (int) splitString(fileLines[i], ' ').size(); j++){
             atomsCharge.at(c) = (stod(splitString(fileLines[i], ' ')[j]));
@@ -624,10 +619,7 @@ void G16FCHKfile::molConstructor(vector <string> fileLines){
         molVector.push_back(tempGrad); 
     };
     for (int i = 0; i < (int) atomsVector.size(); i++){
-        //Atom A = Atom(atomsVector[i], molVector[i][0], molVector[i][1], molVector[i][2], atomsCharge[i]);
         this->molecule.addAtom(atomsVector[i], molVector[i][0], molVector[i][1], molVector[i][2], atomsCharge[i]);
-        //cout << A.toStr() << endl;
-        //printf("%f\n", atomsCharge[i]);
     };
     
 };

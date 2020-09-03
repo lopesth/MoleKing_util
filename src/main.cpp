@@ -27,7 +27,7 @@ using namespace std;
 #include <pybind11/pytypes.h>
 namespace py = pybind11;
 
-
+/*
 PYBIND11_MODULE(MoleKing_util, m) {
     
     py::class_<PeriodicTable>(m, "PeriodicTable", "This class creates a virtual Periodic Table.")
@@ -238,17 +238,17 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("getMolecule", &G16FCHKfile::getMolecule);
 
 };
+*/
 
 
-/*
 int main(int argc, char **argv){
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/VSNS/ONL/pcm_done/pcm_B3LYP_0.log";//
     //string fileN = "/media/mateus/Data/Teste_DicePlayer/OPT/Metanol/metanol.fchk";
-    string fileN = "/home/mateus/Desktop/teste.log";
+    //string fileN = "/home/mateus/Desktop/teste.log";
     //string fileN = "Gau-24967.EFC";
-    //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/OldResearch/chalc_guilherme/chalcona_GM7.log";
-    //G16FCHKfile g16 = G16FCHKfile(fileN);
-    G16LOGfile g16 = G16LOGfile(fileN);
+    string fileN = "/media/mateus/Data/Teste_DicePlayer/OPT/Metanol/Gaussian_ASEC/sample/Gau-7637.EFC";
+    G16FCHKfile g16 = G16FCHKfile(fileN);
+    //G16LOGfile g16 = G16LOGfile(fileN);
     //Matrix Grad = g16.getCartesianGradient();
     Molecule mol = g16.getMolecule();
     int N = mol.getSize();
@@ -263,7 +263,7 @@ int main(int argc, char **argv){
     
     return 0;
 };
-*/
+
 /*
 c++ main.cpp chemicalUnits/AtomicScale.cpp chemicalUnits/PeriodicTable.cpp chemicalUnits/Molecule.cpp chemicalUnits/SupraMolecule.cpp berny/Hessian.cpp math/Geometry.cpp math/MassCenter.cpp math/Matrix.cpp math/Vectors.cpp outputProcess/G16Process.cpp 
 */
