@@ -27,7 +27,7 @@ using namespace std;
 #include <pybind11/pytypes.h>
 namespace py = pybind11;
 
-/*
+
 PYBIND11_MODULE(MoleKing_util, m) {
     
     py::class_<PeriodicTable>(m, "PeriodicTable", "This class creates a virtual Periodic Table.")
@@ -238,9 +238,9 @@ PYBIND11_MODULE(MoleKing_util, m) {
         .def("getMolecule", &G16FCHKfile::getMolecule);
 
 };
-*/
 
 
+/*
 int main(int argc, char **argv){
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/VSNS/ONL/pcm_done/pcm_B3LYP_0.log";//
     //string fileN = "/media/mateus/Data/Teste_DicePlayer/OPT/Metanol/metanol.fchk";
@@ -263,7 +263,7 @@ int main(int argc, char **argv){
     
     return 0;
 };
-
+*/
 /*
 c++ main.cpp chemicalUnits/AtomicScale.cpp chemicalUnits/PeriodicTable.cpp chemicalUnits/Molecule.cpp chemicalUnits/SupraMolecule.cpp berny/Hessian.cpp math/Geometry.cpp math/MassCenter.cpp math/Matrix.cpp math/Vectors.cpp outputProcess/G16Process.cpp 
 */
