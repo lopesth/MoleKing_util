@@ -583,7 +583,6 @@ void G16FCHKfile::molConstructor(vector <string> fileLines){
         };
         
     };
-    //int endMoleculeRef = startMoleculeRef + this->size;
     vector <double> atomsVector;
     for (int i = startAtomsRef; i < endAtomsRef; i++){
         for (int j = 0; j < (int) splitString(fileLines[i], ' ').size(); j++){
