@@ -607,7 +607,7 @@ void G16FCHKfile::molConstructor(vector <string> fileLines){
     vector < vector <double> > molVector;
     for (int i = startMoleculeRef; i < (int) endMoleculeRef; i++){
         for (int j = 0; j < (int) splitString(fileLines[i], ' ').size(); j++){
-            molLine.push_back(stod(splitString(fileLines[i], ' ')[j]));
+            molLine.push_back(stod(splitString(fileLines[i], ' ')[j]) * 0.529177249);
         };
     };
     for (int i = 0; i < (int) molLine.size(); i+=3){
