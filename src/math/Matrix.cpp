@@ -7,6 +7,7 @@
 //
 
 #include "Matrix.hpp"
+#include <string>
 
 Matrix::Matrix(vector < vector <double> > matrix){
     this->matrix = matrix;
@@ -153,7 +154,7 @@ string Matrix::toStr(){
     string temp;
     for (int i = 0; i < (int) this->matrix.size(); i++){
         for (int j = 0; j < (int) this->matrix[0].size(); j++){
-            temp = temp + to_string(this->matrix[i][j]) + " ";
+            temp = temp + std::to_string(this->matrix[i][j]) + " ";
         };
         temp = temp + "\n";
     };
