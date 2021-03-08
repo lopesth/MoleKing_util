@@ -6,9 +6,9 @@ add_subdirectory(chemicalUnits)
 
 
 
-pybind11_add_module(MoleKing_Utils main.cpp)
+pybind11_add_module(MoleKing_util main.cpp)
 
-target_link_libraries(MoleKing_Utils 
+target_link_libraries(MoleKing_util 
 PUBLIC math
 PUBLIC chemicalUnits
 PUBLIC outputProcess

@@ -51,4 +51,13 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
-build
+
+#CmakePyBind
+build/
+dist/
+_build/
+_generate/
+*.so
+*.py[cod]
+*.egg-info
+*env*
