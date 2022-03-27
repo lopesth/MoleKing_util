@@ -10,18 +10,18 @@
 #include <string>
 #include <math.h>
 
-#include "math/MassCenter.hpp"
-#include "chemicalUnits/AtomicScale.hpp"
-#include "math/Geometry.hpp"
-#include "math/Matrix.hpp"
-#include "chemicalUnits/Molecule.hpp"
-#include "berny/Hessian.hpp"
-#include "chemicalUnits/SupraMolecule.hpp"
-#include "math/Vectors.hpp"
-#include "outputProcess/G16Process.hpp"
+#include "src/math/MassCenter.hpp"
+#include "src/chemicalUnits/AtomicScale.hpp"
+#include "src/math/Geometry.hpp"
+#include "src/math/Matrix.hpp"
+#include "src/chemicalUnits/Molecule.hpp"
+#include "src/berny/Hessian.hpp"
+#include "src/chemicalUnits/SupraMolecule.hpp"
+#include "src/math/Vectors.hpp"
+#include "src/outputProcess/G16Process.hpp"
 using namespace std;
 
-
+/*
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/pytypes.h>
@@ -239,8 +239,6 @@ PYBIND11_MODULE(MoleKing_util, m) {
 
 };
 
-
-/*
 int main(int argc, char **argv){
     //string fileN = "/Users/thiagolopes/OneDrive/Pesquisas/VSNS/ONL/pcm_done/pcm_B3LYP_0.log";//
     //string fileN = "/media/mateus/Data/Teste_DicePlayer/OPT/Metanol/metanol.fchk";
@@ -263,7 +261,6 @@ int main(int argc, char **argv){
     
     return 0;
 };
-*/
-/*
+
 c++ main.cpp chemicalUnits/AtomicScale.cpp chemicalUnits/PeriodicTable.cpp chemicalUnits/Molecule.cpp chemicalUnits/SupraMolecule.cpp berny/Hessian.cpp math/Geometry.cpp math/MassCenter.cpp math/Matrix.cpp math/Vectors.cpp outputProcess/G16Process.cpp 
 */

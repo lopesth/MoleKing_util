@@ -13,35 +13,59 @@
 #include <vector>
 #include <string>
 #include <math.h>
-#include <iostream>
+#include <sstream>
+#include <iomanip>
 
-using namespace std;
+#include "Geometry.hpp"
+
 
 class Vector3D{
-    private:
-    double x_a, x_b, y_a, y_b, z_a, z_b, s_i, s_j, s_k;
+    Point a, b;
+    float i, j, k;
+    
+    float magnitude;
+    
+    //Internal Methods
+    void recalc();
 
     public:
-    Vector3D(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0});
+    
+    //Constructors
+    Vector3D(const Point &a, const Point &b);
+    Vector3D(const Point &a);
     Vector3D();
-    void setVector(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0});
-    ~Vector3D();
-    double magnitude();
-    vector <double> getVector();
-    void show();
+    
+    //Getters
+    float getMagnitude() const;
+
+    //Setters
+    void setVector(const Point &a, const Point &b);
+    
+    //Operators
+    Vector3D operator/ (const float &mag);
+    Vector3D operator* (const float &mag);
+    Vector3D operator+ (const Vector3D &vectorB);
+    Vector3D operator- (const Vector3D &vectorB);
+    
+    
+    //void setVector(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0});
+    
+    //vector <double> getVector();
     Vector3D normalize();
     Vector3D conjugate();
-    Vector3D operator/ (double mag);
-    Vector3D operator* (double mag);
-    Vector3D operator+ (Vector3D vectorB);
-    Vector3D operator- (Vector3D vectorB);
+
     Vector3D crossProduct(Vector3D vectorB);
     double dotProduct(Vector3D vectorB);
     double angle(Vector3D vectorB, char unit = 'd');
     double axisValue(char unitVector);
+    
+    
+    
+    // Type Converters
     string toStr();
 };
 
+/*
 class Quaternion{
     private:
     double u, s_i, s_j, s_k;
@@ -52,6 +76,6 @@ class Quaternion{
     double magnitude();
     vector <double> getQuaternion();
     void show();
-};
+};*/
 
 #endif /* Vectors_hpp */

@@ -8,66 +8,109 @@
 
 #include "Vectors.hpp"
 
+
 // Vector3D class ///
 
-Vector3D::Vector3D(vector<double> pointA, vector<double> pointB){
-    this->x_a = pointA[0];
-    this->x_b = pointB[0];
-    this->s_i = this->x_a - this->x_b;
-    this->y_a = pointA[1];
-    this->y_b = pointB[1];
-    this->s_j = this->y_a - this->y_b;
-    this->z_a = pointA[2];
-    this->z_b = pointB[2];
-    this->s_k = this->z_a - this->z_b;
+//Internal Methods
+void Vector3D::recalc(){
+    magnitude = a.distanceTo(b);
+    i = b.getCartCoords()[0] - a.getCartCoords()[0];
+    j = b.getCartCoords()[1] - a.getCartCoords()[1];
+    k = b.getCartCoords()[2] - a.getCartCoords()[2];
 };
 
-Vector3D::Vector3D(){};
+//Constructors
+Vector3D::Vector3D(const Point &a, const Point &b): a(a), b(b) {
+    recalc();
+};
+
+Vector3D::Vector3D(const Point &b) : b(a), a(Point(CartesianCoordinate(0, 0, 0))) {
+    recalc();
+};
+
+Vector3D::Vector3D() : a(Point(CartesianCoordinate(0, 0, 0))), b(Point(CartesianCoordinate(0, 0, 0))){
+    recalc();
+};
+
+
+//Getters
+float Vector3D::getMagnitude() const{
+    return magnitude;
+};
+
+//Setters
+
+void Vector3D::setVector(const Point &a, const Point &b){
+    this->a = a;
+    this->b = b;
+    recalc();
+};
+
+
 
 string Vector3D::toStr(){
-    string temp;
-    temp = to_string(this->s_i) + "i";
-    if(this->s_j >= 0){
-        temp = temp + " +" + to_string(this->s_j) + "j";
+    std::stringstream sI, sJ, sK;
+    string expression = "vector = ";
+    if ( i == 0){
+        if (j == 0){
+            if (k == 0){
+                // -- x = 0 and y = 0 and z = 0
+                return expression + "0.00";
+                // --
+            } else {
+                sK << std::fixed << std::setprecision(2) << k;
+                // -- x = 0 and y = 0 and z ≠ 0
+                return expression + sK.str() + "k";
+                // --
+            }
+        } else {
+            sJ << std::fixed << std::setprecision(2) << j;
+            if (k == 0){
+                // -- x = 0 and y ≠ 0 and z = 0
+                return expression + sJ.str() + "j";
+                // --
+            } else {
+                sK << std::fixed << std::setprecision(2) << k;
+                // -- x = 0 and y ≠ 0 and z ≠ 0
+                return expression + sJ.str() + "j + " + sK.str() + "k";
+                // --
+            }
+        }
     } else {
-        temp = temp + " -" + to_string(this->s_j) + "j";
-    };
-    if(this->s_k >= 0){
-        temp = temp + " +" + to_string(this->s_k) + "k";
-    } else {
-        temp = temp + " -" + to_string(this->s_k) + "k";
-    };
-    return temp;
+        sI << std::fixed << std::setprecision(2) << i;
+        expression += sI.str() + "i";
+
+        if (j == 0){
+            if (k == 0){
+                // -- x ≠ 0 and y = 0 and z = 0
+                return expression;
+                // --
+            } else {
+                sK << std::fixed << std::setprecision(2) << k;
+                // -- x ≠ 0 and y = 0 and z ≠ 0
+                return expression += " + " + sK.str() + "k";
+                // --
+            }
+        } else {
+            sJ << std::fixed << std::setprecision(2) << j;
+            expression += " + " + sJ.str() + "j";
+            
+            if (k == 0){
+                // -- x ≠ 0 and y ≠ 0 and z = 0
+                return expression;
+                // --
+            } else {
+                sK << std::fixed << std::setprecision(2) << k;
+                // -- x ≠ 0 and y ≠ 0 and z ≠ 0
+                return expression + " + " + sK.str() + "k";
+                // --
+            }
+        }
+    }
+  
 }
 
-void Vector3D::setVector(vector<double> pointA, vector<double> pointB){
-    this->x_a = pointA[0];
-    this->x_b = pointB[0];
-    this->s_i = this->x_a - this->x_b;
-    this->y_a = pointA[1];
-    this->y_b = pointB[1];
-    this->s_j = this->y_a - this->y_b;
-    this->z_a = pointA[2];
-    this->z_b = pointB[2];
-    this->s_k = this->z_a - this->z_b;
-};
-
-Vector3D::~Vector3D(){
-    x_a = 0.0;
-    x_b = 0.0;
-    y_a = 0.0;
-    y_b = 0.0;
-    z_a = 0.0;
-    z_b = 0.0;
-    s_i = 0.0;
-    s_j = 0.0;
-    s_k = 0.0;
-};
-
-double Vector3D::magnitude(){
-    double norm = pow(this->s_i, 2) + pow(this->s_j, 2) + pow(this->s_k, 2);
-    return sqrt(norm);
-};
+/*
 
 vector <double> Vector3D::getVector(){
     return vector <double> {this->s_i, this->s_j, this->s_k};
@@ -172,3 +215,5 @@ void Quaternion::show(){
 vector <double> Quaternion::getQuaternion(){
     return vector <double> {this->u, this->s_i, this->s_j, this->s_k};
 };
+
+*/
