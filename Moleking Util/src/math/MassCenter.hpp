@@ -12,18 +12,26 @@
 #include <vector>
 #include "Geometry.hpp"
 
-using namespace std;
+using std::vector;
 
 class MassCenter{
-    private:
-    vector <double> massList;
-    Point massCenterPoint;
-    double axisMassCenter(vector <double> coords);
 
-    public:
-    MassCenter(vector <double> massList, vector <double> xCoords, vector <double> yCoords, vector <double> zCoords);
+    vector <float> mass;
+    vector<array<float, 3>> coords;
+    float massCenterPointAxis();
+    Point massCenterPoint;
+    
+    //Internal Methods
+    void calcMassCenter();
+
+public:
     ~MassCenter();
-    Point getMassCenter();
+    
+    //Constructors
+    MassCenter(const vector <float> &massList, const vector<array<float, 3>> &coordsList);
+
+    // Getters
+    Point getMassCenter() const;
 };
 
 

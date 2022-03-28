@@ -8,30 +8,35 @@
 
 #include "MassCenter.hpp"
 
-double MassCenter::axisMassCenter(vector <double> coords){
-    double rUp = 0;
-    double rDown = 0;
-    for (int i = 0; i < (int) coords.size(); i++){
-        rUp = rUp + (this->massList.at(i) * coords.at(i));
-        rDown = rDown + this->massList.at(i);
-    };
-    return (rUp/rDown);
-};
-
 MassCenter::~MassCenter(){
-    this->massList.clear();
-    this->massCenterPoint.~Point();
-    this->massList.resize(0);
+    mass.clear();
+    mass.resize(0);
 };
 
-MassCenter::MassCenter(vector <double> massList, vector <double> xCoords, vector <double> yCoords, vector <double> zCoords){
-    this->massList = massList;
-    this->massCenterPoint.setCoord('x', this->axisMassCenter(xCoords));
-    this->massCenterPoint.setCoord('y', this->axisMassCenter(yCoords));
-    this->massCenterPoint.setCoord('z', this->axisMassCenter(zCoords));
+//Constructors
+MassCenter::MassCenter(const vector <float> &massList, const vector<array<float, 3>> &coordsList){
+    mass = massList;
+    coords = coordsList;
+    calcMassCenter();
 };
 
-Point MassCenter::getMassCenter(){
-        return this->massCenterPoint;
+//Internal Methods
+void MassCenter::calcMassCenter(){
+    array<float, 3> cart{0, 0, 0};
+    for (int a = 0; a < 3; a++){
+        float rUp = 0;
+        float rDown = 0;
+        for (int i = 0; i < (int) coords.size(); i++){
+            rUp += (mass.at(i) * coords.at(i)[a]);
+            rDown += mass.at(i);
+        };
+        cart[a] = rUp/rDown;
+    };
+    massCenterPoint.moveTo(CartesianCoordinate(cart));
+};
+
+//Getters
+Point MassCenter::getMassCenter() const{
+        return massCenterPoint;
 };
 
