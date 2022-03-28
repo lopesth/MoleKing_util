@@ -15,6 +15,7 @@
 #include <math.h>
 #include <sstream>
 #include <iomanip>
+#include <utility>
 
 #include <iostream>
 
@@ -23,23 +24,27 @@
 
 class Vector3D{
     float i, j, k;
-    Point origin, target;
+    Point origin, terminal;
     float magnitude;
     
     //Internal Methods
-    void createVector(const Point &origin, const Point &target);
-    bool isEqual(const Vector3D &vector) const;
+    void createVector(const Point &origin, const Point &terminal);
+    bool b_isEqual(const Vector3D &vector) const;
 
 public:
     
     //Static
-    static array<float, 3> normVectorCoord(const Vector3D &vector);
-    static array<float, 3> conjVectorCoord(const Vector3D &vector);
+    static array<float, 3> s_normVectorCoord(const Vector3D &vector);
+    static array<float, 3> s_conjVectorCoord(const Vector3D &vector);
     
     //Constructors
-    Vector3D(const Point &originPoint, const Point &targetPoint);
-    Vector3D(const Point &targetPoint);
+    Vector3D(const Point &originPoint, const Point &terminalPoint);
+    Vector3D(const array<float, 3> &caartCoordOriginPoint, const array<float, 3> &caartCoordTerminalPoint);
+    Vector3D(const array<float, 3> &caartCoordTerminalPoint);
+    Vector3D(const Point &terminalPoint);
     Vector3D();
+    
+    ~Vector3D();
     
     //Getters
     float getMagnitude() const;
@@ -61,26 +66,60 @@ public:
     //Operators
     bool operator== (const Vector3D &vector) const;
     bool operator!= (const Vector3D &vector) const;
+    bool operator>= (const Vector3D &vector) const;
+    bool operator<= (const Vector3D &vector) const;
+    bool operator> (const Vector3D &vector) const;
+    bool operator< (const Vector3D &vector) const;
     Vector3D operator/ (const float &mag) const;
     Vector3D operator* (const float &mag) const;
     Vector3D operator+ (const Vector3D &vector) const;
     Vector3D operator- (const Vector3D &vector) const;
     
     // Type Converters
-    string toStr();
+    string toStr() const;
 };
 
-/*
 class Quaternion{
-    private:
-    double u, s_i, s_j, s_k;
+    float u, magnitude;
+    Vector3D vector;
+    
+    //Internal Methods
+    bool b_isEqual(const Quaternion &quaternion) const;
+    void calcMagnitude();
 
-    public:
-    Quaternion(double u, vector <double> vectorA, vector <double> vectorB);
+public:
+    
     ~Quaternion();
-    double magnitude();
-    vector <double> getQuaternion();
-    void show();
-};*/
+    
+    //Constructors
+    Quaternion(const float &u, const Vector3D &vector);
+    Quaternion(const float &u, const array<float, 3> &unitCoordvector);
+    Quaternion(const float &u, const Point &originPoint, const Point &terminalPoint);
+    Quaternion(const float &u, const Point &terminalPoint);
+    Quaternion(const float &u, const array<float, 3> &cartCoordOriginPoint, const array<float, 3> &cartCoordTerminalPoint);
+    Quaternion(const float &u, const CartesianCoordinate &originCartCoord, const CartesianCoordinate &finalCartCoord);
+    Quaternion(const float &u, const CartesianCoordinate &finalCartCoord);
+
+    // Getters
+    float getMagnitude() const;
+    array<float, 4> getQuaternion() const;
+    Vector3D getVector() const;
+    
+    // Type Converters
+    string toStr() const;
+    
+    //Operators
+    bool operator== (const Quaternion &quaternion) const;
+    bool operator!= (const Quaternion &quaternion) const;
+    bool operator>= (const Quaternion &quaternion) const;
+    bool operator<= (const Quaternion &quaternion) const;
+    bool operator> (const Quaternion &quaternion) const;
+    bool operator< (const Quaternion &quaternion) const;
+    Quaternion operator/ (const float &mag) const;
+    Quaternion operator* (const float &mag) const;
+    Quaternion operator+ (const Quaternion &quaternion) const;
+    Quaternion operator- (const Quaternion &quaternion) const;
+    
+};
 
 #endif /* Vectors_hpp */

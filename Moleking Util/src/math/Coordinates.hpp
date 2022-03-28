@@ -25,7 +25,7 @@ class SphericalCoordinate{
     float theta;
     float phi;
     
-    bool isEqual(const SphericalCoordinate &spherical) const;
+    bool b_isEqual(const SphericalCoordinate &spherical) const;
     
 public:
     ~SphericalCoordinate();
@@ -64,7 +64,7 @@ class CartesianCoordinate{
     float y;
     float z;
     
-    bool isEqual(const CartesianCoordinate &cartesian) const;
+    bool b_isEqual(const CartesianCoordinate &cartesian) const;
 
 public:
 

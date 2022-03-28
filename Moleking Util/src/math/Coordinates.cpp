@@ -26,7 +26,7 @@ CartesianCoordinate::CartesianCoordinate(const array<float, 3> &coords): x(coord
 };
 
 // Internal Methods
-bool CartesianCoordinate::isEqual(const CartesianCoordinate &cartesian) const{
+bool CartesianCoordinate::b_isEqual(const CartesianCoordinate &cartesian) const{
     
     if ((x - cartesian.x) < 0.01){
         if ((y - cartesian.y) < 0.01){
@@ -40,10 +40,10 @@ bool CartesianCoordinate::isEqual(const CartesianCoordinate &cartesian) const{
 
 // Operators
 bool CartesianCoordinate::operator==(const CartesianCoordinate &cartesian) const{
-    return isEqual(cartesian);
+    return b_isEqual(cartesian);
 };
 bool CartesianCoordinate::operator!=(const CartesianCoordinate &cartesian) const{
-    return !isEqual(cartesian);
+    return !b_isEqual(cartesian);
 };
 
 //Setters
@@ -135,7 +135,7 @@ SphericalCoordinate::SphericalCoordinate(array<float, 3> const &coordinate):radi
 
 // Internal Methods
 
-bool SphericalCoordinate::isEqual(const SphericalCoordinate &spherical) const{
+bool SphericalCoordinate::b_isEqual(const SphericalCoordinate &spherical) const{
     
     if ((radius - spherical.radius) < 0.01){
         if ((theta - spherical.theta) < 0.01){
@@ -149,10 +149,10 @@ bool SphericalCoordinate::isEqual(const SphericalCoordinate &spherical) const{
 
 // Operators
 bool SphericalCoordinate::operator==(const SphericalCoordinate &spherical) const{
-    return isEqual(spherical);
+    return b_isEqual(spherical);
 };
 bool SphericalCoordinate::operator!=(const SphericalCoordinate &spherical) const{
-    return !isEqual(spherical);
+    return !b_isEqual(spherical);
 };
 
 //Getters

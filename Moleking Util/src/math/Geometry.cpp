@@ -46,17 +46,17 @@ Point::Point() : xyz(CartesianCoordinate()) {
 };
 
 // Internal Methods
-bool Point::isEqual(const Point &point) const{
+bool Point::b_isEqual(const Point &point) const{
     return (xyz == point.xyz);
 };
 
 // Operators
 bool Point::operator==(const Point &point){
-    return isEqual(point);
+    return b_isEqual(point);
 };
 
 bool Point::operator!=(const Point &point){
-    return !isEqual(point);
+    return !b_isEqual(point);
 };
 
 //Getters

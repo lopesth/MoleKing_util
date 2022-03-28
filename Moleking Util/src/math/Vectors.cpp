@@ -12,17 +12,23 @@
 // Vector3D class ///
 
 //Internal Methods
-void Vector3D::createVector(const Point &originPoint, const Point &targetPoint){
-    magnitude = originPoint.distanceTo(targetPoint);
-    i = targetPoint.getCartCoords()[0] - originPoint.getCartCoords()[0];
-    j = targetPoint.getCartCoords()[1] - originPoint.getCartCoords()[1];
-    k = targetPoint.getCartCoords()[2] - originPoint.getCartCoords()[2];
-    target = Point(CartesianCoordinate(i, j, k));
-    magnitude = origin.distanceTo(target);
+Vector3D::~Vector3D(){
+    i = 0;
+    i = 0;
+    k = 0;
+    magnitude = 0;
 };
 
+void Vector3D::createVector(const Point &originPoint, const Point &terminalPoint){
+    magnitude = originPoint.distanceTo(terminalPoint);
+    i = terminalPoint.getCartCoords()[0] - originPoint.getCartCoords()[0];
+    j = terminalPoint.getCartCoords()[1] - originPoint.getCartCoords()[1];
+    k = terminalPoint.getCartCoords()[2] - originPoint.getCartCoords()[2];
+    terminal = Point(CartesianCoordinate(i, j, k));
+    magnitude = origin.distanceTo(terminal);
+};
 
-bool Vector3D::isEqual(const Vector3D &vector) const{
+bool Vector3D::b_isEqual(const Vector3D &vector) const{
     if (std::fabs(i - vector.i) < 0.001){
         if (std::fabs(j - vector.j) < 0.001){
             if (std::fabs(k - vector.k) < 0.001){
@@ -34,19 +40,26 @@ bool Vector3D::isEqual(const Vector3D &vector) const{
 };
 
 //Static
-array<float, 3> Vector3D::normVectorCoord(const Vector3D &vector){
+array<float, 3> Vector3D::s_normVectorCoord(const Vector3D &vector){
     return array<float, 3> {vector.i *1/vector.magnitude, vector.j * 1/vector.magnitude, vector.k * 1/vector.magnitude};
 };
-array<float, 3> Vector3D::conjVectorCoord(const Vector3D &vector){
+array<float, 3> Vector3D::s_conjVectorCoord(const Vector3D &vector){
     return array<float, 3> {-vector.i, -vector.j, -vector.k};
 };
 
 //Constructors
-Vector3D::Vector3D(const Point &originPoint, const Point &targetPoint){
-    createVector(originPoint, targetPoint);
+Vector3D::Vector3D(const Point &originPoint, const Point &terminalPoint){
+    createVector(originPoint, terminalPoint);
 };
-Vector3D::Vector3D(const Point &targetPoint){
-    createVector(origin, targetPoint);
+Vector3D::Vector3D(const array<float, 3> &caartCoordOriginPoint, const array<float, 3> &caartCoordTerminalPoint){
+    createVector(Point(caartCoordOriginPoint), Point(caartCoordTerminalPoint));
+    
+};
+Vector3D::Vector3D(const array<float, 3> &caartCoordTerminalPoint){
+    createVector(Point(CartesianCoordinate(0, 0, 0)), Point(caartCoordTerminalPoint));
+};
+Vector3D::Vector3D(const Point &terminalPoint){
+    createVector(origin, terminalPoint);
 };
 Vector3D::Vector3D(){
 };
@@ -70,12 +83,12 @@ float Vector3D::getAxisValue(const char &unitVector) const {
 }
 
 //Setters
-void Vector3D::setVector(const Point &originPoint, const Point &targetPoint){
-    createVector(originPoint, targetPoint);
+void Vector3D::setVector(const Point &originPoint, const Point &terminalPoint){
+    createVector(originPoint, terminalPoint);
 };
 
 // Type Converters
-string Vector3D::toStr(){
+string Vector3D::toStr() const{
     std::stringstream sI, sJ, sK;
     string expression = "vector = ";
     if (std::fabs(i) < 0.01){
@@ -160,16 +173,16 @@ string Vector3D::toStr(){
 
 //Special Methods
 void Vector3D::norm(){
-    createVector(origin, Point(CartesianCoordinate(normVectorCoord(*this))));
+    createVector(origin, Point(CartesianCoordinate(s_normVectorCoord(*this))));
 };
 Vector3D Vector3D::normalized() const{
-    return Vector3D(Point(CartesianCoordinate(normVectorCoord(*this))));
+    return Vector3D(Point(CartesianCoordinate(s_normVectorCoord(*this))));
 }
 void Vector3D::conj(){
-    createVector(origin, Point(CartesianCoordinate(conjVectorCoord(*this))));
+    createVector(origin, Point(CartesianCoordinate(s_conjVectorCoord(*this))));
 };
 Vector3D Vector3D::conjugated() const{
-    return Vector3D(Point(CartesianCoordinate(conjVectorCoord(*this))));
+    return Vector3D(Point(CartesianCoordinate(s_conjVectorCoord(*this))));
 };
 Vector3D Vector3D::crossProduct(const Vector3D &vector) const{
     array<float, 3> coords = {
@@ -195,10 +208,22 @@ float Vector3D::angle(const Vector3D &vector, const char &unit) const{
 
 //Operators
 bool Vector3D::operator== (const Vector3D &vector) const{
-    return isEqual(vector);
+    return b_isEqual(vector);
 };
 bool Vector3D::operator!= (const Vector3D &vector) const{
-    return !isEqual(vector);
+    return !b_isEqual(vector);
+};
+bool Vector3D::operator>= (const Vector3D &vector) const{
+    return (magnitude >= vector.magnitude);
+};
+bool Vector3D::operator<= (const Vector3D &vector) const{
+    return (magnitude <= vector.magnitude);
+};
+bool Vector3D::operator> (const Vector3D &vector) const{
+    return (magnitude > vector.magnitude);
+};
+bool Vector3D::operator< (const Vector3D &vector) const{
+    return (magnitude < vector.magnitude);
 };
 Vector3D Vector3D::operator/ (const float &mag) const{
     CartesianCoordinate coord = CartesianCoordinate(array<float, 3>{i / mag, j / mag, k / mag});
@@ -217,35 +242,112 @@ Vector3D Vector3D::operator- (const Vector3D &vector) const{
     return Vector3D(Point(coord));
 };
 
-/*
+
 // Quaternion class //
 
-Quaternion::Quaternion(double u, vector <double> vectorA, vector <double> vectorB = {0.0, 0.0, 0.0}){
-    Quaternion q = *this;
-    this->u = u;
-    this->s_i = vectorA[0] - vectorB[0];
-    this->s_j = vectorA[0] - vectorB[0];
-    this->s_k = vectorA[0] - vectorB[0];
+//Internal Methods
+bool Quaternion::b_isEqual(const Quaternion &quaternion) const{
+    if (u == quaternion.u){
+        if (vector == quaternion.vector){
+            return true;
+        }
+    }
+    return false;
 };
-
-Quaternion::~Quaternion(){
-    u = 0.0;
-    s_i = 0.0;
-    s_j = 0.0;
-    s_k = 0.0;
-};
-
-double Quaternion::magnitude(){
-    double norm = pow(this->u, 2) + pow(this->s_i, 2) + pow(this->s_j, 2) + pow(this->s_k, 2);
-    return sqrt(norm);
-};
-
-void Quaternion::show(){
-    cout << "q = " << this->u << " + " << this->s_i << "i +" << this->s_j << "j +" << this->s_k << "k" << endl;
+void Quaternion::calcMagnitude(){
+    array<float, 3> vectorCoords = vector.getVector();
+    magnitude = sqrt(pow(u, 2) + pow(vectorCoords[0], 2) +
+                pow(vectorCoords[1], 2) +
+                pow(vectorCoords[2], 2));
 }
 
-vector <double> Quaternion::getQuaternion(){
-    return vector <double> {this->u, this->s_i, this->s_j, this->s_k};
+Quaternion::~Quaternion(){
+    u = 0;
 };
 
-*/
+//Constructors
+Quaternion::Quaternion(const float &u, const Vector3D &vector) :
+    u(u), vector(vector)
+{
+    calcMagnitude();
+};
+Quaternion::Quaternion(const float &u, const array<float, 3> &unitCoordvector) :
+    u(u), vector(Vector3D(unitCoordvector))
+{
+    calcMagnitude();
+};
+Quaternion::Quaternion(const float &u, const Point &originPoint, const Point &terminalPoint):
+    u(u), vector(originPoint, terminalPoint)
+{
+    calcMagnitude();
+    };
+Quaternion::Quaternion(const float &u, const Point &terminalPoint) :
+    u(u), vector(terminalPoint)
+{
+    calcMagnitude();
+};
+Quaternion::Quaternion(const float &u, const array<float, 3> &cartCoordOriginPoint, const array<float, 3> &cartCoordTerminalPoint) :
+    u(u), vector(cartCoordOriginPoint, cartCoordTerminalPoint)
+{
+    calcMagnitude();
+};
+Quaternion::Quaternion(const float &u, const CartesianCoordinate &originCartCoord, const CartesianCoordinate &finalCartCoord) :
+u(u), vector(originCartCoord, finalCartCoord)
+{
+    calcMagnitude();
+};
+Quaternion::Quaternion(const float &u, const CartesianCoordinate    &finalCartCoord) : u(u), vector(finalCartCoord)
+{
+        calcMagnitude();
+};
+
+// Getters
+float Quaternion::getMagnitude() const{
+    return magnitude;
+};
+array<float, 4> Quaternion::getQuaternion() const{
+    array<float, 3> vectorCoords = vector.getVector();
+    return array<float, 4> {u, vectorCoords[0], vectorCoords[1], vectorCoords[2]};
+};
+Vector3D Quaternion::getVector() const{
+    return vector;
+};
+
+// Type Converters
+std::string Quaternion::toStr() const { // a implementar
+    std::stringstream sU;
+    sU << std::fixed << std::setprecision(2) << abs(u);
+    return string("quaternion: magnitude = ") + sU.str() + ", " +vector.toStr();
+};
+
+//Operators
+bool Quaternion::operator== (const Quaternion &quaternion) const{
+    return b_isEqual(quaternion);
+};
+bool Quaternion::operator!= (const Quaternion &quaternion) const{
+    return !b_isEqual(quaternion);
+};
+bool Quaternion::operator>= (const Quaternion &quaternion) const{
+    return (magnitude >= quaternion.magnitude);
+};
+bool Quaternion::operator<= (const Quaternion &quaternion) const{
+    return (magnitude <= quaternion.magnitude);
+};
+bool Quaternion::operator> (const Quaternion &quaternion) const{
+    return (magnitude > quaternion.magnitude);
+};
+bool Quaternion::operator< (const Quaternion &quaternion) const{
+    return (magnitude < quaternion.magnitude);
+};
+Quaternion Quaternion::operator/ (const float &mag) const{
+    return Quaternion(u/mag, vector/mag);
+};
+Quaternion Quaternion::operator* (const float &mag) const{
+    return Quaternion(u*mag, vector*mag);
+};
+Quaternion Quaternion::operator+ (const Quaternion &quaternion) const{
+    return Quaternion(u+quaternion.u, vector+quaternion.vector);
+};
+Quaternion Quaternion::operator- (const Quaternion &quaternion) const{
+    return Quaternion(u-quaternion.u, vector-quaternion.vector);
+};

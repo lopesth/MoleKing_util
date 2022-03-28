@@ -79,7 +79,7 @@ TEST_CASE("Norm Vectors"){
     
     Vector3D v1 = Vector3D(a, b);
     Vector3D v2 = Vector3D(a, b);
-    array<float, 3> c = Vector3D::normVectorCoord(v1);
+    array<float, 3> c = Vector3D::s_normVectorCoord(v1);
     
     v2.norm();
     Vector3D v3 = Vector3D(Point(CartesianCoordinate(c[0], c[1], c[2])));
@@ -110,7 +110,7 @@ TEST_CASE("Conj Vectors"){
     
     Vector3D v1 = Vector3D(a, b);
     Vector3D v2 = Vector3D(a, b);
-    array<float, 3> c = Vector3D::conjVectorCoord(v1);
+    array<float, 3> c = Vector3D::s_conjVectorCoord(v1);
     
     v2.conj();
     Vector3D v3 = Vector3D(Point(CartesianCoordinate(c[0], c[1], c[2])));
@@ -216,4 +216,62 @@ TEST_CASE("Vector Calc"){
         REQUIRE((v1*2).toStr() == "vector = 6.00i + 2.00j - 30.00k");
         REQUIRE((v2*2).toStr() == "vector = -2.00i + 6.00j - 44.00k");
     }
+}
+
+TEST_CASE("Quaternions"){
+    auto xyz1 = CartesianCoordinate(1, 3, 5);
+    auto xyz2 = CartesianCoordinate(4, 4, -10);
+    auto xyz3 = CartesianCoordinate(7, 4, 12);
+    auto xyz4 = CartesianCoordinate(6, 7, -10);
+    auto  a = Point(xyz1);
+    auto  b = Point(xyz2);
+    auto  c = Point(xyz3);
+    auto  d = Point(xyz4);
+    auto v1 = Vector3D(a, b);
+    auto v2 = Vector3D(c, d);
+    
+    auto qc1 = Quaternion(1, v1);
+    auto qc2 = Quaternion(1, array<float, 3> {1, 2, 3});
+    auto qc3 = Quaternion(1, a, b);
+    auto qc4 = Quaternion(2, b);
+    auto qc5 = Quaternion(1, array<float, 3> {1, 2, 3}, array<float, 3> {3, 2, 1});
+    auto qc6 = Quaternion(1, xyz1, xyz2);
+    auto qc7 = Quaternion(1, xyz3);
+    
+    SECTION("Quaternion getMagnitude"){
+        REQUIRE(std::fabs(qc1.getMagnitude()) - 15.3622 < 0.01);
+        REQUIRE(std::fabs(qc2.getMagnitude()) - 3.8729 < 0.01);
+        REQUIRE(std::fabs(qc4.getMagnitude()) - 11.6619 < 0.01);
+    }
+    
+    SECTION("Quaternion getMagnitude"){
+        REQUIRE(std::fabs(qc1.getMagnitude()) - 15.3622 < 0.01);
+        REQUIRE(std::fabs(qc2.getMagnitude()) - 3.8729 < 0.01);
+        REQUIRE(std::fabs(qc4.getMagnitude()) - 11.6619 < 0.01);
+    }
+    
+    SECTION("Quaternion String"){
+        REQUIRE(qc1.toStr() == "quaternion: magnitude = 1.00, vector = 3.00i + 1.00j - 15.00k");
+        REQUIRE(qc2.toStr() == "quaternion: magnitude = 1.00, vector = 1.00i + 2.00j + 3.00k");
+        REQUIRE(qc4.toStr() == "quaternion: magnitude = 2.00, vector = 4.00i + 4.00j - 10.00k");
+    }
+    
+    SECTION("Quaternion Operators"){
+        REQUIRE((qc1 == qc3) == true);
+        REQUIRE((qc1 >= qc3) == true);
+        REQUIRE((qc1 <= qc3) == true);
+        REQUIRE((qc1 != qc3) == false);
+        REQUIRE((qc1.getMagnitude() < qc4.getMagnitude()) == false);
+        REQUIRE((qc1.getMagnitude() > qc4.getMagnitude()) == true);
+        
+        auto qc1_half = qc1/2;
+        auto qc1_doble = qc1*2;
+        
+        REQUIRE((qc1_half == Quaternion(0.5, Vector3D( array<float, 3> {1.5, 0.5, -7.5} ) ) ) == true);
+        REQUIRE((qc1_doble == Quaternion(2, Vector3D( array<float, 3> {6, 2, -30} ) ) ) == true);
+        REQUIRE((qc1+qc2).toStr() == "quaternion: magnitude = 2.00, vector = 4.00i + 3.00j - 12.00k");
+        REQUIRE((qc1-qc2).toStr() == "quaternion: magnitude = 0.00, vector = 2.00i - 1.00j - 18.00k");
+    }
+    
+    
 }

@@ -24,15 +24,15 @@ class Point{
     CartesianCoordinate xyz;
     SphericalCoordinate rtp;
     
-    bool isEqual(const Point &point) const;
+    bool b_isEqual(const Point &point) const;
     
 public:
     
     //Constructors
     Point(const CartesianCoordinate &cartesianPoint);
     Point(const SphericalCoordinate &sphericalPoint);
-    Point(const array<float, 3> &coordinate, const char &type);
-    Point(const float &coord1, const float &coord2, const float &coord3, const char &type);
+    Point(const array<float, 3> &coordinate, const char &type = 'c');
+    Point(const float &coord1, const float &coord2, const float &coord3, const char &type = 'c');
     Point();
     
     // Operators
