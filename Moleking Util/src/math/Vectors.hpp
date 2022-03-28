@@ -16,50 +16,55 @@
 #include <sstream>
 #include <iomanip>
 
+#include <iostream>
+
 #include "Geometry.hpp"
 
 
 class Vector3D{
-    Point a, b;
     float i, j, k;
-    
+    Point origin, target;
     float magnitude;
     
     //Internal Methods
-    void recalc();
+    void createVector(const Point &origin, const Point &target);
+    bool isEqual(const Vector3D &vector) const;
 
-    public:
+public:
+    
+    //Static
+    static array<float, 3> normVectorCoord(const Vector3D &vector);
+    static array<float, 3> conjVectorCoord(const Vector3D &vector);
     
     //Constructors
-    Vector3D(const Point &a, const Point &b);
-    Vector3D(const Point &a);
+    Vector3D(const Point &originPoint, const Point &targetPoint);
+    Vector3D(const Point &targetPoint);
     Vector3D();
     
     //Getters
     float getMagnitude() const;
+    array<float, 3> getVector() const;
+    float getAxisValue(const char &unitVector) const;
 
     //Setters
     void setVector(const Point &a, const Point &b);
     
+    //Special Methods
+    void norm();
+    Vector3D normalized() const;
+    void conj();
+    Vector3D conjugated() const;
+    Vector3D crossProduct(const Vector3D &vector) const;
+    float dotProduct(const Vector3D &vector) const;
+    float angle(const Vector3D &vector, const char &unit = 'd') const;
+    
     //Operators
-    Vector3D operator/ (const float &mag);
-    Vector3D operator* (const float &mag);
-    Vector3D operator+ (const Vector3D &vectorB);
-    Vector3D operator- (const Vector3D &vectorB);
-    
-    
-    //void setVector(vector<double> pointA, vector<double> pointB = {0.0, 0.0, 0.0});
-    
-    //vector <double> getVector();
-    Vector3D normalize();
-    Vector3D conjugate();
-
-    Vector3D crossProduct(Vector3D vectorB);
-    double dotProduct(Vector3D vectorB);
-    double angle(Vector3D vectorB, char unit = 'd');
-    double axisValue(char unitVector);
-    
-    
+    bool operator== (const Vector3D &vector) const;
+    bool operator!= (const Vector3D &vector) const;
+    Vector3D operator/ (const float &mag) const;
+    Vector3D operator* (const float &mag) const;
+    Vector3D operator+ (const Vector3D &vector) const;
+    Vector3D operator- (const Vector3D &vector) const;
     
     // Type Converters
     string toStr();

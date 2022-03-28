@@ -12,67 +12,100 @@
 // Vector3D class ///
 
 //Internal Methods
-void Vector3D::recalc(){
-    magnitude = a.distanceTo(b);
-    i = b.getCartCoords()[0] - a.getCartCoords()[0];
-    j = b.getCartCoords()[1] - a.getCartCoords()[1];
-    k = b.getCartCoords()[2] - a.getCartCoords()[2];
+void Vector3D::createVector(const Point &originPoint, const Point &targetPoint){
+    magnitude = originPoint.distanceTo(targetPoint);
+    i = targetPoint.getCartCoords()[0] - originPoint.getCartCoords()[0];
+    j = targetPoint.getCartCoords()[1] - originPoint.getCartCoords()[1];
+    k = targetPoint.getCartCoords()[2] - originPoint.getCartCoords()[2];
+    target = Point(CartesianCoordinate(i, j, k));
+    magnitude = origin.distanceTo(target);
+};
+
+
+bool Vector3D::isEqual(const Vector3D &vector) const{
+    if (std::fabs(i - vector.i) < 0.001){
+        if (std::fabs(j - vector.j) < 0.001){
+            if (std::fabs(k - vector.k) < 0.001){
+                return true;
+            }
+        }
+    }
+    return false;
+};
+
+//Static
+array<float, 3> Vector3D::normVectorCoord(const Vector3D &vector){
+    return array<float, 3> {vector.i *1/vector.magnitude, vector.j * 1/vector.magnitude, vector.k * 1/vector.magnitude};
+};
+array<float, 3> Vector3D::conjVectorCoord(const Vector3D &vector){
+    return array<float, 3> {-vector.i, -vector.j, -vector.k};
 };
 
 //Constructors
-Vector3D::Vector3D(const Point &a, const Point &b): a(a), b(b) {
-    recalc();
+Vector3D::Vector3D(const Point &originPoint, const Point &targetPoint){
+    createVector(originPoint, targetPoint);
 };
-
-Vector3D::Vector3D(const Point &b) : b(a), a(Point(CartesianCoordinate(0, 0, 0))) {
-    recalc();
+Vector3D::Vector3D(const Point &targetPoint){
+    createVector(origin, targetPoint);
 };
-
-Vector3D::Vector3D() : a(Point(CartesianCoordinate(0, 0, 0))), b(Point(CartesianCoordinate(0, 0, 0))){
-    recalc();
+Vector3D::Vector3D(){
 };
-
 
 //Getters
 float Vector3D::getMagnitude() const{
     return magnitude;
 };
+array<float, 3> Vector3D::getVector() const{
+    return array<float, 3> {i, j, k};
+};
+float Vector3D::getAxisValue(const char &unitVector) const {
+    switch (unitVector) {
+        case 'j':
+            return j;
+        case 'k':
+            return k;
+        default:
+            return i;
+    }
+}
 
 //Setters
-
-void Vector3D::setVector(const Point &a, const Point &b){
-    this->a = a;
-    this->b = b;
-    recalc();
+void Vector3D::setVector(const Point &originPoint, const Point &targetPoint){
+    createVector(originPoint, targetPoint);
 };
 
-
-
+// Type Converters
 string Vector3D::toStr(){
     std::stringstream sI, sJ, sK;
     string expression = "vector = ";
-    if ( i == 0){
-        if (j == 0){
-            if (k == 0){
+    if (std::fabs(i) < 0.01){
+        if (std::fabs(j) < 0.01){
+            if (std::fabs(k) < 0.01){
                 // -- x = 0 and y = 0 and z = 0
                 return expression + "0.00";
                 // --
             } else {
-                sK << std::fixed << std::setprecision(2) << k;
+                sK << std::fixed << std::setprecision(2) << abs(k);
                 // -- x = 0 and y = 0 and z ≠ 0
                 return expression + sK.str() + "k";
                 // --
             }
         } else {
-            sJ << std::fixed << std::setprecision(2) << j;
-            if (k == 0){
+            sJ << std::fixed << std::setprecision(2) << abs(j);
+            expression += sJ.str() + "j";
+            if (std::fabs(k) < 0.01){
                 // -- x = 0 and y ≠ 0 and z = 0
-                return expression + sJ.str() + "j";
+                return expression;
                 // --
             } else {
-                sK << std::fixed << std::setprecision(2) << k;
+                sK << std::fixed << std::setprecision(2) << abs(k);
+                if (k > 0){
+                    expression += " + ";
+                } else {
+                    expression += " - ";
+                }
                 // -- x = 0 and y ≠ 0 and z ≠ 0
-                return expression + sJ.str() + "j + " + sK.str() + "k";
+                return expression + sK.str() + "k";
                 // --
             }
         }
@@ -80,29 +113,44 @@ string Vector3D::toStr(){
         sI << std::fixed << std::setprecision(2) << i;
         expression += sI.str() + "i";
 
-        if (j == 0){
-            if (k == 0){
+        if (std::fabs(j) < 0.01){
+            if (std::fabs(k) < 0.01){
                 // -- x ≠ 0 and y = 0 and z = 0
                 return expression;
                 // --
             } else {
-                sK << std::fixed << std::setprecision(2) << k;
+                sK << std::fixed << std::setprecision(2) << abs(k);
+                if (k > 0){
+                    expression += " + ";
+                } else {
+                    expression += " - ";
+                }
                 // -- x ≠ 0 and y = 0 and z ≠ 0
-                return expression += " + " + sK.str() + "k";
+                return expression + sK.str() + "k";
                 // --
             }
         } else {
-            sJ << std::fixed << std::setprecision(2) << j;
-            expression += " + " + sJ.str() + "j";
+            sJ << std::fixed << std::setprecision(2) << abs(j);
+            if (j > 0){
+                expression += " + ";
+            } else {
+                expression += " - ";
+            }
+            expression += sJ.str() + "j";
             
-            if (k == 0){
+            if (std::fabs(k) < 0.01){
                 // -- x ≠ 0 and y ≠ 0 and z = 0
                 return expression;
                 // --
             } else {
-                sK << std::fixed << std::setprecision(2) << k;
+                sK << std::fixed << std::setprecision(2) << abs(k);
+                if (k > 0){
+                    expression += " + ";
+                } else {
+                    expression += " - ";
+                }
                 // -- x ≠ 0 and y ≠ 0 and z ≠ 0
-                return expression + " + " + sK.str() + "k";
+                return expression + sK.str() + "k";
                 // --
             }
         }
@@ -110,82 +158,66 @@ string Vector3D::toStr(){
   
 }
 
+//Special Methods
+void Vector3D::norm(){
+    createVector(origin, Point(CartesianCoordinate(normVectorCoord(*this))));
+};
+Vector3D Vector3D::normalized() const{
+    return Vector3D(Point(CartesianCoordinate(normVectorCoord(*this))));
+}
+void Vector3D::conj(){
+    createVector(origin, Point(CartesianCoordinate(conjVectorCoord(*this))));
+};
+Vector3D Vector3D::conjugated() const{
+    return Vector3D(Point(CartesianCoordinate(conjVectorCoord(*this))));
+};
+Vector3D Vector3D::crossProduct(const Vector3D &vector) const{
+    array<float, 3> coords = {
+        (j * vector.k) - (k * vector.j),
+        (k * vector.i) - (i * vector.k),
+        (i * vector.j) - (j * vector.i)
+    };
+    return Vector3D(Point(CartesianCoordinate(coords)));
+};
+float Vector3D::dotProduct(const Vector3D &vector) const{
+    return i * vector.i + j * vector.j + k * vector.k;
+};
+float Vector3D::angle(const Vector3D &vector, const char &unit) const{
+    float theta = std::acos(dotProduct(vector) / (vector.magnitude * magnitude));
+    switch (unit) {
+        case 'r':
+            return theta;
+        default:
+            return (theta * 180) / M_PI;
+    }
+};
+
+
+//Operators
+bool Vector3D::operator== (const Vector3D &vector) const{
+    return isEqual(vector);
+};
+bool Vector3D::operator!= (const Vector3D &vector) const{
+    return !isEqual(vector);
+};
+Vector3D Vector3D::operator/ (const float &mag) const{
+    CartesianCoordinate coord = CartesianCoordinate(array<float, 3>{i / mag, j / mag, k / mag});
+    return Vector3D(Point(coord));
+};
+Vector3D Vector3D::operator* (const float &mag) const{
+    CartesianCoordinate coord = CartesianCoordinate(array<float, 3>{i * mag, j * mag, k * mag});
+    return Vector3D(Point(coord));
+};
+Vector3D Vector3D::operator+ (const Vector3D &vector) const{
+    CartesianCoordinate coord = CartesianCoordinate(array<float, 3>{i + vector.i, j + vector.j, k + vector.k});
+    return Vector3D(Point(coord));
+};
+Vector3D Vector3D::operator- (const Vector3D &vector) const{
+    CartesianCoordinate coord = CartesianCoordinate(array<float, 3>{i - vector.i, j - vector.j, k - vector.k});
+    return Vector3D(Point(coord));
+};
+
 /*
-
-vector <double> Vector3D::getVector(){
-    return vector <double> {this->s_i, this->s_j, this->s_k};
-};
-
-Vector3D Vector3D::normalize(){
-    Vector3D v = *this;
-    double mag = 1/this->magnitude();
-    return Vector3D(vector <double> {this->s_i * mag, this->s_j * mag, this->s_k * mag});
-};
-
-Vector3D Vector3D::conjugate(){
-    Vector3D v = *this;
-    double mag = -1.0;
-    return Vector3D(vector <double> {this->s_i * mag, this->s_j * mag, this->s_k * mag});
-};
-
-Vector3D Vector3D::operator/ (double mag){
-    Vector3D v = *this;
-    return Vector3D(vector <double> {this->s_i / mag, this->s_j / mag, this->s_k / mag});
-};
-
-Vector3D Vector3D::operator* (double mag){
-    Vector3D v = *this;
-    return Vector3D(vector <double> {this->s_i * mag, this->s_j * mag, this->s_k * mag});
-};
-
-Vector3D Vector3D::crossProduct(Vector3D vectorB){
-    Vector3D v = *this;
-    vector < double > b = vectorB.getVector();
-    return Vector3D(vector <double> {(this->s_j * b[2]) - (this->s_k * b[1]), (this->s_k * b[0]) - (this->s_i * b[2]), (this->s_i *b[1]) - (b[0] * this->s_j)});
-};
-
-double Vector3D::dotProduct(Vector3D vectorB){
-    Vector3D v = *this;
-    vector < double > b = vectorB.getVector();
-    double r = double (this->s_i * b[0] + this->s_j * b[1] + this->s_k * b[2]);
-    return r;
-};
-
-Vector3D Vector3D::operator+ (Vector3D vectorB){
-    Vector3D v = *this;
-    vector < double > b = vectorB.getVector();
-    return Vector3D(vector <double> {this->s_i + b[0], this->s_j + b[1], this->s_k + b[2]});
-};
-
-Vector3D Vector3D::operator-(Vector3D vectorB){
-    Vector3D v = *this;
-    return this->operator+(vectorB.conjugate());
-};
-
-double Vector3D::angle(Vector3D vectorB, char unit){
-    double tetha;
-
-    tetha = acos( this->dotProduct(vectorB) / ( vectorB.magnitude() * this->magnitude() ) );
-    if (unit == 'd'){
-        return (tetha * 180) / M_PI;
-    } else {
-        return tetha;
-    };
-        
-};
-
-double Vector3D::axisValue(char unitVector){
-    if (unitVector == 'i' || unitVector == 'x'){
-        return this->s_i;
-    } else if (unitVector == 'j' || unitVector == 'y'){
-        return this->s_j;
-    } else if (unitVector == 'k' || unitVector == 'z'){
-        return this->s_k;
-    } else {
-        return 0.0;
-    };
-};
-
 // Quaternion class //
 
 Quaternion::Quaternion(double u, vector <double> vectorA, vector <double> vectorB = {0.0, 0.0, 0.0}){

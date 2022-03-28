@@ -42,13 +42,13 @@ Point::Point(const float &coord1, const float &coord2, const float &coord3, cons
         xyz = rtp.toCartesian();
     }
 };
+Point::Point() : xyz(CartesianCoordinate()) {
+};
 
 // Internal Methods
-
 bool Point::isEqual(const Point &point) const{
     return (xyz == point.xyz);
 };
-
 
 // Operators
 bool Point::operator==(const Point &point){
@@ -58,7 +58,6 @@ bool Point::operator==(const Point &point){
 bool Point::operator!=(const Point &point){
     return !isEqual(point);
 };
-
 
 //Getters
 array<float, 3> Point::getCartCoords() const{
@@ -83,8 +82,29 @@ void Point::setSphericalCoord(const float &radius, const float &theta, const flo
     xyz = rtp.toCartesian();
 };
 
-
 //Special methods
 float Point::distanceTo(const Point &point) const{
     return  xyz.distanceTo(point.xyz);
+};
+void Point::toOrigin(){
+    xyz.toOrigin();
+    rtp.toOrigin();
+}
+
+void Point::moveTo(const CartesianCoordinate &cart){
+    xyz = cart;
+    rtp = xyz.toSpherical();
+};
+void Point::moveTo(const SphericalCoordinate &spherical){
+    rtp = spherical;
+    xyz = rtp.toCartesian();
+};
+void Point::moveTo(const array<float, 3> &coords, const char &typeCoord){
+    if (typeCoord == 's'){
+        rtp.setCoords(coords);
+        xyz = rtp.toCartesian();
+    } else {
+        xyz.setCoords(coords);
+        rtp = xyz.toSpherical();
+    }
 };

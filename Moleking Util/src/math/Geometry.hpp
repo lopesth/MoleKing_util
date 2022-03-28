@@ -33,6 +33,7 @@ public:
     Point(const SphericalCoordinate &sphericalPoint);
     Point(const array<float, 3> &coordinate, const char &type);
     Point(const float &coord1, const float &coord2, const float &coord3, const char &type);
+    Point();
     
     // Operators
     bool operator==(const Point &point);
@@ -50,6 +51,10 @@ public:
     
     //Special methods
     float distanceTo(const Point &point) const;
+    void toOrigin();
+    void moveTo(const CartesianCoordinate &cart);
+    void moveTo(const SphericalCoordinate &spherical);
+    void moveTo(const array<float, 3> &coords, const char &typeCoord);
     
 };
 

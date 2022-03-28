@@ -42,6 +42,7 @@ public:
     
     //Setters
     void setCoords(const float &radius, const float &theta, const float &phi);
+    void setCoords(const array<float, 3> &coords);
     void setRadiusCoord(const float &radius);
     void setThetaCord(const float &theta);
     void setPhiCoord(const float &phi);
@@ -53,6 +54,8 @@ public:
     CartesianCoordinate toCartesian() const;
     string toStr() const;
 
+    //Special methods
+    void toOrigin();
 
 };
 
@@ -79,6 +82,7 @@ public:
     
     //Setters
     void setCoords(const float &x, const float &y, const float &z);
+    void setCoords(const array<float, 3> &coords);
     void setXcoord(const float &x);
     void setYcoord(const float &y);
     void setZcoord(const float &z);
@@ -92,6 +96,7 @@ public:
     
     //Special methods
     float distanceTo(const CartesianCoordinate &cart) const;
+    void toOrigin();
 
 };
 
