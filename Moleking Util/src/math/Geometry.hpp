@@ -45,6 +45,8 @@ public:
     
     //Getters
     array<float, 3> getCartCoords() const;
+    CartesianCoordinate getCartesianCoordinate() const;
+    SphericalCoordinate getSphericalCoordinate() const;
     
     //Type Converters
     string toStr() const;

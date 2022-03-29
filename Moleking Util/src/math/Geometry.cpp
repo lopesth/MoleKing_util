@@ -64,7 +64,14 @@ array<float, 3> Point::getCartCoords() const{
 
     return xyz.getCoords();
 };
+CartesianCoordinate Point::getCartesianCoordinate() const{
+    return xyz;
+};
+SphericalCoordinate Point::getSphericalCoordinate() const{
+    return rtp;
+};
 
+//Type Converters
 string Point::toStr() const{
     string c = xyz.toStr();
     string s = rtp.toStr();
