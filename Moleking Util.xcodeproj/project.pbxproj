@@ -16,6 +16,7 @@
 		A44B064327F39C0E0067043A /* MassCenter_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A44B064227F39C0E0067043A /* MassCenter_test.cpp */; };
 		A457E5E427EFE87E00B1D97F /* Vectors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A457E5E227EFE87E00B1D97F /* Vectors.cpp */; };
 		A457E5E627F08CA500B1D97F /* vector_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A457E5E527F08CA500B1D97F /* vector_test.cpp */; };
+		A4A069F527F62A6500526F49 /* matrix_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4A069F427F62A6500526F49 /* matrix_test.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,6 +49,7 @@
 		A457E5E227EFE87E00B1D97F /* Vectors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vectors.cpp; sourceTree = "<group>"; };
 		A457E5E327EFE87E00B1D97F /* Vectors.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vectors.hpp; sourceTree = "<group>"; };
 		A457E5E527F08CA500B1D97F /* vector_test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vector_test.cpp; sourceTree = "<group>"; };
+		A4A069F427F62A6500526F49 /* matrix_test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = matrix_test.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 				A431697627EE6C5D0088C300 /* geometry-test.cpp */,
 				A457E5E527F08CA500B1D97F /* vector_test.cpp */,
 				A44B064227F39C0E0067043A /* MassCenter_test.cpp */,
+				A4A069F427F62A6500526F49 /* matrix_test.cpp */,
 				A431697727EE6C5D0088C300 /* main-test.cpp */,
 			);
 			path = tests;
@@ -187,6 +190,7 @@
 				A431697A27EE6C5D0088C300 /* main-test.cpp in Sources */,
 				A44B063E27F25D500067043A /* MassCenter.cpp in Sources */,
 				A431697D27EE83CA0088C300 /* Coordinates.cpp in Sources */,
+				A4A069F527F62A6500526F49 /* matrix_test.cpp in Sources */,
 				A431697927EE6C5D0088C300 /* geometry-test.cpp in Sources */,
 				A457E5E427EFE87E00B1D97F /* Vectors.cpp in Sources */,
 				A431696E27EE3BD50088C300 /* Geometry.cpp in Sources */,

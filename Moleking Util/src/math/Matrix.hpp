@@ -10,35 +10,49 @@
 #define Matrix_hpp
 #include <math.h>
 #include <vector>
-
-
 #include <iostream>
+#include <array>
+#include <string>
 
-using namespace std;
+
+
+using std::vector, std::cout, std::endl, std::string, std::array;
 
 class Matrix{
-    private:
-    vector < vector <double> > matrix;
-    vector < vector <double> > getCofactor(vector< vector <double> > mat, int p, int q, long n);
-    double det(vector< vector <double> > mat, long n);
+    
+    vector < vector <float> > matrix;
+    
+    // Internal Methods
+    vector < vector <float> > cofactor(const vector< vector <float> > &mat, const short &p, const short &q, const short &n) const;
+    float det(const vector< vector <float> > &mat, const short &n) const;
 
-    public:
-    Matrix(vector < vector <double> > matrix);
-    Matrix();
-    Matrix(int i, int j);
+public:
+    
     ~Matrix();
-    void setMatrix(vector < vector <double> > matrix);
-    Matrix sum(Matrix matrixB);
-    Matrix multiplication(double scalar);
-    vector < vector < double > > toVector();
-    Matrix multiplication(Matrix matrixB);
-    double determinant();
-    void replace(int i, int j, double newValue);
-    vector<double> getLine(int i);
-    vector <long> getDimensions();
-    double element(long i, long j);
-    void print();
-    string toStr();
+    
+    // Constructors
+    Matrix(const vector < vector <float> > &matrix);
+    Matrix(const unsigned short &i, const unsigned short &j);
+    Matrix();
+
+    //Setters
+    void setMatrix(const vector < vector <float> > &matrix);
+    void setElement(const unsigned short &i, const unsigned short &j, const float &newValue);
+
+    //Getters
+    float getDeterminant() const;
+    array <short, 2> getDimensions() const;
+    vector<float> getLine(const unsigned short &i) const;
+    float getElement(const short &i, const short &j) const;
+
+    
+    //Operators
+    Matrix operator+(const Matrix &matrix) const;
+    Matrix operator*(const float &scalar) const;
+    Matrix operator*(const Matrix &matrix) const;
+
+    //Type Convertors
+    string toStr() const;
 };
 
 #endif /* Matrix_hpp */

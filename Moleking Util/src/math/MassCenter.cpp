@@ -16,25 +16,25 @@ MassCenter::~MassCenter(){
 //Constructors
 
 MassCenter::MassCenter(){};
-MassCenter::MassCenter(const vector <int> &massList, const vector<array<float, 3>> &coordsList){
+MassCenter::MassCenter(const vector <unsigned int> &massList, const vector<array<float, 3>> &coordsList){
     checkSizes(massList.size(), coordsList.size());
     mass = massList;
     coords = coordsList;
     calcMassCenter();
 };
-MassCenter::MassCenter(const vector <int> &massList, const vector<Point> &points){
+MassCenter::MassCenter(const vector <unsigned int> &massList, const vector<Point> &points){
     checkSizes(massList.size(), points.size());
     mass = massList;
     coords = translateCoord(points);
     calcMassCenter();
 };
-MassCenter::MassCenter(const vector <int> &massList, const vector<CartesianCoordinate> &coord){
+MassCenter::MassCenter(const vector <unsigned int> &massList, const vector<CartesianCoordinate> &coord){
     checkSizes(massList.size(), coord.size());
     mass = massList;
     coords = translateCoord(coord);
     calcMassCenter();
 };
-MassCenter::MassCenter(const vector <int> &massList, const vector<SphericalCoordinate> &coord){
+MassCenter::MassCenter(const vector <unsigned int> &massList, const vector<SphericalCoordinate> &coord){
     checkSizes(massList.size(), coord.size());
     mass = massList;
     coords = translateCoord(coord);
@@ -44,7 +44,7 @@ MassCenter::MassCenter(const vector <int> &massList, const vector<SphericalCoord
 //Internal Methods
 void MassCenter::calcMassCenter(){
     array<float, 3> cart{0, 0, 0};
-    for (int a = 0; a < 3; a++){
+    for (unsigned short a = 0; a < 3; a++){
         float rUp = 0;
         float rDown = 0;
         for (int i = 0; i < (int) coords.size(); i++){
@@ -57,27 +57,27 @@ void MassCenter::calcMassCenter(){
 };
 vector<array<float, 3>> MassCenter::translateCoord(const vector<Point> &points) const{
     vector<array<float, 3>> coord;
-    for (int i = 0; i < points.size(); i++){
+    for (unsigned short i = 0; i < points.size(); i++){
         coord.push_back(points.at(i).getCartCoords());
     };
     return coord;
 };
 vector<array<float, 3>> MassCenter::translateCoord(const vector<CartesianCoordinate> &coord) const{
     vector<array<float, 3>> c;
-    for (int i = 0; i < coord.size(); i++){
+    for (unsigned short i = 0; i < coord.size(); i++){
         c.push_back(coord.at(i).getCoords());
     };
     return c;
 };
 vector<array<float, 3>> MassCenter::translateCoord(const vector<SphericalCoordinate> &coord) const{
     vector<array<float, 3>> c;
-    for (int i = 0; i < coord.size(); i++){
+    for (unsigned short i = 0; i < coord.size(); i++){
         Point point = coord.at(i).toCartesian();
         c.push_back(point.getCartCoords());
     };
     return c;
 };
-void MassCenter::checkSizes(long a, long b){
+void MassCenter::checkSizes(unsigned short a, unsigned short b){
     if (a != b ){
         throw "Error in Mass Center Calculations";
     }
@@ -85,25 +85,25 @@ void MassCenter::checkSizes(long a, long b){
 };
 
 // Setters
-void MassCenter::setValues(const vector <int> &massList, const vector<array<float, 3>> &coordsList){
+void MassCenter::setValues(const vector <unsigned int> &massList, const vector<array<float, 3>> &coordsList){
     checkSizes(massList.size(), coordsList.size());
     mass = massList;
     coords = coordsList;
     calcMassCenter();
 };
-void MassCenter::setValues(const vector <int> &massList, const vector<Point> &points){
+void MassCenter::setValues(const vector <unsigned int> &massList, const vector<Point> &points){
     checkSizes(massList.size(), points.size());
     mass = massList;
     coords = translateCoord(points);
     calcMassCenter();
 };
-void MassCenter::setValues(const vector <int> &massList, const vector<CartesianCoordinate> &coord){
+void MassCenter::setValues(const vector <unsigned int> &massList, const vector<CartesianCoordinate> &coord){
     checkSizes(massList.size(), coord.size());
     mass = massList;
     coords = translateCoord(coord);
     calcMassCenter();
 };
-void MassCenter::setValues(const vector <int> &massList, const vector<SphericalCoordinate> &coord){
+void MassCenter::setValues(const vector <unsigned int> &massList, const vector<SphericalCoordinate> &coord){
     checkSizes(massList.size(), coord.size());
     mass = massList;
     coords = translateCoord(coord);

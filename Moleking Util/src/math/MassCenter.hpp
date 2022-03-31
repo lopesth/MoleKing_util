@@ -17,7 +17,7 @@ using std::vector;
 
 class MassCenter{
 
-    vector <int> mass;
+    vector <unsigned int> mass;
     vector<array<float, 3>> coords;
     float massCenterPointAxis();
     Point massCenterPoint;
@@ -27,24 +27,24 @@ class MassCenter{
     vector<array<float, 3>> translateCoord(const vector<Point> &points) const;
     vector<array<float, 3>> translateCoord(const vector<CartesianCoordinate> &coord) const;
     vector<array<float, 3>> translateCoord(const vector<SphericalCoordinate> &coord) const;
-    void checkSizes(long a, long b);
+    void checkSizes(unsigned short a, unsigned short b);
 
 public:
     ~MassCenter();
     
     //Constructors
     MassCenter();
-    MassCenter(const vector <int> &massList, const vector<array<float, 3>> &coordsList);
-    MassCenter(const vector <int> &massList, const vector<Point> &points);
-    MassCenter(const vector <int> &massList, const vector<CartesianCoordinate> &coord);
-    MassCenter(const vector <int> &massList, const vector<SphericalCoordinate> &coord);
+    MassCenter(const vector <unsigned int> &massList, const vector<array<float, 3>> &coordsList);
+    MassCenter(const vector <unsigned int> &massList, const vector<Point> &points);
+    MassCenter(const vector <unsigned int> &massList, const vector<CartesianCoordinate> &coord);
+    MassCenter(const vector <unsigned int> &massList, const vector<SphericalCoordinate> &coord);
 
     // Setters
-    void setValues(const vector <int> &massList, const vector<array<float, 3>> &coordsList);
-    void setValues(const vector <int> &massList, const vector<Point>
+    void setValues(const vector <unsigned int> &massList, const vector<array<float, 3>> &coordsList);
+    void setValues(const vector <unsigned int> &massList, const vector<Point>
                    &points);
-    void setValues(const vector <int> &massList, const vector<CartesianCoordinate> &coord);
-    void setValues(const vector <int> &massList, const vector<SphericalCoordinate> &coord);
+    void setValues(const vector <unsigned int> &massList, const vector<CartesianCoordinate> &coord);
+    void setValues(const vector <unsigned int> &massList, const vector<SphericalCoordinate> &coord);
 
     // Getters
     Point getMassCenter() const;
